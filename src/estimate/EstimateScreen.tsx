@@ -2,7 +2,6 @@ import { View, StyleSheet, ScrollView, Pressable } from "react-native"
 import { Text } from "../common/components/Text"
 import { BottomSheet } from "../common/components/BottomSheet"
 import { useRef } from "react"
-import { BottomSheetView } from "@gorhom/bottom-sheet"
 import {
 	calculateSectionTotal,
 	calculateEstimateTotal,
@@ -28,16 +27,16 @@ export default function EstimateScreen() {
 
 	const handleSectionPress = (section: EstimateSection) => {
 		handleStartSectionEdit(section)
-		bottomSheetRef.current?.expand()
+		bottomSheetRef.current?.present()
 	}
 
 	const handleItemPress = (item: EstimateRow) => {
 		handleStartItemEdit(item)
-		bottomSheetRef.current?.expand()
+		bottomSheetRef.current?.present()
 	}
 
 	const handleCloseBottomSheet = () => {
-		bottomSheetRef.current?.close()
+		bottomSheetRef.current?.dismiss()
 		handleStopEdit()
 	}
 
@@ -89,27 +88,20 @@ export default function EstimateScreen() {
 				</View>
 			</ScrollView>
 
-			<BottomSheet
-				ref={bottomSheetRef}
-				enablePanDownToClose
-				snapPoints={["50%"]}
-				index={-1}
-			>
-				<BottomSheetView>
-					{editMode && (
-						<EditForm
-							key={editMode.data.id}
-							mode={editMode.type}
-							data={editMode.data}
-							onSave={
-								editMode.type === "item"
-									? handleSaveItem
-									: handleSaveSection
-							}
-							onClose={handleCloseBottomSheet}
-						/>
-					)}
-				</BottomSheetView>
+			<BottomSheet ref={bottomSheetRef}>
+				{editMode && (
+					<EditForm
+						key={editMode.data.id}
+						mode={editMode.type}
+						data={editMode.data}
+						onSave={
+							editMode.type === "item"
+								? handleSaveItem
+								: handleSaveSection
+						}
+						onClose={handleCloseBottomSheet}
+					/>
+				)}
 			</BottomSheet>
 		</View>
 	)

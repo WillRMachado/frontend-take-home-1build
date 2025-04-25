@@ -1,10 +1,10 @@
-import BottomSheetComponent, { BottomSheetProps } from "@gorhom/bottom-sheet"
+import { TrueSheet, TrueSheetProps } from "@lodev09/react-native-true-sheet"
 import { forwardRef } from "react"
 
-export type BottomSheet = BottomSheetComponent
+export type BottomSheet = TrueSheet
 
-export const BottomSheet = forwardRef<BottomSheetComponent, BottomSheetProps>(
+export const BottomSheet = forwardRef<TrueSheet, TrueSheetProps>(
 	function BottomSheet(props, ref) {
-		return <BottomSheetComponent ref={ref} {...props} />
+		return <TrueSheet ref={ref} {...props} />
 	}
 )
