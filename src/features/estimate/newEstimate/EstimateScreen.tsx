@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { useTheme } from "@/src/context/ThemeContext";
+import { useTheme } from "@/src/common/hooks/useTheme";
 import { getComponentTokens } from "../../../common/theme/tokens/components";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 
