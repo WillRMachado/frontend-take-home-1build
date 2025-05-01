@@ -1,13 +1,13 @@
 import { View, StyleSheet, Pressable } from "react-native"
-import { Text } from "../common/components/Text"
+import { Text } from "../../common/components/Text"
 import type { EstimateRow, EstimateSection } from "@/data"
 import {
 	calculateSectionTotal,
 	calculateEstimateTotal,
-} from "../common/lib/estimate"
-import { EditForm } from "./EditForm"
+} from "../../common/lib/estimate"
+import { EditForm } from "./components/EditForm"
 import { useEstimateScreen } from "./useEstimateScreen"
-import { TextField } from "../common/components/TextField"
+import { TextField } from "../../common/components/TextField"
 
 export default function EstimateScreenDesktop() {
 	const {

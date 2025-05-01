@@ -1,10 +1,10 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { Text } from "../common/components/Text"
-import { Button } from "../common/components/Button"
+import { Text } from "../../../common/components/Text"
+import { Button } from "../../../common/components/Button"
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data"
 import { useState } from "react"
-import { TextField } from "../common/components/TextField"
+import { TextField } from "../../../common/components/TextField"
 
 type EditFormProps = {
 	mode: "item" | "section"

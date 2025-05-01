@@ -1,15 +1,15 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native"
-import { Text } from "../common/components/Text"
-import { BottomSheet } from "../common/components/BottomSheet"
+import { Text } from "../../common/components/Text"
+import { BottomSheet } from "../../common/components/BottomSheet"
 import { useRef } from "react"
 import {
 	calculateSectionTotal,
 	calculateEstimateTotal,
-} from "../common/lib/estimate"
+} from "../../common/lib/estimate"
 import type { EstimateRow, EstimateSection } from "@/data"
-import { EditForm } from "./EditForm"
+import { EditForm } from "./components/EditForm"
 import { useEstimateScreen } from "./useEstimateScreen"
-import { TextField } from "../common/components/TextField"
+import { TextField } from "../../common/components/TextField"
 
 export default function EstimateScreen() {
 	const bottomSheetRef = useRef<BottomSheet>(null)
