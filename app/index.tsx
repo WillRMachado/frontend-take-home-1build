@@ -1,12 +1,7 @@
-import { EstimateProvider } from "@/src/features/estimate/context";
 import EstimateScreen from "@/src/features/estimate/EstimateScreen";
 import NewEstimateScreen from "@/src/features/estimate/newEstimate/EstimateScreen";
 import { Platform } from "react-native";
 
 export default function Index() {
-  return (
-    <EstimateProvider>
-      {Platform.OS === "web" ? <EstimateScreen /> : <NewEstimateScreen />}
-    </EstimateProvider>
-  );
+  return Platform.OS === "web" ? <EstimateScreen /> : <NewEstimateScreen />;
 }

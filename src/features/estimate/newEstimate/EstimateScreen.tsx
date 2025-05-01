@@ -1,17 +1,12 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { useCurrentThemeScheme } from "../../../common/hooks/useCurrentThemeScheme";
+import { useTheme } from "@/src/context/ThemeContext";
 import { getComponentTokens } from "../../../common/theme/tokens/components";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 
-
 export default function EstimateScreen() {
-  const { value: themeScheme, setValue: setThemeScheme } = useCurrentThemeScheme();
-  const themeColors = getComponentTokens(themeScheme);
-  const colors = getColors(themeScheme);
-
-  const toggleTheme = () => {
-    setThemeScheme(themeScheme === "dark" ? "light" : "dark");
-  };
+  const { theme, toggleTheme, isDark } = useTheme();
+  const themeColors = getComponentTokens(theme);
+  const colors = getColors(theme);
 
   return (
     <View style={{ 
@@ -32,7 +27,7 @@ export default function EstimateScreen() {
           color: themeColors.badges.solidColors.text.neutral,
           fontSize: 16,
         }}>
-          Toggle {themeScheme === "dark" ? "Light" : "Dark"} Theme
+          Toggle {isDark ? "Light" : "Dark"} Theme
         </Text>
       </TouchableOpacity>
       <Text style={{ 
@@ -41,7 +36,7 @@ export default function EstimateScreen() {
         marginVertical: 8
       }}>
         New Estimate
-        {themeScheme}
+        {theme}
       </Text>
       <Text
         style={{
