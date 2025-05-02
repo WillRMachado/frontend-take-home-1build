@@ -6,6 +6,8 @@ import type { ColorMode } from "../tokens/alias/colors";
 import { ThemeScheme } from "../types";
 import { getColorWithAlpha } from "@/src/common/lib/colors";
 import { numbersAliasTokens } from "../tokens/alias/numbers";
+import { customFonts } from "../fonts";
+
 type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
 
 type ThemeParams = {
@@ -14,6 +16,7 @@ type ThemeParams = {
   getColorWithAlpha: typeof getColorWithAlpha;
   theme: ThemeScheme;
   numbersAliasTokens: typeof numbersAliasTokens;
+  customFonts: typeof customFonts;
 };
 
 export function useThemedColors() {
@@ -45,6 +48,7 @@ export default function createThemedStyles<T extends NamedStyles<T>>(
         getColorWithAlpha,
         theme,
         numbersAliasTokens,
+        customFonts,
       })
     );
   };

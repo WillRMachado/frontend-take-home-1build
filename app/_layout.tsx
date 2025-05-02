@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { EstimateProvider } from "@/src/features/estimate/context";
+import { EstimateProvider } from "@/src/context/EstimateContext";
 import { ThemeProvider, ThemeContext } from "@/src/context/ThemeContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
