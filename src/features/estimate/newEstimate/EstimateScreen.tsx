@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { ThemeSwitch } from "@/src/common/components";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import AddSectionButton from "./components/AddSectionButton";
+import EstimateList from "./components/EstimateList";
 
 export default function EstimateScreen() {
   const { theme, toggleTheme, isDark } = useTheme();
@@ -14,6 +15,7 @@ export default function EstimateScreen() {
         <ThemeSwitch />
         <AddSectionButton />
       </View>
+      <EstimateList />
     </View>
   );
 }
