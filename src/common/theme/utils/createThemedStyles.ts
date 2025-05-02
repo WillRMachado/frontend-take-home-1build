@@ -4,13 +4,16 @@ import { getComponentTokens } from "../tokens/components";
 import { getColors } from "../tokens/alias/colors";
 import type { ColorMode } from "../tokens/alias/colors";
 import { ThemeScheme } from "../types";
-
+import { getColorWithAlpha } from "@/src/common/lib/colors";
+import { numbersAliasTokens } from "../tokens/alias/numbers";
 type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
 
 type ThemeParams = {
   themeColors: ReturnType<typeof getComponentTokens>;
   colors: ColorMode;
+  getColorWithAlpha: typeof getColorWithAlpha;
   theme: ThemeScheme;
+  numbersAliasTokens: typeof numbersAliasTokens;
 };
 
 export function useThemedColors() {
@@ -23,6 +26,10 @@ export function useThemedComponentTokens() {
   return getComponentTokens(theme);
 }
 
+export function useThemedAlphaColors() {
+  return getColorWithAlpha;
+}
+
 export default function createThemedStyles<T extends NamedStyles<T>>(
   styleCreator: (params: ThemeParams) => T
 ) {
@@ -30,6 +37,15 @@ export default function createThemedStyles<T extends NamedStyles<T>>(
     const { theme } = useTheme();
     const themeColors = useThemedComponentTokens();
     const colors = useThemedColors();
-    return StyleSheet.create(styleCreator({ themeColors, colors, theme }));
+    const getColorWithAlpha = useThemedAlphaColors();
+    return StyleSheet.create(
+      styleCreator({
+        themeColors,
+        colors,
+        getColorWithAlpha,
+        theme,
+        numbersAliasTokens,
+      })
+    );
   };
 }
