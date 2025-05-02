@@ -36,7 +36,7 @@ export default function EstimateScreen() {
 const useStyles = createThemedStyles(({ themeColors, colors }) => ({
   container: {
     flex: 1,
-    backgroundColor: themeColors.badges.washedColors.backgrounds.neutral,
+    backgroundColor: colors.layer.solid.medium,
   },
   themeToggleButton: {
     backgroundColor: themeColors.button.background.primary.idle,
