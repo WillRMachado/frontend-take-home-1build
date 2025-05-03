@@ -23,6 +23,7 @@ interface EstimateContextValue {
 		updates: Partial<EstimateSection>
 	) => void
 	updateItem: (rowId: string, updates: Partial<EstimateRow>) => void
+	deleteItem: (rowId: string) => void
 	selectItem: (item: EstimateRow) => void
 	selectSection: (section: EstimateSection) => void
 	clearSelection: () => void
@@ -72,6 +73,24 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 		setEditMode(null)
 	}
 
+	const deleteItem = (rowId: string) => {
+		setEstimate((prev) => {
+			const updateRows = prev.sections.map((section) => ({
+				...section,
+				rows: section.rows.filter((row) => row.id !== rowId)
+			}));
+
+			const cleanedSections = updateRows.filter(section => section.rows.length > 0);
+
+			return {
+				...prev,
+				updatedAt: new Date(),
+				sections: cleanedSections
+			}
+		})
+		setEditMode(null)
+	}
+
 	const selectItem = (item: EstimateRow) => {
 		setEditMode({ type: "item", data: item })
 	}
@@ -91,6 +110,7 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 			updateTitle,
 			updateSection,
 			updateItem,
+			deleteItem,
 			selectItem,
 			selectSection,
 			clearSelection,
@@ -101,6 +121,7 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 			updateTitle,
 			updateSection,
 			updateItem,
+			deleteItem,
 			selectItem,
 			selectSection,
 			clearSelection,

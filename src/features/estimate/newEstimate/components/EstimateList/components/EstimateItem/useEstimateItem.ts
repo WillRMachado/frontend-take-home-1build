@@ -1,16 +1,18 @@
 import type { EstimateRow } from "@/data";
 import { useCallback } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
+import { useEstimateContext } from "@/src/context/EstimateContext";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
-  onRemove: (id: string) => void;
 }
 
-export function useEstimateItem({ item, onRemove }: UseEstimateItemProps) {
+export function useEstimateItem({ item }: UseEstimateItemProps) {
+  const { deleteItem } = useEstimateContext();
+
   const handleRemove = useCallback(() => {
-    onRemove(item.id);
-  }, [item.id, onRemove]);
+    deleteItem(item.id);
+  }, [item.id, deleteItem]);
 
   return {
     description: item.title,
