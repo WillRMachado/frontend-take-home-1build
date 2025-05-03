@@ -1,94 +1,115 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, Animated, ViewStyle, TextStyle } from "react-native";
 import type { EstimateRow } from "@/data";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-import { colorsBaseTokens } from "@/src/common/theme/tokens/base/colors";
 import { useEstimateItem } from "./useEstimateItem";
+import { Feather } from "@expo/vector-icons";
 
 interface EstimateItemProps {
   item: EstimateRow;
   onRemove: (id: string) => void;
+  isLast: boolean;
 }
 
-export default function EstimateItem({ item, onRemove }: EstimateItemProps) {
-  const styles = useStyles();
-  const { description, quantity, unitPrice, total, handleRemove } = useEstimateItem({
+const SWIPE_THRESHOLD = 120;
+
+export default function EstimateItem({
+  item,
+  onRemove,
+  isLast,
+}: EstimateItemProps) {
+  const styles = useStyles({ isLast });
+  const {
+    description,
+    quantity,
+    unitPrice,
+    total,
+    panResponder,
+    getItemStyle,
+    getDeleteButtonStyle,
+  } = useEstimateItem({
     item,
     onRemove,
   });
 
   return (
-    <View style={styles.itemContainer}>
-      <View style={styles.itemContent}>
-        <Text style={styles.description}>{description}</Text>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.quantity}>Qty: {quantity} {item.uom}</Text>
-          <Text style={styles.price}>Price: {unitPrice}</Text>
-          <Text style={styles.total}>Total: {total}</Text>
+    <View style={styles.wrapper}>
+      {/* <Animated.View style={[styles.deleteButtonContainer, getDeleteButtonStyle()]}>
+        <Feather name="trash-2" size={24} color="white" />
+      </Animated.View> */}
+
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>{description}</Text>
+          <Text style={styles.quantityText}>
+            {quantity} x {unitPrice} / {item.uom}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.totalText}>{total}</Text>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.removeButton}
-        onPress={handleRemove}
-      >
-        <Text style={styles.removeButtonText}>×</Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
-const useStyles = createThemedStyles(
-  ({ colors, numbersAliasTokens }) => ({
-    itemContainer: {
-      flexDirection: "row",
-      backgroundColor: colors.layer.solid.medium,
-      borderRadius: numbersAliasTokens.borderRadius.sm,
-      padding: numbersAliasTokens.spacing.sm,
-      marginBottom: numbersAliasTokens.spacing.xs,
-      shadowColor: colorsBaseTokens.solid.neutral["900"],
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
-    },
-    itemContent: {
-      flex: 1,
-    },
-    description: {
-      fontSize: numbersBaseTokens.typography.size["4"],
-      fontWeight: "600",
-      color: colors.text.primary,
-      marginBottom: numbersAliasTokens.spacing.xs,
-    },
-    detailsContainer: {
+const useStyles = createThemedStyles<{ isLast?: boolean }>(
+  ({ colors, numbersAliasTokens, customFonts, props }) => ({
+    wrapper: {},
+    container: {
       flexDirection: "row",
       justifyContent: "space-between",
-      alignItems: "center",
+      alignItems: "flex-start",
+      padding: numbersAliasTokens.spacing.sm,
+      paddingRight: numbersAliasTokens.spacing["3xl"],
+      backgroundColor: colors.layer.solid.dark,
+      borderBottomWidth: props.isLast ? 0 : numbersAliasTokens.borderWidth.xs,
+      borderColor: colors.layer.solid.darker,
+      gap: numbersAliasTokens.spacing["2xs"],
     },
-    quantity: {
+    description: {
+      flexDirection: "column",
+      gap: numbersAliasTokens.spacing["2xs"],
+    },
+    title: {
+      color: colors.text.primary,
+      ...customFonts.regular.text.md,
+    },
+    quantityText: {
       fontSize: numbersBaseTokens.typography.size["3"],
       color: colors.text.secondary,
     },
-    price: {
-      fontSize: numbersBaseTokens.typography.size["3"],
-      color: colors.text.secondary,
-    },
-    total: {
-      fontSize: numbersBaseTokens.typography.size["3"],
-      fontWeight: "600",
+    totalText: {
+      fontSize: numbersBaseTokens.typography.size["4"],
       color: colors.text.primary,
     },
-    removeButton: {
-      width: 24,
-      height: 24,
-      justifyContent: "center",
-      alignItems: "center",
-      marginLeft: numbersAliasTokens.spacing.xs,
+
+
+
+    
+    deleteButtonContainer: {
+      // position: "absolute",
+      // right: 0,
+      // top: 0,
+      // bottom: 0,
+      // width: SWIPE_THRESHOLD,
+      // backgroundColor: "#E74C3C",
+      // justifyContent: "center",
+      // alignItems: "center",
     },
-    removeButtonText: {
-      fontSize: numbersBaseTokens.typography.size["5"],
-      color: colors.text.danger,
-      fontWeight: "600",
+    mainContent: {
+      // flex: 1,
+      // gap: numbersAliasTokens.spacing.xs,
+    },
+
+
+    priceContainer: {
+      marginLeft: numbersAliasTokens.spacing.md,
+    },
+    price: {
+      fontSize: numbersBaseTokens.typography.size["4"],
+      color: colors.text.primary,
+      fontWeight: "500",
     },
   })
-); 
+);

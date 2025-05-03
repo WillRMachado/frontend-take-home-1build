@@ -6,6 +6,8 @@ import { formatCurrency } from "@/src/common/utils/format";
 import { Feather } from "@expo/vector-icons";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import AddItemButton from "../AddItemButton";
+import EstimateItem from "../EstimateItem";
+import React from "react";
 
 interface EstimateSectionProps {
   section: EstimateSectionType;
@@ -18,22 +20,36 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
   });
 
   return (
-    <Pressable style={styles.sectionContainer} onPress={toggleOpen}>
-      <View style={styles.contentWrapper}>
-        <Text style={styles.sectionTitleInfo}>{title}</Text>
-        <AddItemButton section={section} />
-      </View>
-      <View style={styles.contentWrapper}>
-        <Text style={styles.sectionTitleInfo}>
-          {formatCurrency(Number(price))}
-        </Text>
-        <Feather
-          name={isOpen ? "chevron-up" : "chevron-down"}
-          size={numbersAliasTokens.sizing.icon.lg}
-          color={styles.sectionTitleInfo.color}
-        />
-      </View>
-    </Pressable>
+    <>
+      <Pressable style={styles.sectionContainer} onPress={toggleOpen}>
+        <View style={styles.contentWrapper}>
+          <Text style={styles.sectionTitleInfo}>{title}</Text>
+          <AddItemButton section={section} />
+        </View>
+        <View style={styles.contentWrapper}>
+          <Text style={styles.sectionTitleInfo}>
+            {formatCurrency(Number(price))}
+          </Text>
+          <Feather
+            name={isOpen ? "chevron-down" : "chevron-up"}
+            size={numbersAliasTokens.sizing.icon.lg}
+            color={styles.sectionTitleInfo.color}
+          />
+        </View>
+      </Pressable>
+      {isOpen && (
+        <>
+          {section.rows.map((row, index) => (
+            <EstimateItem
+              item={row}
+              onRemove={() => {}}
+              key={row.id}
+              isLast={index === section.rows.length - 1}
+            />
+          ))}
+        </>
+      )}
+    </>
   );
 }
 
