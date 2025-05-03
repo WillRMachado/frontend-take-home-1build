@@ -5,6 +5,9 @@ import {
   PanResponder,
   GestureResponderEvent,
   PanResponderGestureState,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
@@ -15,25 +18,39 @@ import createThemedStyles, {
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-
+import { BottomSheet } from "@/src/common/components/BottomSheet";
+import { EditForm } from "@/src/features/estimate/components/EditForm";
+import React from "react";
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
 }
 
 const SWIPE_THRESHOLD = 196;
+const SHOW_DELETE_THRESHOLD = SWIPE_THRESHOLD / 2;
 const DELETE_ANIMATION_DURATION = 200;
 const DELETE_OFFSET = -500;
 
 export default function EstimateItem({ item, isLast }: EstimateItemProps) {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const styles = useStyles({ isLast });
   const colors = useThemedColors();
-  const { description, quantity, unitPrice, total, handleRemove } =
-    useEstimateItem({
-      item,
-    });
+  const {
+    description,
+    quantity,
+    unitPrice,
+    total,
+    handleRemove,
+    supplierLogoUrl,
+    handleSaveItem,
+    handleCloseEdit,
+    bottomSheetRef,
+    handleEdit,
+  } = useEstimateItem({
+    item,
+  });
 
   const containerRef = useRef<View>(null);
   const translateX = useRef(new Animated.Value(0)).current;
@@ -85,7 +102,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dx) > 15;
+        return Math.abs(gestureState.dx) > 5;
       },
       onPanResponderGrant: () => {
         return true;
@@ -93,7 +110,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
       onPanResponderMove: handlePanResponderMove,
       onPanResponderRelease: handlePanResponderRelease,
       onPanResponderTerminate: resetPosition,
-      onPanResponderTerminationRequest: () => false,
+      onPanResponderTerminationRequest: () => true,
     })
   ).current;
 
@@ -102,6 +119,20 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
       transform: [{ translateX }],
     };
   }, [translateX]);
+
+  const getDeleteButtonOpacity = useCallback(() => {
+    return {
+      opacity: translateX.interpolate({
+        inputRange: [-SHOW_DELETE_THRESHOLD, 0],
+        outputRange: [1, 0],
+        extrapolate: "clamp",
+      }),
+    };
+  }, [translateX]);
+
+  const forceRecalculateHeight = () => {
+    setMeasuredHeight(null);
+  };
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -113,39 +144,73 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
   }, []);
 
   return (
-    <Animated.View
-      style={[styles.wrapper, measuredHeight !== null && { height }]}
-      ref={containerRef}
-    >
-      <Animated.View style={styles.deleteButtonContainer}>
-        <Feather
-          name="trash-2"
-          size={numbersBaseTokens.globalScale[6]}
-          color={colors.icon.white}
-        />
-      </Animated.View>
-
+    <>
       <Animated.View
-        style={[getTranslationX(), styles.container]}
-        {...panResponder.panHandlers}
+        style={measuredHeight !== null && { height }}
+        ref={containerRef}
       >
-        <View style={styles.description}>
-          <Text style={styles.title}>{description}</Text>
-          <Text style={styles.quantityText}>
-            {quantity} x {unitPrice} / {item.uom}
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.totalText}>{total}</Text>
-        </View>
+        <Animated.View
+          style={[styles.deleteButtonContainer, getDeleteButtonOpacity()]}
+        >
+          <Feather
+            name="trash-2"
+            size={numbersBaseTokens.globalScale[6]}
+            color={colors.icon.white}
+          />
+        </Animated.View>
+
+        <Animated.View style={getTranslationX()} {...panResponder.panHandlers}>
+          <TouchableOpacity
+            style={[styles.editButtonWrapper]}
+            onPress={handleEdit}
+          >
+            <View style={styles.description}>
+              <Text style={styles.title}>{description}</Text>
+              <Text style={styles.quantityText}>
+                {quantity} x {unitPrice} / {item.uom}
+              </Text>
+            </View>
+            <View style={styles.rightContent}>
+              <Text style={styles.totalText}>{total}</Text>
+              {supplierLogoUrl && (
+                <View style={styles.supplierLogoContainer}>
+                  <Image
+                    source={{ uri: supplierLogoUrl }}
+                    style={styles.supplierLogo}
+                    resizeMode="contain"
+                    onLoadStart={() => setIsImageLoading(true)}
+                    onLoadEnd={() => setIsImageLoading(false)}
+                  />
+                  {isImageLoading && (
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.icon.primary}
+                      style={styles.loadingIndicator}
+                    />
+                  )}
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
+      <BottomSheet ref={bottomSheetRef}>
+        <EditForm
+          mode={"item"}
+          data={item}
+          onSave={(item) => {
+            handleSaveItem(item);
+            forceRecalculateHeight();
+          }}
+          onClose={handleCloseEdit}
+        />
+      </BottomSheet>
+    </>
   );
 }
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
   ({ colors, numbersAliasTokens, customFonts, props }) => ({
-    wrapper: {},
-    container: {
+    editButtonWrapper: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "flex-start",
@@ -173,7 +238,7 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     totalText: {
       color: colors.text.primary,
       ...customFonts.regular.text.md,
-      flex: 1,
+
     },
     deleteButtonContainer: {
       position: "absolute",
@@ -186,6 +251,29 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
       alignItems: "flex-end",
       paddingRight: numbersAliasTokens.spacing.md,
       zIndex: 0,
+    },
+    rightContent: {
+      alignItems: "flex-end",
+      gap: numbersAliasTokens.spacing.xs,
+    },
+    supplierLogoContainer: {
+      position: "relative",
+      width: numbersAliasTokens.sizing.icon.xl,
+      height: numbersAliasTokens.sizing.icon.xl,
+    },
+    loadingIndicator: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    supplierLogo: {
+      width: numbersAliasTokens.sizing.icon.xl,
+      height: numbersAliasTokens.sizing.icon.xl,
+      borderRadius: numbersAliasTokens.borderRadius.sm,
     },
   })
 );
