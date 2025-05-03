@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import type { EstimateRow } from "@/data";
-import createThemedStyles, { useThemedColors } from "@/src/common/theme/utils/createThemedStyles";
+import createThemedStyles, {
+  useThemedColors,
+} from "@/src/common/theme/utils/createThemedStyles";
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { useRef, useCallback } from "react";
@@ -16,7 +18,6 @@ import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 
 interface EstimateItemProps {
   item: EstimateRow;
-  onRemove: (id: string) => void;
   isLast: boolean;
 }
 
@@ -24,17 +25,12 @@ const SWIPE_THRESHOLD = 196;
 const DELETE_ANIMATION_DURATION = 200;
 const DELETE_OFFSET = -500;
 
-export default function EstimateItem({
-  item,
-  onRemove,
-  isLast,
-}: EstimateItemProps) {
+export default function EstimateItem({ item, isLast }: EstimateItemProps) {
   const styles = useStyles({ isLast });
   const colors = useThemedColors();
   const { description, quantity, unitPrice, total, handleRemove } =
     useEstimateItem({
       item,
-      onRemove,
     });
 
   const translateX = useRef(new Animated.Value(0)).current;
@@ -110,7 +106,7 @@ export default function EstimateItem({
         style={[getItemStyle(), styles.container]}
         {...panResponder.panHandlers}
       >
-        <View>
+        <View style={styles.description}>
           <Text style={styles.title}>{description}</Text>
           <Text style={styles.quantityText}>
             {quantity} x {unitPrice} / {item.uom}
@@ -123,7 +119,6 @@ export default function EstimateItem({
     </View>
   );
 }
-
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
   ({ colors, numbersAliasTokens, customFonts, props }) => ({
     wrapper: {},
@@ -141,10 +136,12 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     description: {
       flexDirection: "column",
       gap: numbersAliasTokens.spacing["2xs"],
+      flex: 1,
     },
     title: {
       color: colors.text.primary,
       ...customFonts.regular.text.md,
+      flexWrap: 'wrap',
     },
     quantityText: {
       color: colors.text.secondary,
@@ -153,6 +150,7 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     totalText: {
       color: colors.text.primary,
       ...customFonts.regular.text.md,
+      flex: 1,
     },
     deleteButtonContainer: {
       position: "absolute",
