@@ -5,6 +5,7 @@ import { useEstimateSection } from "./useEstimateSection";
 import { formatCurrency } from "@/src/common/utils/format";
 import { Feather } from "@expo/vector-icons";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+import AddItemButton from "../AddItemButton";
 
 interface EstimateSectionProps {
   section: EstimateSectionType;
@@ -18,8 +19,11 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
 
   return (
     <Pressable style={styles.sectionContainer} onPress={toggleOpen}>
-      <Text style={styles.sectionTitleInfo}>{title}</Text>
-      <View style={styles.priceContainer}>
+      <View style={styles.contentWrapper}>
+        <Text style={styles.sectionTitleInfo}>{title}</Text>
+        <AddItemButton section={section} />
+      </View>
+      <View style={styles.contentWrapper}>
         <Text style={styles.sectionTitleInfo}>
           {formatCurrency(Number(price))}
         </Text>
@@ -50,9 +54,10 @@ const useStyles = createThemedStyles(
       color: colors.text.primary,
       ...customFonts.bold.text.md,
     },
-    priceContainer: {
+    contentWrapper: {
       flexDirection: "row",
       alignItems: "center",
+      justifyContent: "center",
       gap: numbersAliasTokens.spacing.xs,
     },
   })
