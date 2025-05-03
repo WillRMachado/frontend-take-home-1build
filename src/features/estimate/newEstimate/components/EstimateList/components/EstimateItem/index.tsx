@@ -1,9 +1,18 @@
-import { View, Text, Animated, ViewStyle, TextStyle } from "react-native";
+import {
+  View,
+  Text,
+  Animated,
+  PanResponder,
+  GestureResponderEvent,
+  PanResponderGestureState,
+} from "react-native";
+import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import type { EstimateRow } from "@/data";
-import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
-import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
+import createThemedStyles, { useThemedColors } from "@/src/common/theme/utils/createThemedStyles";
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
+import { useRef, useCallback } from "react";
+import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 
 interface EstimateItemProps {
   item: EstimateRow;
@@ -11,7 +20,9 @@ interface EstimateItemProps {
   isLast: boolean;
 }
 
-const SWIPE_THRESHOLD = 120;
+const SWIPE_THRESHOLD = 196;
+const DELETE_ANIMATION_DURATION = 200;
+const DELETE_OFFSET = -500;
 
 export default function EstimateItem({
   item,
@@ -19,26 +30,86 @@ export default function EstimateItem({
   isLast,
 }: EstimateItemProps) {
   const styles = useStyles({ isLast });
-  const {
-    description,
-    quantity,
-    unitPrice,
-    total,
-    panResponder,
-    getItemStyle,
-    getDeleteButtonStyle,
-  } = useEstimateItem({
-    item,
-    onRemove,
-  });
+  const colors = useThemedColors();
+  const { description, quantity, unitPrice, total, handleRemove } =
+    useEstimateItem({
+      item,
+      onRemove,
+    });
+
+  const translateX = useRef(new Animated.Value(0)).current;
+
+  const animateDelete = useCallback(() => {
+    Animated.timing(translateX, {
+      toValue: DELETE_OFFSET,
+      duration: DELETE_ANIMATION_DURATION,
+      useNativeDriver: true,
+    }).start(handleRemove);
+  }, [translateX, handleRemove]);
+
+  const resetPosition = useCallback(() => {
+    Animated.spring(translateX, {
+      toValue: 0,
+      useNativeDriver: true,
+    }).start();
+  }, [translateX]);
+
+  const handlePanResponderMove = useCallback(
+    (_: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+      if (gestureState.dx < 0) {
+        translateX.setValue(gestureState.dx);
+      }
+    },
+    [translateX]
+  );
+
+  const handlePanResponderRelease = useCallback(
+    (_: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+      if (gestureState.dx < -SWIPE_THRESHOLD) {
+        animateDelete();
+      } else {
+        resetPosition();
+      }
+    },
+    [animateDelete, resetPosition]
+  );
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > 15;
+      },
+      onPanResponderGrant: () => {
+        return true;
+      },
+      onPanResponderMove: handlePanResponderMove,
+      onPanResponderRelease: handlePanResponderRelease,
+      onPanResponderTerminate: resetPosition,
+      onPanResponderTerminationRequest: () => false,
+    })
+  ).current;
+
+  const getItemStyle = useCallback(() => {
+    return {
+      transform: [{ translateX }],
+    };
+  }, [translateX]);
 
   return (
     <View style={styles.wrapper}>
-      {/* <Animated.View style={[styles.deleteButtonContainer, getDeleteButtonStyle()]}>
-        <Feather name="trash-2" size={24} color="white" />
-      </Animated.View> */}
+      <Animated.View style={styles.deleteButtonContainer}>
+        <Feather
+          name="trash-2"
+          size={numbersBaseTokens.globalScale[6]}
+          color={colors.icon.white}
+        />
+      </Animated.View>
 
-      <View style={styles.container}>
+      <Animated.View
+        style={[getItemStyle(), styles.container]}
+        {...panResponder.panHandlers}
+      >
         <View>
           <Text style={styles.title}>{description}</Text>
           <Text style={styles.quantityText}>
@@ -48,7 +119,7 @@ export default function EstimateItem({
         <View>
           <Text style={styles.totalText}>{total}</Text>
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -76,40 +147,24 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
       ...customFonts.regular.text.md,
     },
     quantityText: {
-      fontSize: numbersBaseTokens.typography.size["3"],
       color: colors.text.secondary,
+      ...customFonts.regular.text.sm,
     },
     totalText: {
-      fontSize: numbersBaseTokens.typography.size["4"],
       color: colors.text.primary,
+      ...customFonts.regular.text.md,
     },
-
-
-
-    
     deleteButtonContainer: {
-      // position: "absolute",
-      // right: 0,
-      // top: 0,
-      // bottom: 0,
-      // width: SWIPE_THRESHOLD,
-      // backgroundColor: "#E74C3C",
-      // justifyContent: "center",
-      // alignItems: "center",
-    },
-    mainContent: {
-      // flex: 1,
-      // gap: numbersAliasTokens.spacing.xs,
-    },
-
-
-    priceContainer: {
-      marginLeft: numbersAliasTokens.spacing.md,
-    },
-    price: {
-      fontSize: numbersBaseTokens.typography.size["4"],
-      color: colors.text.primary,
-      fontWeight: "500",
+      position: "absolute",
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: SWIPE_THRESHOLD,
+      backgroundColor: colors.core.red.base,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      paddingRight: numbersAliasTokens.spacing.sm,
+      zIndex: 0,
     },
   })
 );
