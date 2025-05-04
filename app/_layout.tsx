@@ -12,9 +12,9 @@ import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import { BottomSheet } from "@/src/common/lib/imports";
 import { EditForm } from "@/src/features/estimate/components/EditForm";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { EstimateRow, EstimateSection } from "@/data";
-import BottomSheetWrapper from "@gorhom/bottom-sheet";
+import BottomSheetWrapper, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 
 function ThemedContent() {
   const { theme } = useTheme();
@@ -27,6 +27,20 @@ function ThemedContent() {
 
   const { bottomSheetRef, bottomSheetChild, isBottomSheetOpen } =
     componentContext;
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheet.Backdrop
+        {...props}
+        disappearsOnIndex={-1}
+        enableTouchThrough={false}
+        opacity={1.5}
+        style={{ backgroundColor: '#000'}}
+        pressBehavior="close"
+      />
+    ),
+    []
+  );
 
   return (
     <SafeAreaView
@@ -42,7 +56,11 @@ function ThemedContent() {
       />
 
       {isBottomSheetOpen && (
-        <BottomSheet.Wrapper ref={bottomSheetRef}>
+        <BottomSheet.Wrapper
+          backgroundStyle={{ backgroundColor: colors.outline.medium }}
+          ref={bottomSheetRef}
+          backdropComponent={renderBackdrop}
+        >
           <BottomSheet.View>{bottomSheetChild}</BottomSheet.View>
         </BottomSheet.Wrapper>
       )}

@@ -32,10 +32,17 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
     [updateItem, closeBottomSheet]
   );
 
-  const handleEdit = useCallback((component: React.ReactNode) => {
-    setBottomSheetChild(component);
-    openBottomSheet();
-  }, [openBottomSheet, setBottomSheetChild]);
+  const handleEdit = useCallback(
+    (component: React.ReactNode) => {
+      setBottomSheetChild(component);
+      openBottomSheet();
+    },
+    [openBottomSheet, setBottomSheetChild]
+  );
+
+  const handleCloseEdit = useCallback(() => {
+    closeBottomSheet();
+  }, [closeBottomSheet]);
 
   return {
     description: item.title,
@@ -45,5 +52,7 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
     handleRemove,
     supplierLogoUrl: item.supplier?.logoUrl,
     handleEdit,
+    handleSaveItem,
+    handleCloseEdit,
   };
 }

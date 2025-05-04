@@ -44,8 +44,8 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     total,
     handleRemove,
     supplierLogoUrl,
-    // handleSaveItem,
-    // handleCloseEdit,
+    handleSaveItem,
+    handleCloseEdit,
     // bottomSheetRef,
     handleEdit,
   } = useEstimateItem({
@@ -164,16 +164,15 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
             style={[styles.editButtonWrapper]}
             onPress={() =>
               handleEdit(
-                <View>
-                  <Text style={{ color: "green" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "white" }}>text</Text>
-                  <Text style={{ color: "back" }}>text</Text>
-                </View>
+                <EditForm
+                  mode="item"
+                  data={item}
+                  onSave={(updatedItem) => {
+                    handleSaveItem(updatedItem);
+                    forceRecalculateHeight();
+                  }}
+                  onClose={handleCloseEdit}
+                />
               )
             }
           >
