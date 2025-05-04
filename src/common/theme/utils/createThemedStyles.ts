@@ -33,9 +33,10 @@ export function useThemedAlphaColors() {
   return getColorWithAlpha;
 }
 
-export default function createThemedStyles<P = {}, S extends NamedStyles<S> = any>(
-  styleCreator: (params: ThemeParams & { props: P }) => S
-) {
+export default function createThemedStyles<
+  P = {},
+  S extends NamedStyles<S> = any
+>(styleCreator: (params: ThemeParams & { props: P }) => S) {
   return (props?: P) => {
     const { theme } = useTheme();
     const themeColors = useThemedComponentTokens();
@@ -53,26 +54,3 @@ export default function createThemedStyles<P = {}, S extends NamedStyles<S> = an
     return StyleSheet.create(styles);
   };
 }
-
-
-
-// export default function createThemedStyles<T extends NamedStyles<T>>(
-//   styleCreator: (params: ThemeParams) => T
-// ) {
-//   return () => {
-//     const { theme } = useTheme();
-//     const themeColors = useThemedComponentTokens();
-//     const colors = useThemedColors();
-//     const getColorWithAlpha = useThemedAlphaColors();
-//     return StyleSheet.create(
-//       styleCreator({
-//         themeColors,
-//         colors,
-//         getColorWithAlpha,
-//         theme,
-//         numbersAliasTokens,
-//         customFonts,
-//       })
-//     );
-//   };
-// }
