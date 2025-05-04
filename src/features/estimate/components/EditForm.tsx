@@ -45,7 +45,7 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.header}>
+			{/* <Text style={styles.header}>
 				Edit {mode === "item" ? "Item" : "Section"}
 			</Text>
 
@@ -82,7 +82,7 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
 						/>
 					</View>
 				</>
-			)}
+			)} */}
 
 			<View style={styles.formActions}>
 				<Button onPress={handleSave} style={styles.button}>

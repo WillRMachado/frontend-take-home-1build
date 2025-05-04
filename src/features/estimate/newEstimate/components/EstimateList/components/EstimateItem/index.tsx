@@ -18,9 +18,9 @@ import createThemedStyles, {
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-import { BottomSheet } from "@/src/common/components/BottomSheet";
 import { EditForm } from "@/src/features/estimate/components/EditForm";
 import React from "react";
+import { BottomSheet } from "@/src/common/lib/imports";
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
@@ -44,9 +44,9 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     total,
     handleRemove,
     supplierLogoUrl,
-    handleSaveItem,
-    handleCloseEdit,
-    bottomSheetRef,
+    // handleSaveItem,
+    // handleCloseEdit,
+    // bottomSheetRef,
     handleEdit,
   } = useEstimateItem({
     item,
@@ -162,7 +162,20 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
         <Animated.View style={getTranslationX()} {...panResponder.panHandlers}>
           <TouchableOpacity
             style={[styles.editButtonWrapper]}
-            onPress={handleEdit}
+            onPress={() =>
+              handleEdit(
+                <View>
+                  <Text style={{ color: "green" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "white" }}>text</Text>
+                  <Text style={{ color: "back" }}>text</Text>
+                </View>
+              )
+            }
           >
             <View style={styles.description}>
               <Text style={styles.title}>{description}</Text>
@@ -194,17 +207,6 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
           </TouchableOpacity>
         </Animated.View>
       </Animated.View>
-      <BottomSheet ref={bottomSheetRef}>
-        <EditForm
-          mode={"item"}
-          data={item}
-          onSave={(item) => {
-            handleSaveItem(item);
-            forceRecalculateHeight();
-          }}
-          onClose={handleCloseEdit}
-        />
-      </BottomSheet>
     </>
   );
 }
@@ -238,7 +240,6 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     totalText: {
       color: colors.text.primary,
       ...customFonts.regular.text.md,
-
     },
     deleteButtonContainer: {
       position: "absolute",

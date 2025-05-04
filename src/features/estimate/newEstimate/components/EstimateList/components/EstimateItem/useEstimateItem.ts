@@ -1,8 +1,9 @@
 import type { EstimateRow } from "@/data";
-import { useCallback, useRef } from "react";
+import { useCallback, useContext } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
-import { BottomSheet } from "@/src/common/components/BottomSheet";
+import { ComponentContext } from "@/src/context/ComponentContext";
+import { View, Text } from "react-native";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
@@ -10,7 +11,14 @@ interface UseEstimateItemProps {
 
 export function useEstimateItem({ item }: UseEstimateItemProps) {
   const { deleteItem, updateItem, clearSelection } = useEstimateContext();
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const componentContext = useContext(ComponentContext);
+
+  if (!componentContext) {
+    throw new Error("ComponentContext must be used within a ComponentProvider");
+  }
+
+  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
+    componentContext;
 
   const handleRemove = useCallback(() => {
     deleteItem(item.id);
@@ -19,19 +27,15 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
   const handleSaveItem = useCallback(
     (updatedItem: EstimateRow) => {
       updateItem(updatedItem.id, updatedItem);
-      bottomSheetRef.current?.dismiss();
+      closeBottomSheet();
     },
-
-    [item.id, updateItem]
+    [updateItem, closeBottomSheet]
   );
 
-  const handleCloseEdit = useCallback(() => {
-    bottomSheetRef.current?.dismiss();
-  }, []);
-
-  const handleEdit = useCallback(() => {
-    bottomSheetRef.current?.present();
-  }, []);
+  const handleEdit = useCallback((component: React.ReactNode) => {
+    setBottomSheetChild(component);
+    openBottomSheet();
+  }, [openBottomSheet, setBottomSheetChild]);
 
   return {
     description: item.title,
@@ -40,9 +44,6 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
     total: formatCurrency(item.price * item.quantity),
     handleRemove,
     supplierLogoUrl: item.supplier?.logoUrl,
-    handleSaveItem,
-    handleCloseEdit,
-    bottomSheetRef,
     handleEdit,
   };
 }
