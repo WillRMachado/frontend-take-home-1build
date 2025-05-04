@@ -7,7 +7,7 @@ import {
 	calculateEstimateTotal,
 } from "../../common/lib/estimate"
 import type { EstimateRow, EstimateSection } from "@/data"
-import { EditForm } from "./components/EditForm"
+import { EditForm } from "./newEstimate/components/EditForm"
 import { useEstimateScreen } from "./useEstimateScreen"
 import { TextField } from "../../common/components/TextField"
 

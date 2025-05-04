@@ -6,15 +6,22 @@ import {
   ComponentProvider,
   ComponentContext,
 } from "@/src/context/ComponentContext";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  useSafeAreaFrame, useSafeAreaInsets
+} from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import { BottomSheet } from "@/src/common/lib/imports";
-import { EditForm } from "@/src/features/estimate/components/EditForm";
+import { EditForm } from "@/src/features/estimate/newEstimate/components/EditForm";
 import { useCallback, useContext } from "react";
 import { EstimateRow, EstimateSection } from "@/data";
-import BottomSheetWrapper, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import BottomSheetWrapper, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from "@gorhom/bottom-sheet";
+import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 
 function ThemedContent() {
   const { theme } = useTheme();
@@ -28,6 +35,8 @@ function ThemedContent() {
   const { bottomSheetRef, bottomSheetChild, isBottomSheetOpen } =
     componentContext;
 
+  const { top, bottom, left, right } = useSafeAreaInsets();
+
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <BottomSheet.Backdrop
@@ -35,7 +44,7 @@ function ThemedContent() {
         disappearsOnIndex={-1}
         enableTouchThrough={false}
         opacity={1.5}
-        style={{ backgroundColor: '#000'}}
+        style={{ backgroundColor: "#000" }}
         pressBehavior="close"
       />
     ),
@@ -60,8 +69,10 @@ function ThemedContent() {
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
+          enablePanDownToClose={true}
+          topInset={(top + numbersAliasTokens.spacing.lg)}
         >
-          <BottomSheet.View>{bottomSheetChild}</BottomSheet.View>
+          <BottomSheet.ScrollView>{bottomSheetChild}</BottomSheet.ScrollView>
         </BottomSheet.Wrapper>
       )}
     </SafeAreaView>

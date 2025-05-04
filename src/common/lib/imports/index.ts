@@ -3,12 +3,14 @@ import BottomSheetWrapper, {
   BottomSheetView,
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
+  BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 
 
 const BottomSheet = {
   Wrapper: BottomSheetWrapper,
   View: BottomSheetView,
+  ScrollView: BottomSheetScrollView,
   Backdrop: BottomSheetBackdrop,
 };
 

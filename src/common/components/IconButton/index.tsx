@@ -25,7 +25,9 @@ export default function IconButton({
 
   return (
     <TouchableOpacity
-      style={label ? styles.labeledButtonContainer : styles.standaloneButtonContainer}
+      style={
+        label ? styles.labeledButtonContainer : styles.standaloneButtonContainer
+      }
       onPress={onClick}
     >
       <View style={styles.contentWrapper}>
@@ -59,8 +61,8 @@ const useStyles = createThemedStyles(
       alignSelf: "center",
       justifyContent: "center",
       alignItems: "center",
-      width: numbersAliasTokens.sizing.icon.xl,
-      height: numbersAliasTokens.sizing.icon.xl,
+      width: numbersAliasTokens.spacing["3xl"],
+      height: numbersAliasTokens.spacing["3xl"],
     },
     contentWrapper: {
       flexDirection: "row",

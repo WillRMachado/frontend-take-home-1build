@@ -7,12 +7,22 @@ export type UnitOfMeasure =
 	| "HR" // Hour
 	| "DAY" // Day
 	| "LS" // Lump Sum
+	| "SHT" // Sheet
 	| "TON" // Ton
 	| "GAL" // Gallon
 	| "BF" // Board Feet
 	| "BOX" // Box
 	| "SET" // Set
 	| "ROLL" // Roll
+	| "SQ" // Square
+	| "IN" // Inch
+	| "YD" // Yard
+	| "CF" // Cubic Feet
+	| "LBS" // Pounds
+	| "TONS" // Tons
+	| "DY" // Day
+	| "WK" // Week
+	| "MO" // Month
 
 export interface Supplier {
 	name: string

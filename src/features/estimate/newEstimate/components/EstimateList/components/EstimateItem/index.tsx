@@ -7,18 +7,21 @@ import {
   PanResponderGestureState,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   ActivityIndicator,
 } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState } from "react";
 import type { EstimateRow, UnitOfMeasure } from "@/data";
 import createThemedStyles, {
   useThemedColors,
+  useThemedAlphaColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-import { EditForm } from "@/src/features/estimate/components/EditForm";
+import { EditForm } from "@/src/features/estimate/newEstimate/components/EditForm";
 import React from "react";
+import UomSelector from "@/src/features/estimate/newEstimate/components/UomSelector";
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
@@ -32,6 +35,8 @@ const DELETE_OFFSET = -500;
 export default function EstimateItem({ item, isLast }: EstimateItemProps) {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const getColorWithAlpha = useThemedAlphaColors();
 
   const styles = useStyles({ isLast });
   const colors = useThemedColors();
@@ -99,7 +104,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dx) > 5;
+        return Math.abs(gestureState.dx) > 25;
       },
       onPanResponderGrant: () => {
         return true;
@@ -142,9 +147,12 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
 
   const handleChangeUom = () => {
     handleEdit(
-      <View>
-        <Text>Change UOM</Text>
-      </View>
+      <UomSelector
+        selectUom={(uom) => {
+          handleSaveItem({ ...item, uom });
+          forceRecalculateHeight();
+        }}
+      />
     );
   };
 
@@ -165,7 +173,8 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
         </Animated.View>
 
         <Animated.View style={getTranslationX()} {...panResponder.panHandlers}>
-          <TouchableOpacity
+          <TouchableHighlight
+            underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
             style={[styles.editButtonWrapper]}
             onPress={() =>
               handleEdit(
@@ -178,38 +187,44 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
                   }}
                   onClose={handleCloseEdit}
                   onDropdownPress={handleChangeUom}
+                  onDelete={() => {
+                    handleRemove();
+                    handleCloseEdit();
+                  }}
                 />
               )
             }
           >
-            <View style={styles.description}>
-              <Text style={styles.title}>{description}</Text>
-              <Text style={styles.quantityText}>
-                {quantity} x {unitPrice} / {item.uom}
-              </Text>
-            </View>
-            <View style={styles.rightContent}>
-              <Text style={styles.totalText}>{total}</Text>
-              {supplierLogoUrl && (
-                <View style={styles.supplierLogoContainer}>
-                  <Image
-                    source={{ uri: supplierLogoUrl }}
-                    style={styles.supplierLogo}
-                    resizeMode="contain"
-                    onLoadStart={() => setIsImageLoading(true)}
-                    onLoadEnd={() => setIsImageLoading(false)}
-                  />
-                  {isImageLoading && (
-                    <ActivityIndicator
-                      size="small"
-                      color={colors.icon.primary}
-                      style={styles.loadingIndicator}
+            <>
+              <View style={styles.description}>
+                <Text style={styles.title}>{description}</Text>
+                <Text style={styles.quantityText}>
+                  {quantity} x {unitPrice} / {item.uom}
+                </Text>
+              </View>
+              <View style={styles.rightContent}>
+                <Text style={styles.totalText}>{total}</Text>
+                {supplierLogoUrl && (
+                  <View style={styles.supplierLogoContainer}>
+                    <Image
+                      source={{ uri: supplierLogoUrl }}
+                      style={styles.supplierLogo}
+                      resizeMode="contain"
+                      onLoadStart={() => setIsImageLoading(true)}
+                      onLoadEnd={() => setIsImageLoading(false)}
                     />
-                  )}
-                </View>
-              )}
-            </View>
-          </TouchableOpacity>
+                    {isImageLoading && (
+                      <ActivityIndicator
+                        size="small"
+                        color={colors.icon.primary}
+                        style={styles.loadingIndicator}
+                      />
+                    )}
+                  </View>
+                )}
+              </View>
+            </>
+          </TouchableHighlight>
         </Animated.View>
       </Animated.View>
     </>

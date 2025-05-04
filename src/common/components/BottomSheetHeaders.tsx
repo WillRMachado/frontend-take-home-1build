@@ -5,7 +5,7 @@ import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import { Text } from "@/src/common/components/Text";
-
+import IconButton from "@/src/common/components/IconButton";
 interface BottomSheetHeadersProps {
   title: string;
   rightIcon?: keyof typeof Feather.glyphMap;
@@ -26,21 +26,12 @@ export function BottomSheetHeaders({
 
   return (
     <View style={styles.container}>
-      {leftIcon && (
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={onClickLeftIcon}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Feather name={leftIcon} size={24} color={colors.icon.primary} />
-        </TouchableOpacity>
-      )}
+      {leftIcon && <IconButton iconName={leftIcon} onClick={onClickLeftIcon ? onClickLeftIcon : () => {}} />}
       <Text style={styles.title}>{title}</Text>
       {rightIcon && (
         <TouchableOpacity
           style={styles.iconButton}
-          onPress={onClickRightIcon}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          onPress={onClickRightIcon ? onClickRightIcon : () => {}}
         >
           <Feather name={rightIcon} size={24} color={colors.icon.primary} />
         </TouchableOpacity>
@@ -49,25 +40,25 @@ export function BottomSheetHeaders({
   );
 }
 
-const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: numbersAliasTokens.spacing.sm,
-    marginBottom: numbersAliasTokens.spacing.sm, 
-    // borderWidth: 1,
-    // borderColor: "red",
-  },
-  title: {
-    flex: 1,
-    textAlign: "center",
-    color: colors.text.primary,
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-})); 
+const useStyles = createThemedStyles(
+  ({ numbersAliasTokens, colors, customFonts }) => ({
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: numbersAliasTokens.spacing.xl,
+    },
+    title: {
+      flex: 1,
+      textAlign: "center",
+      color: colors.text.primary,
+      ...customFonts.bold.text.md,
+    },
+    iconButton: {
+      width: 40,
+      height: 40,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  })
+);

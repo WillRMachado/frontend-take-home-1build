@@ -1,9 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { PrimaryButton } from "../../../common/components/PrimaryButton";
+import { PrimaryButton } from "../../../../common/components/PrimaryButton";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { useState } from "react";
-import { FloatingLabelInput } from "../../../common/components/FloatingLabelInput";
+import { FloatingLabelInput } from "../../../../common/components/FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
@@ -15,6 +15,7 @@ type EditFormProps = {
   onSave: (updates: any) => void;
   onClose: () => void;
   onDropdownPress: () => void;
+  onDelete: () => void;
 };
 
 function isEstimateRow(data: any): data is EstimateRow {
@@ -26,6 +27,8 @@ export function EditForm({
   data,
   onSave,
   onDropdownPress,
+  onClose,
+  onDelete,
 }: EditFormProps) {
   const [title, setTitle] = useState(data.title);
   const [price, setPrice] = useState(
@@ -64,9 +67,9 @@ export function EditForm({
       <BottomSheetHeaders
         title="Edit Item"
         leftIcon="x"
-        onClickLeftIcon={() => {}}
-        rightIcon="check"
-        onClickRightIcon={() => {}}
+        onClickLeftIcon={onClose}
+        rightIcon="trash-2"
+        onClickRightIcon={onDelete}
       />
 
       <View style={styles.field}>

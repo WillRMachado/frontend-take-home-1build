@@ -1,4 +1,9 @@
-export const UNITS_OF_MEASURE = {
+import { UnitOfMeasure } from "@/data";
+
+export const UNITS_OF_MEASURE: Record<
+  string,
+  { name: string; abbreviation: UnitOfMeasure; key: string }[]
+> = {
   QUANTITY: [
     { name: "Each", abbreviation: "EA", key: "QUANTITY" },
     { name: "Lump Sum", abbreviation: "LS", key: "QUANTITY" },
