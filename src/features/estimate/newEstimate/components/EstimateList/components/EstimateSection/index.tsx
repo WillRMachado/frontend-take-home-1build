@@ -7,7 +7,7 @@ import { Feather } from "@expo/vector-icons";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import EstimateItem from "../EstimateItem";
 import React from "react";
-import AddItemButton from "@/src/common/components/AddItemButton";
+import IconButton from "@/src/common/components/IconButton";
 
 interface EstimateSectionProps {
   section: EstimateSectionType;
@@ -24,7 +24,12 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
       <Pressable style={styles.sectionContainer} onPress={toggleOpen}>
         <View style={styles.contentWrapper}>
           <Text style={styles.sectionTitleInfo}>{title}</Text>
-          <AddItemButton section={section} />
+          <IconButton
+            iconName="plus"
+            onClick={() => {
+              console.log("add section");
+            }}
+          />
         </View>
         <View style={styles.contentWrapper}>
           <Text style={styles.sectionTitleInfo}>

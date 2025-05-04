@@ -2,8 +2,8 @@ import { View } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { ThemeSwitch } from "@/src/common/components";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
-import AddSectionButton from "./components/AddSectionButton";
 import EstimateList from "./components/EstimateList";
+import IconButton from "@/src/common/components/IconButton";
 
 export default function EstimateScreen() {
   const { theme, toggleTheme, isDark } = useTheme();
@@ -13,7 +13,14 @@ export default function EstimateScreen() {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <ThemeSwitch />
-        <AddSectionButton />
+        
+        <IconButton
+          iconName="plus"
+          onClick={() => {
+            console.log("add section");
+          }}
+          label="Add"
+        />
       </View>
       <EstimateList />
     </View>

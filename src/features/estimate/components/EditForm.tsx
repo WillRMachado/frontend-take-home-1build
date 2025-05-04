@@ -7,6 +7,7 @@ import { FloatingLabelInput } from "../../../common/components/FloatingLabelInpu
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
+import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
 
 type EditFormProps = {
   mode: "item" | "section";
@@ -59,6 +60,14 @@ export function EditForm({
       {/* <Text style={styles.header}>
         Edit {mode === "item" ? "Item" : "Section"}
       </Text> */}
+
+      <BottomSheetHeaders
+        title="Edit Item"
+        leftIcon="x"
+        onClickLeftIcon={() => {}}
+        rightIcon="check"
+        onClickRightIcon={() => {}}
+      />
 
       <View style={styles.field}>
         <FloatingLabelInput

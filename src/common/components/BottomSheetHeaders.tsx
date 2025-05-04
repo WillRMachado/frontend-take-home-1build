@@ -55,9 +55,9 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: numbersAliasTokens.spacing.sm,
-    paddingVertical: numbersAliasTokens.spacing.md,
-    borderBottomWidth: numbersAliasTokens.borderWidth.xs,
-    borderBottomColor: colors.layer.solid.darker,
+    marginBottom: numbersAliasTokens.spacing.sm, 
+    // borderWidth: 1,
+    // borderColor: "red",
   },
   title: {
     flex: 1,
