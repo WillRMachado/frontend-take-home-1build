@@ -21,6 +21,8 @@ interface FloatingLabelInputProps extends TextInputProps {
   showStepper?: boolean;
   onIncrement?: () => void;
   onDecrement?: () => void;
+  showChevron?: boolean;
+  onChevronPress?: () => void;
 }
 
 export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
@@ -34,6 +36,8 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   showStepper = false,
   onIncrement,
   onDecrement,
+  showChevron = false,
+  onChevronPress,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -117,6 +121,26 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
             />
           </TouchableOpacity>
         </View>
+      ) : showChevron ? (
+        <TouchableOpacity
+          style={[styles.inputRow, { backgroundColor }]}
+          activeOpacity={0.7}
+          onPress={onChevronPress}
+        >
+          <TextInput
+            {...props}
+            value={value}
+            style={[styles.dropdown, style]}
+            editable={false}
+            pointerEvents="none"
+          />
+          <Feather
+            name="chevron-down"
+            size={numbersAliasTokens.sizing.icon.md}
+            color={colors.text.secondary}
+            style={styles.chevronIcon}
+          />
+        </TouchableOpacity>
       ) : (
         <TextInput
           {...props}
@@ -136,35 +160,50 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   );
 };
 
-const useStyles = createThemedStyles(
-  ({ numbersAliasTokens, colors }) => ({
-    container: {
-      position: "relative",
-      marginBottom: numbersAliasTokens.spacing.xs,
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: colors.outline.dark,
-      borderRadius: numbersAliasTokens.borderRadius["sm"],
-      padding: numbersAliasTokens.spacing.xs,
-      paddingTop: numbersAliasTokens.spacing.md,
-      fontSize: numbersAliasTokens.sizing.icon.sm,
-      color: colors.text.primary,
-    },
-    stepperRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
-      borderWidth: numbersAliasTokens.borderWidth.xs,
-      borderColor: colors.outline.dark,
-      borderRadius: numbersAliasTokens.borderRadius["sm"],
-      paddingHorizontal: numbersAliasTokens.spacing["2xs"],
-      paddingVertical: numbersAliasTokens.spacing["3xs"],
-    },
-    iconButton: {
-      paddingHorizontal: numbersAliasTokens.spacing["3xs"],
-      paddingVertical: numbersAliasTokens.spacing["2xs"],
-    },
-  })
-);
+const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
+  container: {
+    position: "relative",
+    marginBottom: numbersAliasTokens.spacing.xs,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.outline.dark,
+    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    padding: numbersAliasTokens.spacing.xs,
+    paddingTop: numbersAliasTokens.spacing.md,
+    fontSize: numbersAliasTokens.sizing.icon.sm,
+    color: colors.text.primary,
+  },
+  dropdown: {
+    borderWidth: 0,
+    color: colors.text.primary,
+    paddingRight: numbersAliasTokens.spacing.xs,
+  },
+  inputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.outline.dark,
+    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    padding: numbersAliasTokens.spacing.xs,
+    paddingTop: numbersAliasTokens.spacing.md,
+  },
+  chevronIcon: {
+    marginLeft: numbersAliasTokens.spacing["2xs"],
+  },
+  stepperRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    borderWidth: numbersAliasTokens.borderWidth.xs,
+    borderColor: colors.outline.dark,
+    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    paddingHorizontal: numbersAliasTokens.spacing["2xs"],
+    paddingVertical: numbersAliasTokens.spacing["3xs"],
+  },
+  iconButton: {
+    paddingHorizontal: numbersAliasTokens.spacing["3xs"],
+    paddingVertical: numbersAliasTokens.spacing["2xs"],
+  },
+}));

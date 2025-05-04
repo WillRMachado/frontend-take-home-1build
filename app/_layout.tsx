@@ -57,7 +57,7 @@ function ThemedContent() {
 
       {isBottomSheetOpen && (
         <BottomSheet.Wrapper
-          backgroundStyle={{ backgroundColor: colors.outline.medium }}
+          backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
         >

@@ -10,8 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState } from "react";
-import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
-import type { EstimateRow } from "@/data";
+import type { EstimateRow, UnitOfMeasure } from "@/data";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
@@ -20,7 +19,6 @@ import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import { EditForm } from "@/src/features/estimate/components/EditForm";
 import React from "react";
-import { BottomSheet } from "@/src/common/lib/imports";
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
@@ -46,7 +44,6 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     supplierLogoUrl,
     handleSaveItem,
     handleCloseEdit,
-    // bottomSheetRef,
     handleEdit,
   } = useEstimateItem({
     item,
@@ -143,6 +140,14 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     }
   }, []);
 
+  const handleChangeUom = () => {
+    handleEdit(
+      <View>
+        <Text>Change UOM</Text>
+      </View>
+    );
+  };
+
   return (
     <>
       <Animated.View
@@ -172,6 +177,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
                     forceRecalculateHeight();
                   }}
                   onClose={handleCloseEdit}
+                  onDropdownPress={handleChangeUom}
                 />
               )
             }
@@ -217,7 +223,7 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
       alignItems: "flex-start",
       padding: numbersAliasTokens.spacing.sm,
       paddingRight: numbersAliasTokens.spacing["3xl"],
-      backgroundColor: colors.layer.solid.dark,
+      backgroundColor: colors.layer.solid.light,
       borderBottomWidth: props.isLast ? 0 : numbersAliasTokens.borderWidth.xs,
       borderColor: colors.layer.solid.darker,
       gap: numbersAliasTokens.spacing["2xs"],

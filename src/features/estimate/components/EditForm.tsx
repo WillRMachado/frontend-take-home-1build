@@ -13,13 +13,19 @@ type EditFormProps = {
   data: EstimateRow | EstimateSection;
   onSave: (updates: any) => void;
   onClose: () => void;
+  onDropdownPress: () => void;
 };
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
 }
 
-export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
+export function EditForm({
+  mode,
+  data,
+  onSave,
+  onDropdownPress,
+}: EditFormProps) {
   const [title, setTitle] = useState(data.title);
   const [price, setPrice] = useState(
     isEstimateRow(data) ? data.price.toString() : ""
@@ -59,7 +65,7 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
           label={mode === "item" ? "Item title" : "Section title"}
           value={title}
           onChangeText={setTitle}
-          backgroundColor={colors.outline.medium}
+          backgroundColor={colors.layer.solid.light}
         />
       </View>
 
@@ -72,7 +78,7 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
                 value={price}
                 onChangeText={setPrice}
                 keyboardType="decimal-pad"
-                backgroundColor={colors.outline.medium}
+                backgroundColor={colors.layer.solid.light}
               />
             </View>
             <View style={{ width: 100 }}>
@@ -80,7 +86,9 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
                 label="Unit"
                 value={uom}
                 onChangeText={(text) => setUom(text as UnitOfMeasure)}
-                backgroundColor={colors.outline.medium}
+                backgroundColor={colors.layer.solid.light}
+                showChevron
+                onChevronPress={onDropdownPress}
               />
             </View>
           </View>
@@ -90,7 +98,7 @@ export function EditForm({ mode, data, onSave, onClose }: EditFormProps) {
               value={quantity}
               onChangeText={setQuantity}
               showStepper
-              backgroundColor={colors.outline.medium}
+              backgroundColor={colors.layer.solid.light}
               onIncrement={() => setQuantity((q) => (Number(q) + 1).toString())}
               onDecrement={() =>
                 setQuantity((q) => Math.max(0, Number(q) - 1).toString())
