@@ -1,8 +1,10 @@
 import { UnitOfMeasure } from "@/data";
 
+export type UomEntry = { name: string; abbreviation: UnitOfMeasure; key: string };
+
 export const UNITS_OF_MEASURE: Record<
   string,
-  { name: string; abbreviation: UnitOfMeasure; key: string }[]
+  UomEntry[]
 > = {
   QUANTITY: [
     { name: "Each", abbreviation: "EA", key: "QUANTITY" },

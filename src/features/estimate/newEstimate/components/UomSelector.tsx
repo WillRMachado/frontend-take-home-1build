@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
-import { UNITS_OF_MEASURE } from "@/src/consts/unitsOfMeasure";
+import { UNITS_OF_MEASURE, UomEntry } from "@/src/consts/unitsOfMeasure";
 import { THEMES } from "@/src/common/enums/themes";
 import { UnitOfMeasure } from "@/data";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
@@ -17,15 +17,28 @@ export default function UomSelector({ selectUom, onReturn }: UomSelectorProps) {
   const styles = useStyles();
   const [search, setSearch] = useState("");
 
-  // Filtered units by search
-  const filteredUnits = Object.keys(UNITS_OF_MEASURE).reduce((acc, key) => {
-    const filtered = UNITS_OF_MEASURE[key].filter((uom) =>
-      uom.name.toLowerCase().includes(search.toLowerCase()) ||
-      uom.abbreviation.toLowerCase().includes(search.toLowerCase())
+
+  const matchesSearch = (text: string) =>
+    text.toLowerCase().includes(search.toLowerCase());
+
+  const filterUnitsByCategory = (units: UomEntry[]) =>
+    units.filter(
+      (uom) =>
+        matchesSearch(uom.name) ||
+        matchesSearch(uom.abbreviation) ||
+        matchesSearch(uom.key)
     );
-    if (filtered.length > 0) acc[key] = filtered;
-    return acc;
-  }, {} as typeof UNITS_OF_MEASURE);
+
+  const filteredUnits = Object.entries(UNITS_OF_MEASURE).reduce(
+    (acc, [category, units]) => {
+      const filtered = filterUnitsByCategory(units);
+      if (filtered.length > 0) {
+        acc[category] = filtered;
+      }
+      return acc;
+    },
+    {} as typeof UNITS_OF_MEASURE
+  );
 
   return (
     <View>
@@ -40,10 +53,8 @@ export default function UomSelector({ selectUom, onReturn }: UomSelectorProps) {
           value={search}
           onChangeText={setSearch}
           backgroundColor={styles.searchInput.backgroundColor}
-          style={styles.searchInput}
-          placeholderTextColor="#A0A3BD"
+          placeholderTextColor={styles.searchInput.backgroundColor}
           autoCorrect={false}
-          autoCapitalize="none"
           leftIconName="search"
         />
       </View>
@@ -92,12 +103,12 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
       ...customFonts.regular.text.md,
     },
     uomRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
     },
     abbreviationText: {
-      color: '#A0A3BD',
+      color: colors.text.secondary,
       ...customFonts.regular.text.md,
     },
     searchInputContainer: {
@@ -105,10 +116,10 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
       paddingBottom: numbersAliasTokens.spacing.xs,
     },
     searchInput: {
-      color: '#fff',
-      borderRadius: 12,
-      padding: 12,
-      backgroundColor: '#23262F',
+      color: colors.text.primary,
+      borderRadius: numbersAliasTokens.borderRadius.md,
+      padding: numbersAliasTokens.spacing.sm,
+      backgroundColor: colors.layer.solid.light,
     },
   })
 );

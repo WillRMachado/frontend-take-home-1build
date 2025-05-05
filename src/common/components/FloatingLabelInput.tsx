@@ -14,6 +14,7 @@ import createThemedStyles, {
   useThemedColors,
 } from "../theme/utils/createThemedStyles";
 import { numbersAliasTokens } from "../theme/tokens/alias/numbers";
+import { numbersBaseTokens } from "../theme/tokens/base/numbers";
 
 interface FloatingLabelInputProps extends TextInputProps {
   label: string;
@@ -27,14 +28,17 @@ interface FloatingLabelInputProps extends TextInputProps {
   leftIconName?: keyof typeof Feather.glyphMap;
 }
 
-const StepperInput = forwardRef<TextInput, {
-  value: string | undefined;
-  onIncrement: () => void;
-  onDecrement: () => void;
-  backgroundColor: string;
-  style?: StyleProp<TextStyle>;
-  props: TextInputProps;
-}>(({ value, onIncrement, onDecrement, backgroundColor, style, props }, ref) => {
+const StepperInput = forwardRef<
+  TextInput,
+  {
+    value: string | undefined;
+    onIncrement: () => void;
+    onDecrement: () => void;
+    backgroundColor: string;
+    style?: StyleProp<TextStyle>;
+    props: TextInputProps;
+  }
+>(({ value, onIncrement, onDecrement, backgroundColor, style, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -74,13 +78,16 @@ const StepperInput = forwardRef<TextInput, {
   );
 });
 
-const ChevronInput = forwardRef<TextInput, {
-  value: string | undefined;
-  onChevronPress: () => void;
-  backgroundColor: string;
-  style?: StyleProp<TextStyle>;
-  props: TextInputProps;
-}>(({ value, onChevronPress, backgroundColor, style, props }, ref) => {
+const ChevronInput = forwardRef<
+  TextInput,
+  {
+    value: string | undefined;
+    onChevronPress: () => void;
+    backgroundColor: string;
+    style?: StyleProp<TextStyle>;
+    props: TextInputProps;
+  }
+>(({ value, onChevronPress, backgroundColor, style, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -108,14 +115,17 @@ const ChevronInput = forwardRef<TextInput, {
   );
 });
 
-const StandardInput = forwardRef<TextInput, {
-  value: string | undefined;
-  leftIconName?: keyof typeof Feather.glyphMap;
-  style?: StyleProp<TextStyle>;
-  onFocus: (e: any) => void;
-  onBlur: (e: any) => void;
-  props: TextInputProps;
-}>(({ value, leftIconName, style, onFocus, onBlur, props }, ref) => {
+const StandardInput = forwardRef<
+  TextInput,
+  {
+    value: string | undefined;
+    leftIconName?: keyof typeof Feather.glyphMap;
+    style?: StyleProp<TextStyle>;
+    onFocus: (e: any) => void;
+    onBlur: (e: any) => void;
+    props: TextInputProps;
+  }
+>(({ value, leftIconName, style, onFocus, onBlur, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -124,7 +134,7 @@ const StandardInput = forwardRef<TextInput, {
       {leftIconName && (
         <Feather
           name={leftIconName}
-          size={20}
+          size={numbersAliasTokens.sizing.icon.sm}
           color={colors.text.secondary}
           style={styles.leftIcon}
         />
@@ -150,7 +160,6 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   value,
   onFocus,
   onBlur,
-  style,
   containerStyle,
   backgroundColor,
   showStepper = false,
@@ -177,7 +186,7 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
 
   const labelStyle: Animated.WithAnimatedObject<TextStyle> = {
     position: "absolute",
-    left: 12,
+    left: numbersAliasTokens.spacing["2xl"],
     top: labelAnim.interpolate({
       inputRange: [0, 1],
       outputRange: [18, -8],
@@ -218,7 +227,6 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           onIncrement={onIncrement!}
           onDecrement={onDecrement!}
           backgroundColor={backgroundColor}
-          style={style}
           props={props}
           ref={inputRef}
         />
@@ -231,7 +239,6 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           value={value}
           onChevronPress={onChevronPress!}
           backgroundColor={backgroundColor}
-          style={style}
           props={props}
           ref={inputRef}
         />
@@ -242,21 +249,18 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
       <StandardInput
         value={value}
         leftIconName={leftIconName}
-        style={style}
         onFocus={handleFocus}
         onBlur={handleBlur}
         props={props}
         ref={inputRef}
+        style={leftIconName ? styles.inputWithLeftIcon : {}}
       />
     );
   };
 
   return (
     <View style={[styles.container, containerStyle as any]}>
-      <Animated.Text 
-        style={labelStyle}
-        onPress={handleLabelPress}
-      >
+      <Animated.Text style={labelStyle} onPress={handleLabelPress}>
         {label}
       </Animated.Text>
       {renderInput()}
@@ -270,12 +274,12 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     marginBottom: numbersAliasTokens.spacing.xs,
   },
   input: {
-    borderWidth: 1,
+    borderWidth: numbersAliasTokens.borderWidth.xs,
     borderColor: colors.outline.dark,
-    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    borderRadius: numbersAliasTokens.borderRadius.sm,
     padding: numbersAliasTokens.spacing.xs,
     paddingTop: numbersAliasTokens.spacing.md,
-    fontSize: numbersAliasTokens.sizing.icon.sm,
+    fontSize: numbersBaseTokens.typography.size[3],
     color: colors.text.primary,
   },
   dropdown: {
@@ -286,9 +290,9 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
+    borderWidth: numbersAliasTokens.borderWidth.xs,
     borderColor: colors.outline.dark,
-    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    borderRadius: numbersAliasTokens.borderRadius.sm,
     padding: numbersAliasTokens.spacing.xs,
     paddingTop: numbersAliasTokens.spacing.md,
   },
@@ -299,10 +303,10 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: numbersAliasTokens.spacing["2xs"],
     borderWidth: numbersAliasTokens.borderWidth.xs,
     borderColor: colors.outline.dark,
-    borderRadius: numbersAliasTokens.borderRadius["sm"],
+    borderRadius: numbersAliasTokens.borderRadius.sm,
     paddingHorizontal: numbersAliasTokens.spacing["2xs"],
     paddingVertical: numbersAliasTokens.spacing["3xs"],
   },
@@ -311,17 +315,17 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     paddingVertical: numbersAliasTokens.spacing["2xs"],
   },
   inputWithIconWrapper: {
-    position: 'relative',
-    justifyContent: 'center',
+    position: "relative",
+    justifyContent: "center",
   },
   leftIcon: {
-    position: 'absolute',
-    left: 12,
-    top: '50%',
-    marginTop: -10,
+    position: "absolute",
+    left: numbersAliasTokens.spacing.sm,
+    top: "50%",
+    marginTop: -numbersAliasTokens.spacing["2xs"],
     zIndex: 2,
   },
   inputWithLeftIcon: {
-    paddingLeft: 40,
+    paddingLeft: numbersAliasTokens.spacing["3xl"],
   },
 }));
