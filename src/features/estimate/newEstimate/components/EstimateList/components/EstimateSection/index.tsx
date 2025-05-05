@@ -15,7 +15,7 @@ interface EstimateSectionProps {
 
 export default function EstimateSection({ section }: EstimateSectionProps) {
   const styles = useStyles();
-  const { title, price, isOpen, toggleOpen } = useEstimateSection({
+  const { title, price, isOpen, toggleOpen, handleAddItem } = useEstimateSection({
     section,
   });
 
@@ -26,9 +26,7 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
           <Text style={styles.sectionTitleInfo}>{title}</Text>
           <IconButton
             iconName="plus"
-            onClick={() => {
-              console.log("add section2");
-            }}
+            onClick={handleAddItem}
           />
         </View>
         <View style={styles.contentWrapper}>
