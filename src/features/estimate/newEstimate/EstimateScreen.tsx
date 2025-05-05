@@ -4,10 +4,12 @@ import { ThemeSwitch } from "@/src/common/components";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import EstimateList from "./components/EstimateList";
 import IconButton from "@/src/common/components/IconButton";
+import { useNewEstimateScreen } from "./useNewEstimateScreen";
 
 export default function EstimateScreen() {
   const { theme, toggleTheme, isDark } = useTheme();
   const styles = useStyles();
+  const { handleAddNewSection } = useNewEstimateScreen();
 
   return (
     <View style={styles.container}>
@@ -16,9 +18,7 @@ export default function EstimateScreen() {
         
         <IconButton
           iconName="plus"
-          onClick={() => {
-            console.log("add section");
-          }}
+          onClick={handleAddNewSection}
           label="Add"
         />
       </View>

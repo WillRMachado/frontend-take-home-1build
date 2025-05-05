@@ -28,6 +28,7 @@ interface EstimateContextValue {
 	selectSection: (section: EstimateSection) => void
 	clearSelection: () => void
 	addItem: (sectionId: string, item: EstimateRow) => void
+	addSection: (section: EstimateSection) => void
 }
 
 export const EstimateContext = createContext<EstimateContextValue | null>(null)
@@ -117,6 +118,15 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 		setEditMode(null)
 	}
 
+	const addSection = (section: EstimateSection) => {
+		setEstimate((prev) => ({
+			...prev,
+			updatedAt: new Date(),
+			sections: [...prev.sections, section],
+		}))
+		setEditMode(null)
+	}
+
 	const value = useMemo(
 		() => ({
 			estimate,
@@ -129,6 +139,7 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 			selectSection,
 			clearSelection,
 			addItem,
+			addSection,
 		}),
 		[
 			estimate,
@@ -141,6 +152,7 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 			selectSection,
 			clearSelection,
 			addItem,
+			addSection,
 		]
 	)
 
