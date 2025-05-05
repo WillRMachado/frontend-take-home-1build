@@ -82,8 +82,9 @@ export function useEstimateItem({
       selectUom: (uom: UnitOfMeasure) => {
         handleUpdateUom(uom);
       },
+      onReturn: handleEdit,
     });
-  }, [handleUpdateUom]);
+  }, [handleUpdateUom, handleEdit]);
 
   const handleChangeUom = useCallback((): void => {
     setBottomSheetChild(getUomSelector());

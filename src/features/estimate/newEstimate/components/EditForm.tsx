@@ -59,11 +59,7 @@ export function EditForm({
   };
 
   return (
-    <View style={styles.container}>
-      {/* <Text style={styles.header}>
-        Edit {mode === "item" ? "Item" : "Section"}
-      </Text> */}
-
+    <>
       <BottomSheetHeaders
         title="Edit Item"
         leftIcon="x"
@@ -72,64 +68,68 @@ export function EditForm({
         onClickRightIcon={onDelete}
       />
 
-      <View style={styles.field}>
-        <FloatingLabelInput
-          label={mode === "item" ? "Item title" : "Section title"}
-          value={title}
-          onChangeText={setTitle}
-          backgroundColor={colors.layer.solid.light}
-        />
-      </View>
+      <View style={styles.container}>
+        <View style={styles.field}>
+          <FloatingLabelInput
+            label={mode === "item" ? "Item title" : "Section title"}
+            value={title}
+            onChangeText={setTitle}
+            backgroundColor={colors.layer.solid.light}
+          />
+        </View>
 
-      {mode === "item" && (
-        <>
-          <View style={{ flexDirection: "row", gap: 12 }}>
-            <View style={{ flex: 1 }}>
+        {mode === "item" && (
+          <>
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <View style={{ flex: 1 }}>
+                <FloatingLabelInput
+                  label="Cost"
+                  value={price}
+                  onChangeText={setPrice}
+                  keyboardType="decimal-pad"
+                  backgroundColor={colors.layer.solid.light}
+                />
+              </View>
+              <View style={{ width: 100 }}>
+                <FloatingLabelInput
+                  label="Unit"
+                  value={uom}
+                  onChangeText={(text) => setUom(text as UnitOfMeasure)}
+                  backgroundColor={colors.layer.solid.light}
+                  showChevron
+                  onChevronPress={onDropdownPress}
+                />
+              </View>
+            </View>
+            <View style={styles.field}>
               <FloatingLabelInput
-                label="Cost"
-                value={price}
-                onChangeText={setPrice}
-                keyboardType="decimal-pad"
+                label="Quantity"
+                value={quantity}
+                onChangeText={setQuantity}
+                showStepper
                 backgroundColor={colors.layer.solid.light}
+                onIncrement={() =>
+                  setQuantity((q) => (Number(q) + 1).toString())
+                }
+                onDecrement={() =>
+                  setQuantity((q) => Math.max(0, Number(q) - 1).toString())
+                }
               />
             </View>
-            <View style={{ width: 100 }}>
-              <FloatingLabelInput
-                label="Unit"
-                value={uom}
-                onChangeText={(text) => setUom(text as UnitOfMeasure)}
-                backgroundColor={colors.layer.solid.light}
-                showChevron
-                onChevronPress={onDropdownPress}
-              />
-            </View>
-          </View>
-          <View style={styles.field}>
-            <FloatingLabelInput
-              label="Quantity"
-              value={quantity}
-              onChangeText={setQuantity}
-              showStepper
-              backgroundColor={colors.layer.solid.light}
-              onIncrement={() => setQuantity((q) => (Number(q) + 1).toString())}
-              onDecrement={() =>
-                setQuantity((q) => Math.max(0, Number(q) - 1).toString())
-              }
-            />
-          </View>
-        </>
-      )}
+          </>
+        )}
 
-      <View style={styles.formActions}>
-        <PrimaryButton onPress={handleSave}>Save item</PrimaryButton>
+        <View style={styles.formActions}>
+          <PrimaryButton onPress={handleSave}>Save item</PrimaryButton>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   container: {
-    paddingVertical: numbersAliasTokens.spacing.md,
+    paddingBottom: numbersAliasTokens.spacing.md,
     paddingHorizontal: numbersAliasTokens.spacing.sm,
   },
   header: {

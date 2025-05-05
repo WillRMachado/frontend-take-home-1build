@@ -5,15 +5,22 @@ import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { UNITS_OF_MEASURE } from "@/src/consts/unitsOfMeasure";
 import { THEMES } from "@/src/common/enums/themes";
 import { UnitOfMeasure } from "@/data";
+import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
 
 interface UomSelectorProps {
   selectUom: (name: UnitOfMeasure) => void;
+  onReturn: () => void;
 }
 
-export default function UomSelector({ selectUom }: UomSelectorProps) {
+export default function UomSelector({ selectUom, onReturn }: UomSelectorProps) {
   const styles = useStyles();
   return (
     <View>
+      <BottomSheetHeaders
+        title="Unit of measurement"
+        leftIcon="arrow-left"
+        onClickLeftIcon={() => onReturn()}
+      />
       {Object.keys(UNITS_OF_MEASURE).map((key) => (
         <View key={key} style={styles.categoryContainer}>
           <Text style={styles.categoryText}>{key}</Text>

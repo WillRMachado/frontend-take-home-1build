@@ -46,7 +46,8 @@ const useStyles = createThemedStyles(
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: numbersAliasTokens.spacing.xl,
+      marginBottom: numbersAliasTokens.spacing.md,
+      paddingHorizontal: numbersAliasTokens.spacing.md,
     },
     title: {
       flex: 1,
