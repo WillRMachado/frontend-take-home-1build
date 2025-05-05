@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
-import { UNITS_OF_MEASURE, UomEntry } from "@/src/consts/unitsOfMeasure";
 import { THEMES } from "@/src/common/enums/themes";
 import { UnitOfMeasure } from "@/data";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
 import { FloatingLabelInput } from "@/src/common/components/FloatingLabelInput";
+import { useUomSelector } from "./useUomSelector";
 
 interface UomSelectorProps {
   selectUom: (name: UnitOfMeasure) => void;
@@ -15,37 +14,17 @@ interface UomSelectorProps {
 
 export default function UomSelector({ selectUom, onReturn }: UomSelectorProps) {
   const styles = useStyles();
-  const [search, setSearch] = useState("");
-
-
-  const matchesSearch = (text: string) =>
-    text.toLowerCase().includes(search.toLowerCase());
-
-  const filterUnitsByCategory = (units: UomEntry[]) =>
-    units.filter(
-      (uom) =>
-        matchesSearch(uom.name) ||
-        matchesSearch(uom.abbreviation) ||
-        matchesSearch(uom.key)
-    );
-
-  const filteredUnits = Object.entries(UNITS_OF_MEASURE).reduce(
-    (acc, [category, units]) => {
-      const filtered = filterUnitsByCategory(units);
-      if (filtered.length > 0) {
-        acc[category] = filtered;
-      }
-      return acc;
-    },
-    {} as typeof UNITS_OF_MEASURE
-  );
+  const { search, setSearch, filteredUnits } = useUomSelector({
+    onSelectUom: selectUom,
+    onReturn,
+  });
 
   return (
     <View>
       <BottomSheetHeaders
         title="Unit of measurement"
         leftIcon="arrow-left"
-        onClickLeftIcon={() => onReturn()}
+        onClickLeftIcon={onReturn}
       />
       <View style={styles.searchInputContainer}>
         <FloatingLabelInput

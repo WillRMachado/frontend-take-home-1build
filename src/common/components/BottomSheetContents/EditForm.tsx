@@ -1,13 +1,13 @@
 import React from "react";
 import { View } from "react-native";
-import { PrimaryButton } from "../../../../common/components/PrimaryButton";
+import { PrimaryButton } from "../PrimaryButton";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
-import { useState } from "react";
-import { FloatingLabelInput } from "../../../../common/components/FloatingLabelInput";
+import { FloatingLabelInput } from "../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
+import { useEditForm } from "./useEditForm";
 
 type EditFormProps = {
   mode: "item" | "section";
@@ -18,10 +18,6 @@ type EditFormProps = {
   onDelete: () => void;
 };
 
-function isEstimateRow(data: any): data is EstimateRow {
-  return "price" in data && "quantity" in data && "uom" in data;
-}
-
 export function EditForm({
   mode,
   data,
@@ -30,33 +26,29 @@ export function EditForm({
   onClose,
   onDelete,
 }: EditFormProps) {
-  const [title, setTitle] = useState(data.title);
-  const [price, setPrice] = useState(
-    isEstimateRow(data) ? data.price.toString() : ""
-  );
-  const [quantity, setQuantity] = useState(
-    isEstimateRow(data) ? data.quantity.toString() : ""
-  );
-  const [uom, setUom] = useState<UnitOfMeasure>(
-    isEstimateRow(data) ? data.uom : "EA"
-  );
-
   const styles = useStyles();
   const colors = useThemedColors();
 
-  const handleSave = () => {
-    if (mode === "item") {
-      onSave({
-        ...data,
-        title,
-        price: parseFloat(price),
-        quantity: parseFloat(quantity),
-        uom,
-      });
-    } else {
-      onSave({ title });
-    }
-  };
+  const {
+    title,
+    setTitle,
+    price,
+    setPrice,
+    quantity,
+    setQuantity,
+    uom,
+    setUom,
+    handleSave,
+    handleIncrement,
+    handleDecrement,
+  } = useEditForm({
+    mode,
+    data,
+    onSave,
+    onClose,
+    onDropdownPress,
+    onDelete,
+  });
 
   return (
     <>
@@ -108,12 +100,8 @@ export function EditForm({
                 onChangeText={setQuantity}
                 showStepper
                 backgroundColor={colors.layer.solid.light}
-                onIncrement={() =>
-                  setQuantity((q) => (Number(q) + 1).toString())
-                }
-                onDecrement={() =>
-                  setQuantity((q) => Math.max(0, Number(q) - 1).toString())
-                }
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
               />
             </View>
           </>

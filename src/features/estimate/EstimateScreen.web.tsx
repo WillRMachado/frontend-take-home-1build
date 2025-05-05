@@ -5,7 +5,7 @@ import {
 	calculateSectionTotal,
 	calculateEstimateTotal,
 } from "../../common/lib/estimate"
-import { EditForm } from "./newEstimate/components/EditForm"
+import { EditForm } from "../../common/components/BottomSheetContents/EditForm"
 import { useEstimateScreen } from "./useEstimateScreen"
 import { TextField } from "../../common/components/TextField"
 

@@ -27,7 +27,7 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
           <IconButton
             iconName="plus"
             onClick={() => {
-              console.log("add section");
+              console.log("add section2");
             }}
           />
         </View>
@@ -47,7 +47,6 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
           {section.rows.map((row, index) => (
             <EstimateItem
               item={row}
-              onRemove={() => {}}
               key={row.id}
               isLast={index === section.rows.length - 1}
             />

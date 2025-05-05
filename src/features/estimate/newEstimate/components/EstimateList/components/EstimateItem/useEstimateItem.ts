@@ -3,9 +3,9 @@ import { useCallback, useContext, useState } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
-import UomSelector from "@/src/features/estimate/newEstimate/components/UomSelector";
+import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector";
 import React from "react";
-import { EditForm } from "@/src/features/estimate/newEstimate/components/EditForm";
+import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
