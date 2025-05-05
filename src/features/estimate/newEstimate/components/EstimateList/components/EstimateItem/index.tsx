@@ -6,12 +6,11 @@ import {
   GestureResponderEvent,
   PanResponderGestureState,
   Image,
-  TouchableOpacity,
   TouchableHighlight,
   ActivityIndicator,
 } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState } from "react";
-import type { EstimateRow, UnitOfMeasure } from "@/data";
+import type { EstimateRow } from "@/data";
 import createThemedStyles, {
   useThemedColors,
   useThemedAlphaColors,
@@ -19,9 +18,7 @@ import createThemedStyles, {
 import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-import { EditForm } from "@/src/features/estimate/newEstimate/components/EditForm";
 import React from "react";
-import UomSelector from "@/src/features/estimate/newEstimate/components/UomSelector";
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
@@ -40,6 +37,11 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
 
   const styles = useStyles({ isLast });
   const colors = useThemedColors();
+
+  const forceRecalculateHeight = () => {
+    setMeasuredHeight(null);
+  };
+
   const {
     description,
     quantity,
@@ -47,11 +49,10 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     total,
     handleRemove,
     supplierLogoUrl,
-    handleSaveItem,
-    handleCloseEdit,
     handleEdit,
   } = useEstimateItem({
     item,
+    forceRecalculateHeight,
   });
 
   const containerRef = useRef<View>(null);
@@ -132,10 +133,6 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     };
   }, [translateX]);
 
-  const forceRecalculateHeight = () => {
-    setMeasuredHeight(null);
-  };
-
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.measure((x, y, width, measuredHeight) => {
@@ -144,17 +141,6 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
       });
     }
   }, []);
-
-  const handleChangeUom = () => {
-    handleEdit(
-      <UomSelector
-        selectUom={(uom) => {
-          handleSaveItem({ ...item, uom });
-          forceRecalculateHeight();
-        }}
-      />
-    );
-  };
 
   return (
     <>
@@ -176,24 +162,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
           <TouchableHighlight
             underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
             style={[styles.editButtonWrapper]}
-            onPress={() =>
-              handleEdit(
-                <EditForm
-                  mode="item"
-                  data={item}
-                  onSave={(updatedItem) => {
-                    handleSaveItem(updatedItem);
-                    forceRecalculateHeight();
-                  }}
-                  onClose={handleCloseEdit}
-                  onDropdownPress={handleChangeUom}
-                  onDelete={() => {
-                    handleRemove();
-                    handleCloseEdit();
-                  }}
-                />
-              )
-            }
+            onPress={() => handleEdit()}
           >
             <>
               <View style={styles.description}>

@@ -5,6 +5,7 @@ import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { UNITS_OF_MEASURE } from "@/src/consts/unitsOfMeasure";
 import { THEMES } from "@/src/common/enums/themes";
 import { UnitOfMeasure } from "@/data";
+
 interface UomSelectorProps {
   selectUom: (name: UnitOfMeasure) => void;
 }
@@ -32,7 +33,7 @@ export default function UomSelector({ selectUom }: UomSelectorProps) {
 }
 
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
-  ({ colors, numbersAliasTokens, customFonts, props, theme }) => ({
+  ({ colors, numbersAliasTokens, customFonts, theme }) => ({
     categoryContainer: {},
     categoryText: {
       backgroundColor:

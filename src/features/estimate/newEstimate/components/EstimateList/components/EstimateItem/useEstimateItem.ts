@@ -1,15 +1,21 @@
-import type { EstimateRow } from "@/data";
-import { useCallback, useContext } from "react";
+import type { EstimateRow, UnitOfMeasure } from "@/data";
+import { useCallback, useContext, useState } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
-import { View, Text } from "react-native";
+import UomSelector from "@/src/features/estimate/newEstimate/components/UomSelector";
+import React from "react";
+import { EditForm } from "@/src/features/estimate/newEstimate/components/EditForm";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
+  forceRecalculateHeight: () => void;
 }
 
-export function useEstimateItem({ item }: UseEstimateItemProps) {
+export function useEstimateItem({
+  item,
+  forceRecalculateHeight,
+}: UseEstimateItemProps) {
   const { deleteItem, updateItem, clearSelection } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
 
@@ -24,25 +30,64 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
     deleteItem(item.id);
   }, [item.id, deleteItem]);
 
-  const handleSaveItem = useCallback(
+  const handleCloseAndSave = useCallback(
     (updatedItem: EstimateRow) => {
       updateItem(updatedItem.id, updatedItem);
-      closeBottomSheet();
+      handleCloseEdit();
+      forceRecalculateHeight();
     },
-    [updateItem, closeBottomSheet]
-  );
-
-  const handleEdit = useCallback(
-    (component: React.ReactNode) => {
-      setBottomSheetChild(component);
-      openBottomSheet();
-    },
-    [openBottomSheet, setBottomSheetChild]
+    [updateItem, closeBottomSheet, forceRecalculateHeight]
   );
 
   const handleCloseEdit = useCallback(() => {
     closeBottomSheet();
   }, [closeBottomSheet]);
+
+  const getEditForm = useCallback(
+    (partialItem?: Partial<EstimateRow>): React.ReactElement => {
+      return React.createElement(EditForm, {
+        mode: "item",
+        data: { ...item, ...partialItem },
+        onSave: handleCloseAndSave,
+        onClose: handleCloseEdit,
+        onDropdownPress: handleChangeUom,
+        onDelete: () => {
+          handleRemove();
+          handleCloseEdit();
+        },
+      });
+    },
+    [item, handleCloseAndSave, handleCloseEdit, handleRemove]
+  );
+
+  const handleEdit = useCallback(
+    (partialItem?: Partial<EstimateRow>) => {
+      setBottomSheetChild(getEditForm(partialItem));
+      openBottomSheet();
+    },
+    [openBottomSheet, setBottomSheetChild, getEditForm]
+  );
+
+  const handleUpdateUom = useCallback(
+    (uom: UnitOfMeasure) => {
+      updateItem(item.id, { ...item, uom });
+      forceRecalculateHeight();
+      handleEdit({ uom });
+    },
+    [updateItem, item, forceRecalculateHeight, handleEdit]
+  );
+
+  const getUomSelector = useCallback((): React.ReactElement => {
+    return React.createElement(UomSelector, {
+      selectUom: (uom: UnitOfMeasure) => {
+        handleUpdateUom(uom);
+      },
+    });
+  }, [handleUpdateUom]);
+
+  const handleChangeUom = useCallback((): void => {
+    setBottomSheetChild(getUomSelector());
+  }, [setBottomSheetChild, getUomSelector]);
 
   return {
     description: item.title,
@@ -52,7 +97,9 @@ export function useEstimateItem({ item }: UseEstimateItemProps) {
     handleRemove,
     supplierLogoUrl: item.supplier?.logoUrl,
     handleEdit,
-    handleSaveItem,
+    handleCloseAndSave,
     handleCloseEdit,
+    handleChangeUom,
+    getEditForm,
   };
 }
