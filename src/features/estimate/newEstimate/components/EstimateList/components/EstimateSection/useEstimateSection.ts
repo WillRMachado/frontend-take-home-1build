@@ -47,7 +47,7 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
   }
 
   function handleUpdateUom(uom: UnitOfMeasure): void {
-    handleAddItem();
+    handleAddItem(uom);
   }
 
   function getAddForm(): React.ReactElement {

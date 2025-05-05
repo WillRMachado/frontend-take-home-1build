@@ -42,7 +42,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       setTheme(newTheme);
       await storage.setItem(STORAGE_KEYS.THEME, newTheme);
     } catch (error) {
-      //   console.error("Failed to save theme:", error);
       handleError(error);
     }
   };

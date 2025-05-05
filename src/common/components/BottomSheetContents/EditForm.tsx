@@ -22,7 +22,7 @@ export function EditForm({
   mode,
   data,
   onSave,
-  onDropdownPress,
+  // onDropdownPress,
   onClose,
   onDelete,
 }: EditFormProps) {
@@ -41,12 +41,14 @@ export function EditForm({
     handleSave,
     handleIncrement,
     handleDecrement,
+    // onDropdownPress,
+    handleDropdownPress
   } = useEditForm({
     mode,
     data,
     onSave,
     onClose,
-    onDropdownPress,
+    // onDropdownPress,
     onDelete,
   });
 
@@ -86,10 +88,10 @@ export function EditForm({
                 <FloatingLabelInput
                   label="Unit"
                   value={uom}
-                  onChangeText={(text) => setUom(text as UnitOfMeasure)}
+                  // onChangeText={(text) => setUom(text as UnitOfMeasure)}
                   backgroundColor={colors.layer.solid.light}
                   showChevron
-                  onChevronPress={onDropdownPress}
+                  onChevronPress={handleDropdownPress}
                 />
               </View>
             </View>

@@ -57,7 +57,7 @@ export function useEstimateItem({
         },
       });
     },
-    [item, handleCloseAndSave, handleCloseEdit, handleRemove]
+    [item, handleCloseAndSave, handleCloseEdit, handleRemove, item]
   );
 
   const handleEdit = useCallback(

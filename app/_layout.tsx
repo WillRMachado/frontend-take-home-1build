@@ -8,14 +8,15 @@ import {
 } from "@/src/context/ComponentContext";
 import {
   SafeAreaProvider,
-  useSafeAreaFrame, useSafeAreaInsets
+  useSafeAreaFrame,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import { BottomSheet } from "@/src/common/lib/imports";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { EstimateRow, EstimateSection } from "@/data";
 import BottomSheetWrapper, {
   BottomSheetBackdrop,
@@ -66,11 +67,12 @@ function ThemedContent() {
 
       {isBottomSheetOpen && (
         <BottomSheet.Wrapper
+          key={JSON.stringify(bottomSheetChild)}
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
           enablePanDownToClose={true}
-          topInset={(top + numbersAliasTokens.spacing.lg)}
+          topInset={top + numbersAliasTokens.spacing.lg}
         >
           <BottomSheet.ScrollView>{bottomSheetChild}</BottomSheet.ScrollView>
         </BottomSheet.Wrapper>
