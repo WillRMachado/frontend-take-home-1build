@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import {
   View,
   TextInput,
@@ -14,6 +14,7 @@ import createThemedStyles, {
   useThemedColors,
 } from "../theme/utils/createThemedStyles";
 import { numbersAliasTokens } from "../theme/tokens/alias/numbers";
+
 interface FloatingLabelInputProps extends TextInputProps {
   label: string;
   backgroundColor: string;
@@ -23,7 +24,126 @@ interface FloatingLabelInputProps extends TextInputProps {
   onDecrement?: () => void;
   showChevron?: boolean;
   onChevronPress?: () => void;
+  leftIconName?: keyof typeof Feather.glyphMap;
 }
+
+const StepperInput = forwardRef<TextInput, {
+  value: string | undefined;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  backgroundColor: string;
+  style?: StyleProp<TextStyle>;
+  props: TextInputProps;
+}>(({ value, onIncrement, onDecrement, backgroundColor, style, props }, ref) => {
+  const colors = useThemedColors();
+  const styles = useStyles();
+
+  return (
+    <View style={[styles.stepperRow, { backgroundColor }]}>
+      <TouchableOpacity onPress={onDecrement} style={styles.iconButton}>
+        <Feather
+          name="minus"
+          size={numbersAliasTokens.sizing.icon.md}
+          color={colors.text.primary}
+        />
+      </TouchableOpacity>
+      <TextInput
+        {...props}
+        ref={ref}
+        value={value}
+        style={[
+          styles.input,
+          {
+            borderWidth: 0,
+            backgroundColor: "transparent",
+            textAlign: "center",
+            flex: 1,
+          },
+          style,
+        ]}
+        keyboardType={props.keyboardType || "decimal-pad"}
+      />
+      <TouchableOpacity onPress={onIncrement} style={styles.iconButton}>
+        <Feather
+          name="plus"
+          size={numbersAliasTokens.sizing.icon.md}
+          color={colors.text.primary}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+});
+
+const ChevronInput = forwardRef<TextInput, {
+  value: string | undefined;
+  onChevronPress: () => void;
+  backgroundColor: string;
+  style?: StyleProp<TextStyle>;
+  props: TextInputProps;
+}>(({ value, onChevronPress, backgroundColor, style, props }, ref) => {
+  const colors = useThemedColors();
+  const styles = useStyles();
+
+  return (
+    <TouchableOpacity
+      style={[styles.inputRow, { backgroundColor }]}
+      activeOpacity={0.7}
+      onPress={onChevronPress}
+    >
+      <TextInput
+        {...props}
+        ref={ref}
+        value={value}
+        style={[styles.dropdown, style]}
+        editable={false}
+        pointerEvents="none"
+      />
+      <Feather
+        name="chevron-down"
+        size={numbersAliasTokens.sizing.icon.md}
+        color={colors.text.secondary}
+        style={styles.chevronIcon}
+      />
+    </TouchableOpacity>
+  );
+});
+
+const StandardInput = forwardRef<TextInput, {
+  value: string | undefined;
+  leftIconName?: keyof typeof Feather.glyphMap;
+  style?: StyleProp<TextStyle>;
+  onFocus: (e: any) => void;
+  onBlur: (e: any) => void;
+  props: TextInputProps;
+}>(({ value, leftIconName, style, onFocus, onBlur, props }, ref) => {
+  const colors = useThemedColors();
+  const styles = useStyles();
+
+  return (
+    <View style={styles.inputWithIconWrapper}>
+      {leftIconName && (
+        <Feather
+          name={leftIconName}
+          size={20}
+          color={colors.text.secondary}
+          style={styles.leftIcon}
+        />
+      )}
+      <TextInput
+        {...props}
+        ref={ref}
+        value={value}
+        style={[
+          styles.input,
+          leftIconName ? styles.inputWithLeftIcon : {},
+          style,
+        ]}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />
+    </View>
+  );
+});
 
 export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   label,
@@ -38,11 +158,12 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   onDecrement,
   showChevron = false,
   onChevronPress,
+  leftIconName,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const labelAnim = useState(new Animated.Value(value ? 1 : 0))[0];
-
+  const inputRef = React.useRef<TextInput>(null);
   const styles = useStyles();
   const colors = useThemedColors();
 
@@ -71,91 +192,74 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
     zIndex: 1,
   };
 
+  const handleFocus = (e: any) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
+
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
+
+  const handleLabelPress = () => {
+    if (!showChevron) {
+      inputRef.current?.focus();
+    } else if (onChevronPress) {
+      onChevronPress();
+    }
+  };
+
+  const renderInput = () => {
+    if (showStepper) {
+      return (
+        <StepperInput
+          value={value}
+          onIncrement={onIncrement!}
+          onDecrement={onDecrement!}
+          backgroundColor={backgroundColor}
+          style={style}
+          props={props}
+          ref={inputRef}
+        />
+      );
+    }
+
+    if (showChevron) {
+      return (
+        <ChevronInput
+          value={value}
+          onChevronPress={onChevronPress!}
+          backgroundColor={backgroundColor}
+          style={style}
+          props={props}
+          ref={inputRef}
+        />
+      );
+    }
+
+    return (
+      <StandardInput
+        value={value}
+        leftIconName={leftIconName}
+        style={style}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        props={props}
+        ref={inputRef}
+      />
+    );
+  };
+
   return (
     <View style={[styles.container, containerStyle as any]}>
-      <Animated.Text style={labelStyle}>{label}</Animated.Text>
-      {showStepper ? (
-        <View
-          style={[
-            styles.stepperRow,
-            {
-              backgroundColor: backgroundColor,
-            },
-          ]}
-        >
-          <TouchableOpacity onPress={onDecrement} style={styles.iconButton}>
-            <Feather
-              name="minus"
-              size={numbersAliasTokens.sizing.icon.md}
-              color={colors.text.primary}
-            />
-          </TouchableOpacity>
-          <TextInput
-            {...props}
-            value={value}
-            style={[
-              styles.input,
-              {
-                borderWidth: 0,
-                backgroundColor: "transparent",
-                textAlign: "center",
-                flex: 1,
-              },
-              style,
-            ]}
-            onFocus={(e) => {
-              setIsFocused(true);
-              onFocus && onFocus(e);
-            }}
-            onBlur={(e) => {
-              setIsFocused(false);
-              onBlur && onBlur(e);
-            }}
-            keyboardType={props.keyboardType || "decimal-pad"}
-          />
-          <TouchableOpacity onPress={onIncrement} style={styles.iconButton}>
-            <Feather
-              name="plus"
-              size={numbersAliasTokens.sizing.icon.md}
-              color={colors.text.primary}
-            />
-          </TouchableOpacity>
-        </View>
-      ) : showChevron ? (
-        <TouchableOpacity
-          style={[styles.inputRow, { backgroundColor }]}
-          activeOpacity={0.7}
-          onPress={onChevronPress}
-        >
-          <TextInput
-            {...props}
-            value={value}
-            style={[styles.dropdown, style]}
-            editable={false}
-            pointerEvents="none"
-          />
-          <Feather
-            name="chevron-down"
-            size={numbersAliasTokens.sizing.icon.md}
-            color={colors.text.secondary}
-            style={styles.chevronIcon}
-          />
-        </TouchableOpacity>
-      ) : (
-        <TextInput
-          {...props}
-          value={value}
-          style={[styles.input, style]}
-          onFocus={(e) => {
-            setIsFocused(true);
-            onFocus && onFocus(e);
-          }}
-          onBlur={(e) => {
-            setIsFocused(false);
-            onBlur && onBlur(e);
-          }}
-        />
-      )}
+      <Animated.Text 
+        style={labelStyle}
+        onPress={handleLabelPress}
+      >
+        {label}
+      </Animated.Text>
+      {renderInput()}
     </View>
   );
 };
@@ -205,5 +309,19 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   iconButton: {
     paddingHorizontal: numbersAliasTokens.spacing["3xs"],
     paddingVertical: numbersAliasTokens.spacing["2xs"],
+  },
+  inputWithIconWrapper: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  leftIcon: {
+    position: 'absolute',
+    left: 12,
+    top: '50%',
+    marginTop: -10,
+    zIndex: 2,
+  },
+  inputWithLeftIcon: {
+    paddingLeft: 40,
   },
 }));
