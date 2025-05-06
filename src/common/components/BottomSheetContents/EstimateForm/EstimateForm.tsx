@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import { PrimaryButton } from "../../PrimaryButton";
 import { EstimateRow, EstimateSection } from "@/data";
@@ -8,9 +8,10 @@ import createThemedStyles, {
 } from "@/src/common/theme/utils/createThemedStyles";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
 import { useEditForm } from "./useEstimateForm";
-import { EstimateMode } from "@/src/common/enums/estimateFormTypes";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+import { EstimateMode } from "@/src/common/enums";
+import { formatCurrency } from "@/src/common/utils/format";
 
 export type EstimateFormProps = {
   mode: EstimateMode;
@@ -33,8 +34,10 @@ export function EstimateForm({
   const {
     title,
     setTitle,
-    price,
-    setPrice,
+    displayPrice,
+    handlePriceChange,
+    handlePriceFocus,
+    handlePriceBlur,
     quantity,
     setQuantity,
     uom,
@@ -92,10 +95,12 @@ export function EstimateForm({
               <View style={{ flex: 1 }}>
                 <FloatingLabelInput
                   label="Cost"
-                  value={price}
-                  onChangeText={setPrice}
+                  value={displayPrice}
+                  onChangeText={handlePriceChange}
                   keyboardType="decimal-pad"
                   backgroundColor={colors.layer.solid.light}
+                  onFocus={handlePriceFocus}
+                  onBlur={handlePriceBlur}
                 />
               </View>
               <View
@@ -123,10 +128,8 @@ export function EstimateForm({
                 onDecrement={handleDecrement}
               />
             </View>
-            {/* {(data as EstimateRow) && (data as EstimateRow)?.supplier && ( */}
             {showSupplierInfo && (
               <SupplierInfo
-                // supplier={(data as EstimateRow).supplier!}
                 supplier={supplierInfo}
                 onClose={handleCloseSuplier}
               />

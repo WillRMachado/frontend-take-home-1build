@@ -3,8 +3,9 @@ import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
 import React from "react";
-import { EstimateMode } from "@/src/common/enums/estimateFormTypes";
 import { EstimateFormProps } from "./EstimateForm";
+import { EstimateMode } from "@/src/common/enums";
+import { formatCurrency } from "@/src/common/utils/format";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
@@ -26,6 +27,7 @@ export const useEditForm = ({
   const [showSupplierInfo, setShowSupplierInfo] = useState(
     isEstimateRow(data) && data.supplier
   );
+  const [isPriceFocused, setIsPriceFocused] = useState(false);
 
   const componentContext = useContext(ComponentContext);
 
@@ -44,6 +46,30 @@ export const useEditForm = ({
     isEstimateRow(data) ? data.quantity.toString() : ""
   );
   const uom: UnitOfMeasure = isEstimateRow(data) ? data.uom : "EA";
+
+  const handlePriceChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9.]/g, "");
+
+    const parts = numericValue.split(".");
+    if (parts.length > 2) {
+      return;
+    }
+
+    if (parts[1] && parts[1].length > 2) {
+      return;
+    }
+
+    setPrice(numericValue);
+  };
+
+  const displayPrice = isPriceFocused
+    ? price
+    : price
+    ? formatCurrency(parseFloat(price))
+    : "";
+
+  const handlePriceFocus = () => setIsPriceFocused(true);
+  const handlePriceBlur = () => setIsPriceFocused(false);
 
   const handleSave = () => {
     if (mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM) {
@@ -109,6 +135,10 @@ export const useEditForm = ({
     setTitle,
     price,
     setPrice,
+    displayPrice,
+    handlePriceChange,
+    handlePriceFocus,
+    handlePriceBlur,
     quantity,
     setQuantity,
     uom,
@@ -120,7 +150,8 @@ export const useEditForm = ({
     handleDelete: onDelete,
     handleClose: onClose,
     mode,
-    isItemMode: mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM,
+    isItemMode:
+      mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM,
     isEditMode:
       mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.EDIT_SECTION,
     supplierInfo: isEstimateRow(data) ? data.supplier : null,
