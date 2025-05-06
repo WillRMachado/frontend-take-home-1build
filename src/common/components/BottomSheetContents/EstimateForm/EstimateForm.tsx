@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { PrimaryButton } from "../../PrimaryButton";
-import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
+import { EstimateRow, EstimateSection } from "@/data";
 import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
@@ -9,6 +9,8 @@ import createThemedStyles, {
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
 import { useEditForm } from "./useEstimateForm";
 import { EstimateMode } from "@/src/common/types/estimate";
+import SupplierInfo from "@/src/common/components/SupplierInfo";
+import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 
 export type EstimateFormProps = {
   mode: EstimateMode;
@@ -25,8 +27,8 @@ export function EstimateForm({
   onClose,
   onDelete,
 }: EstimateFormProps) {
-  const styles = useStyles();
   const colors = useThemedColors();
+  const styles = useStyles();
 
   const {
     title,
@@ -78,7 +80,12 @@ export function EstimateForm({
 
         {isItemMode && (
           <>
-            <View style={{ flexDirection: "row", gap: 12 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: numbersAliasTokens.spacing.sm,
+              }}
+            >
               <View style={{ flex: 1 }}>
                 <FloatingLabelInput
                   label="Cost"
@@ -88,7 +95,11 @@ export function EstimateForm({
                   backgroundColor={colors.layer.solid.light}
                 />
               </View>
-              <View style={{ width: 100 }}>
+              <View
+                style={{
+                  width: "50%",
+                }}
+              >
                 <FloatingLabelInput
                   label="Unit"
                   value={uom}
@@ -109,6 +120,9 @@ export function EstimateForm({
                 onDecrement={handleDecrement}
               />
             </View>
+            {(data as EstimateRow) && (data as EstimateRow)?.supplier && (
+              <SupplierInfo supplier={(data as EstimateRow).supplier!} />
+            )}
           </>
         )}
 
@@ -144,9 +158,36 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   formActions: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    gap: 8,
+    gap: numbersAliasTokens.spacing.sm,
   },
   button: {
-    minWidth: 100,
+    minWidth: numbersAliasTokens.sizing.container["2xs"],
+  },
+  supplierContainer: {
+    backgroundColor: colors.layer.solid.light,
+    borderRadius: numbersAliasTokens.borderRadius.md,
+    padding: numbersAliasTokens.spacing.sm,
+    marginVertical: numbersAliasTokens.spacing.sm,
+  },
+  supplierLabel: {
+    color: colors.text.secondary,
+    fontSize: numbersAliasTokens.spacing.sm,
+    marginBottom: numbersAliasTokens.spacing["3xs"],
+  },
+  supplierLink: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  supplierName: {
+    color: colors.text.primary,
+    textDecorationLine: "underline",
+    fontSize: numbersAliasTokens.spacing.md,
+    flex: 1,
+  },
+  supplierLogo: {
+    width: numbersAliasTokens.sizing.icon.md,
+    height: numbersAliasTokens.sizing.icon.md,
+    marginLeft: numbersAliasTokens.spacing.sm,
+    borderRadius: numbersAliasTokens.borderRadius.xs,
   },
 }));

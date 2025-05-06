@@ -16,7 +16,7 @@ import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import React from "react";
-import ItemContent from '../EstimateItemContent';
+import ItemContent from "../EstimateItemContent";
 
 interface EstimateItemProps {
   item: EstimateRow;
@@ -30,7 +30,6 @@ const DELETE_OFFSET = -500;
 
 const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
-  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const getColorWithAlpha = useThemedAlphaColors();
   const styles = useStyles({ isLast });
@@ -133,18 +132,6 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
     [translateX]
   );
 
-  const handleImageLoadStart = useCallback(() => {
-    setIsImageLoading(true);
-  }, []);
-
-  const handleImageLoadEnd = useCallback(() => {
-    setIsImageLoading(false);
-  }, []);
-
-  const handleEditPress = useCallback(() => {
-    handleEdit();
-  }, [handleEdit]);
-
   useLayoutEffect(() => {
     if (containerRef.current && !measuredHeight) {
       containerRef.current.measure((x, y, width, measuredHeight) => {
@@ -174,7 +161,7 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
           <TouchableHighlight
             underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
             style={[styles.editButtonWrapper]}
-            onPress={handleEditPress}
+            onPress={() => handleEdit()}
           >
             <ItemContent
               description={description}
@@ -183,11 +170,7 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
               uom={item.uom}
               total={total}
               supplierLogoUrl={supplierLogoUrl}
-              isImageLoading={isImageLoading}
-              onImageLoadStart={handleImageLoadStart}
-              onImageLoadEnd={handleImageLoadEnd}
               styles={styles}
-              colors={colors}
             />
           </TouchableHighlight>
         </Animated.View>
@@ -196,7 +179,7 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
   );
 });
 
-EstimateItem.displayName = 'EstimateItem';
+EstimateItem.displayName = "EstimateItem";
 
 export default EstimateItem;
 
