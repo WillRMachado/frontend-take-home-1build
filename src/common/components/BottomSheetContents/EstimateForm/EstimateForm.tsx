@@ -97,7 +97,7 @@ export function EstimateForm({
               </View>
               <View
                 style={{
-                  width: "50%",
+                  width: "45%",
                 }}
               >
                 <FloatingLabelInput

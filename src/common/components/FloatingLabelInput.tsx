@@ -186,7 +186,7 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
 
   const labelStyle: Animated.WithAnimatedObject<TextStyle> = {
     position: "absolute",
-    left: numbersAliasTokens.spacing["2xl"],
+    left: numbersAliasTokens.spacing.xs,
     top: labelAnim.interpolate({
       inputRange: [0, 1],
       outputRange: [18, -8],
@@ -290,6 +290,7 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: numbersAliasTokens.borderWidth.xs,
     borderColor: colors.outline.dark,
     borderRadius: numbersAliasTokens.borderRadius.sm,
