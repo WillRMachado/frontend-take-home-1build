@@ -95,7 +95,7 @@ const ChevronInput = forwardRef<
         {...props}
         ref={ref}
         value={value}
-        style={[styles.dropdown]}
+        style={styles.dropdown}
         editable={false}
         pointerEvents="none"
       />

@@ -2,8 +2,7 @@ import { createContext, useContext, useMemo } from "react"
 import type { Estimate, EstimateRow, EstimateSection } from "@/data"
 import { PropsWithChildren, useState } from "react"
 import { sampleEstimate } from "@/data"
-import { EstimateMode } from "@/src/common/enums/estimate"
-
+import { EstimateMode } from "@/src/common/enums"
 export type EditMode =
 	| {
 			type: EstimateMode.EDIT_ITEM | EstimateMode.ADD_ITEM

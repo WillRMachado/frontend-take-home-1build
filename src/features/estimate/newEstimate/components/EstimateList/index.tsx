@@ -3,6 +3,8 @@ import { useEstimateList } from "./useEstimateList";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import EstimateSection from "./components/EstimateSection";
+import Tag from "@/src/common/components/Tag";
+import { TagType } from "@/src/common/enums";
 
 export default function EstimateList() {
   const { estimate } = useEstimateList();
@@ -11,6 +13,8 @@ export default function EstimateList() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.titleContainer}>
+        <Tag type={TagType.DRAFT} />
+
         <Text style={styles.title}>{estimate.title}</Text>
       </View>
       {estimate.sections.length === 0 ? (
@@ -33,6 +37,7 @@ const useStyles = createThemedStyles(
     },
 
     title: {
+      marginTop: numbersAliasTokens.spacing.xs,
       color: colors.text.primary,
       ...customFonts.bold.headline.sm,
     },

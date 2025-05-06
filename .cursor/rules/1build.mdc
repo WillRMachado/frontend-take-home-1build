@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+remember to follow the archtecture of the codebase, lkely MVVM and to always use stylings from tokens, and always use other files, specially components as references

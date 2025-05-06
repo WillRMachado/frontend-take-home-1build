@@ -8,7 +8,7 @@ import createThemedStyles, {
 } from "@/src/common/theme/utils/createThemedStyles";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
 import { useEditForm } from "./useEstimateForm";
-import { EstimateMode } from "@/src/common/enums/estimate";
+import { EstimateMode } from "@/src/common/enums/estimateFormTypes";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 

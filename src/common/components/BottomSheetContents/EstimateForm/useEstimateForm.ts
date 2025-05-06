@@ -3,7 +3,7 @@ import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
 import React from "react";
-import { EstimateMode } from "@/src/common/enums/estimate";
+import { EstimateMode } from "@/src/common/enums/estimateFormTypes";
 import { EstimateFormProps } from "./EstimateForm";
 
 function isEstimateRow(data: any): data is EstimateRow {

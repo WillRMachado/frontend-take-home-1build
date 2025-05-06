@@ -4,7 +4,7 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
 import type { EstimateSection } from "@/data";
-import { EstimateMode } from "@/src/common/enums/estimate";
+import { EstimateMode } from "@/src/common/enums";
 
 export function useNewEstimateScreen() {
   const { addSection } = useEstimateContext();
