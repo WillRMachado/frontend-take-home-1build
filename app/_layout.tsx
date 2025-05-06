@@ -67,7 +67,7 @@ function ThemedContent() {
 
       {isBottomSheetOpen && bottomSheetChild && (
         <BottomSheet.Wrapper
-          key={`bottomSheet-${Math.random().toString(36).substring(2, 9)}`}
+          key={JSON.stringify(bottomSheetChild)}
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
