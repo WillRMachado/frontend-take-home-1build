@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
+import { TouchableOpacity, Text, TextStyle } from "react-native";
 import createThemedStyles from "../theme/utils/createThemedStyles";
 import { numbersBaseTokens } from "../theme/tokens/base/numbers";
 

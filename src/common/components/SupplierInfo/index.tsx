@@ -17,7 +17,10 @@ interface SupplierInfoProps {
 export default function SupplierInfo({ supplier, onClose }: SupplierInfoProps) {
   const styles = useStyles();
   const colors = useThemedColors();
-  const { handleProductPress, handleClosePress } = useSupplierInfo({ supplier, onClose });
+  const { handleProductPress, handleClosePress } = useSupplierInfo({
+    supplier,
+    onClose,
+  });
 
   if (!supplier) return null;
   return (
@@ -57,6 +60,7 @@ export default function SupplierInfo({ supplier, onClose }: SupplierInfoProps) {
           <LazyImage
             uri={supplier.logoUrl}
             size={numbersAliasTokens.spacing["4xl"]}
+            style={styles.supplierImage}
           />
         )}
       </TouchableOpacity>
@@ -98,6 +102,9 @@ const useStyles = createThemedStyles(
       color: colors.text.hyperlink,
       textDecorationLine: "underline",
       ...customFonts.regular.text.sm,
+    },
+    supplierImage: {
+      borderRadius: numbersAliasTokens.borderRadius.sm,
     },
   })
 );

@@ -4,8 +4,6 @@ import {
   TextInput,
   Animated,
   TextInputProps,
-  StyleProp,
-  ViewStyle,
   TextStyle,
   TouchableOpacity,
 } from "react-native";
@@ -19,7 +17,6 @@ import { numbersBaseTokens } from "../theme/tokens/base/numbers";
 interface FloatingLabelInputProps extends TextInputProps {
   label: string;
   backgroundColor: string;
-  containerStyle?: StyleProp<ViewStyle>;
   showStepper?: boolean;
   onIncrement?: () => void;
   onDecrement?: () => void;
@@ -35,10 +32,9 @@ const StepperInput = forwardRef<
     onIncrement: () => void;
     onDecrement: () => void;
     backgroundColor: string;
-    style?: StyleProp<TextStyle>;
     props: TextInputProps;
   }
->(({ value, onIncrement, onDecrement, backgroundColor, style, props }, ref) => {
+>(({ value, onIncrement, onDecrement, backgroundColor, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -63,7 +59,6 @@ const StepperInput = forwardRef<
             textAlign: "center",
             flex: 1,
           },
-          style,
         ]}
         keyboardType={props.keyboardType || "decimal-pad"}
       />
@@ -84,10 +79,9 @@ const ChevronInput = forwardRef<
     value: string | undefined;
     onChevronPress: () => void;
     backgroundColor: string;
-    style?: StyleProp<TextStyle>;
     props: TextInputProps;
   }
->(({ value, onChevronPress, backgroundColor, style, props }, ref) => {
+>(({ value, onChevronPress, backgroundColor, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -101,7 +95,7 @@ const ChevronInput = forwardRef<
         {...props}
         ref={ref}
         value={value}
-        style={[styles.dropdown, style]}
+        style={[styles.dropdown]}
         editable={false}
         pointerEvents="none"
       />
@@ -120,12 +114,11 @@ const StandardInput = forwardRef<
   {
     value: string | undefined;
     leftIconName?: keyof typeof Feather.glyphMap;
-    style?: StyleProp<TextStyle>;
     onFocus: (e: any) => void;
     onBlur: (e: any) => void;
     props: TextInputProps;
   }
->(({ value, leftIconName, style, onFocus, onBlur, props }, ref) => {
+>(({ value, leftIconName, onFocus, onBlur, props }, ref) => {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -143,11 +136,7 @@ const StandardInput = forwardRef<
         {...props}
         ref={ref}
         value={value}
-        style={[
-          styles.input,
-          leftIconName ? styles.inputWithLeftIcon : {},
-          style,
-        ]}
+        style={styles.input}
         onFocus={onFocus}
         onBlur={onBlur}
       />
@@ -160,7 +149,6 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   value,
   onFocus,
   onBlur,
-  containerStyle,
   backgroundColor,
   showStepper = false,
   onIncrement,
@@ -186,7 +174,9 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
 
   const labelStyle: Animated.WithAnimatedObject<TextStyle> = {
     position: "absolute",
-    left: numbersAliasTokens.spacing.xs,
+    left: leftIconName
+      ? numbersAliasTokens.spacing["2xl"]
+      : numbersAliasTokens.spacing.xs,
     top: labelAnim.interpolate({
       inputRange: [0, 1],
       outputRange: [18, -8],
@@ -253,13 +243,12 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
         onBlur={handleBlur}
         props={props}
         ref={inputRef}
-        style={leftIconName ? styles.inputWithLeftIcon : {}}
       />
     );
   };
 
   return (
-    <View style={[styles.container, containerStyle as any]}>
+    <View style={styles.container}>
       <Animated.Text style={labelStyle} onPress={handleLabelPress}>
         {label}
       </Animated.Text>
@@ -325,8 +314,5 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     top: "50%",
     marginTop: -numbersAliasTokens.spacing["2xs"],
     zIndex: 2,
-  },
-  inputWithLeftIcon: {
-    paddingLeft: numbersAliasTokens.spacing["3xl"],
   },
 }));
