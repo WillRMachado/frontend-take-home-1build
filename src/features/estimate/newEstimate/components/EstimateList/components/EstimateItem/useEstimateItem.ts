@@ -6,6 +6,8 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import React from "react";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
+import { useToast } from '@/src/common/utils/toast';
+
 interface UseEstimateItemProps {
   item: EstimateRow;
   forceRecalculateHeight: () => void;
@@ -27,6 +29,7 @@ export function useEstimateItem({
 }: UseEstimateItemProps): FormattedEstimateItem {
   const { deleteItem, updateItem } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
+  const { show } = useToast();
 
   if (!componentContext) {
     throw new Error("ComponentContext must be used within a ComponentProvider");
@@ -37,7 +40,8 @@ export function useEstimateItem({
 
   const handleRemove = useCallback(() => {
     deleteItem(item.id);
-  }, [item.id, deleteItem]);
+    show('Item deleted');
+  }, [item.id, deleteItem, show]);
 
   const handleCloseAndSave = useCallback(
     (updatedItem: EstimateRow) => {

@@ -1,4 +1,4 @@
-import { View, Animated } from "react-native";
+import { View, Animated, Button } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState } from "react";
 import type { EstimateRow } from "@/data";
 import { useEstimateItem } from "./useEstimateItem";
@@ -6,6 +6,10 @@ import React from "react";
 import { DeleteButton } from "./DeleteButton";
 import { DIRECTIONS } from "@/src/common/enums/directions";
 import { EstimateItemButton } from "./EstimateItemButton";
+import { getColors } from "@/src/common/theme/tokens/alias/colors";
+import { useTheme } from "@/src/common/hooks/useTheme";
+import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 
 interface EstimateItemProps {
   item: EstimateRow;

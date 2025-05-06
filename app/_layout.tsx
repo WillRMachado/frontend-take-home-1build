@@ -24,6 +24,7 @@ import {
 import { useCallback, useContext } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { THEMES } from "@/src/common/enums";
+import { ToastProvider } from "@/src/common/lib/imports";
 
 type BottomSheetChildProps =
   | EstimateFormProps
@@ -105,16 +106,18 @@ function ThemedContent() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <EstimateProvider>
-            <ComponentProvider>
-              <ThemedContent />
-            </ComponentProvider>
-          </EstimateProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <ToastProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <EstimateProvider>
+              <ComponentProvider>
+                <ThemedContent />
+              </ComponentProvider>
+            </EstimateProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </ToastProvider>
   );
 }
