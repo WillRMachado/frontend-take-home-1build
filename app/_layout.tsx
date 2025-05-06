@@ -1,28 +1,37 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { EstimateProvider } from "@/src/context/EstimateContext";
-import { ThemeProvider, ThemeContext } from "@/src/context/ThemeContext";
+import { ThemeProvider } from "@/src/context/ThemeContext";
 import {
   ComponentProvider,
   ComponentContext,
 } from "@/src/context/ComponentContext";
 import {
   SafeAreaProvider,
-  useSafeAreaFrame,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
-import { BottomSheet } from "@/src/common/lib/imports";
-import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
-import { useCallback, useContext, useEffect } from "react";
-import { EstimateRow, EstimateSection } from "@/data";
-import BottomSheetWrapper, {
-  BottomSheetBackdrop,
+import {
+  BottomSheet,
   BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
+} from "@/src/common/lib/imports";
+import {
+  EstimateForm,
+  EstimateFormProps,
+} from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
+import { useCallback, useContext } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+
+type BottomSheetChildProps =
+  | EstimateFormProps
+  | {
+      selectUom: (name: string) => void;
+      onReturn: () => void;
+    };
+
+type BottomSheetChild = React.ReactElement<BottomSheetChildProps>;
 
 function ThemedContent() {
   const { theme } = useTheme();
@@ -52,6 +61,14 @@ function ThemedContent() {
     []
   );
 
+  const _getBottomSheetKey = useCallback((child: BottomSheetChild) => {
+    if (child.type === EstimateForm) {
+      const props = child.props as EstimateFormProps;
+      return `bottom-sheet-${props.mode}-${props.data.id || "new"}`;
+    }
+    return "bottom-sheet";
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -67,7 +84,7 @@ function ThemedContent() {
 
       {isBottomSheetOpen && bottomSheetChild && (
         <BottomSheet.Wrapper
-          key={JSON.stringify(bottomSheetChild)}
+          key={_getBottomSheetKey(bottomSheetChild as BottomSheetChild)}
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
