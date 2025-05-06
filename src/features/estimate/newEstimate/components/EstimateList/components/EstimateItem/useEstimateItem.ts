@@ -1,9 +1,8 @@
-import type { EstimateRow, UnitOfMeasure } from "@/data";
-import { useCallback, useContext, useState } from "react";
+import type { EstimateRow } from "@/data";
+import { useCallback, useContext } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
-import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector";
 import React from "react";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
 
@@ -16,7 +15,7 @@ export function useEstimateItem({
   item,
   forceRecalculateHeight,
 }: UseEstimateItemProps) {
-  const { deleteItem, updateItem, clearSelection } = useEstimateContext();
+  const { deleteItem, updateItem } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
 
   if (!componentContext) {
@@ -50,7 +49,6 @@ export function useEstimateItem({
         data: { ...item, ...partialItem },
         onSave: handleCloseAndSave,
         onClose: handleCloseEdit,
-        onDropdownPress: handleChangeUom,
         onDelete: () => {
           handleRemove();
           handleCloseEdit();
@@ -68,28 +66,6 @@ export function useEstimateItem({
     [openBottomSheet, setBottomSheetChild, getEditForm]
   );
 
-  const handleUpdateUom = useCallback(
-    (uom: UnitOfMeasure) => {
-      updateItem(item.id, { ...item, uom });
-      forceRecalculateHeight();
-      handleEdit({ uom });
-    },
-    [updateItem, item, forceRecalculateHeight, handleEdit]
-  );
-
-  const getUomSelector = useCallback((): React.ReactElement => {
-    return React.createElement(UomSelector, {
-      selectUom: (uom: UnitOfMeasure) => {
-        handleUpdateUom(uom);
-      },
-      onReturn: handleEdit,
-    });
-  }, [handleUpdateUom, handleEdit]);
-
-  const handleChangeUom = useCallback((): void => {
-    setBottomSheetChild(getUomSelector());
-  }, [setBottomSheetChild, getUomSelector]);
-
   return {
     description: item.title,
     quantity: item.quantity,
@@ -98,9 +74,5 @@ export function useEstimateItem({
     handleRemove,
     supplierLogoUrl: item.supplier?.logoUrl,
     handleEdit,
-    handleCloseAndSave,
-    handleCloseEdit,
-    handleChangeUom,
-    getEditForm,
   };
 }

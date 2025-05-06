@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   ActivityIndicator,
 } from "react-native";
-import { useLayoutEffect, useRef, useCallback, useState } from "react";
+import { useLayoutEffect, useRef, useCallback, useState, useMemo } from "react";
 import type { EstimateRow } from "@/data";
 import createThemedStyles, {
   useThemedColors,
@@ -19,6 +19,7 @@ import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import React from "react";
+
 interface EstimateItemProps {
   item: EstimateRow;
   isLast: boolean;
@@ -34,13 +35,12 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   const getColorWithAlpha = useThemedAlphaColors();
-
   const styles = useStyles({ isLast });
   const colors = useThemedColors();
 
-  const forceRecalculateHeight = () => {
+  const forceRecalculateHeight = useCallback(() => {
     setMeasuredHeight(null);
-  };
+  }, []);
 
   const {
     description,
@@ -72,7 +72,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
         useNativeDriver: false,
       }),
     ]).start(handleRemove);
-  }, [translateX, height, handleRemove, measuredHeight]);
+  }, [translateX, height, handleRemove]);
 
   const resetPosition = useCallback(() => {
     Animated.spring(translateX, {
@@ -101,46 +101,48 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     [animateDelete, resetPosition]
   );
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dx) > 25;
-      },
-      onPanResponderGrant: () => {
-        return true;
-      },
-      onPanResponderMove: handlePanResponderMove,
-      onPanResponderRelease: handlePanResponderRelease,
-      onPanResponderTerminate: resetPosition,
-      onPanResponderTerminationRequest: () => true,
-    })
-  ).current;
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: (_, gestureState) => {
+          return Math.abs(gestureState.dx) > 25;
+        },
+        onPanResponderGrant: () => true,
+        onPanResponderMove: handlePanResponderMove,
+        onPanResponderRelease: handlePanResponderRelease,
+        onPanResponderTerminate: resetPosition,
+        onPanResponderTerminationRequest: () => true,
+      }),
+    [handlePanResponderMove, handlePanResponderRelease, resetPosition]
+  );
 
-  const getTranslationX = useCallback(() => {
-    return {
+  const getTranslationX = useMemo(
+    () => ({
       transform: [{ translateX }],
-    };
-  }, [translateX]);
+    }),
+    [translateX]
+  );
 
-  const getDeleteButtonOpacity = useCallback(() => {
-    return {
+  const getDeleteButtonOpacity = useMemo(
+    () => ({
       opacity: translateX.interpolate({
         inputRange: [-SHOW_DELETE_THRESHOLD, 0],
         outputRange: [1, 0],
         extrapolate: "clamp",
       }),
-    };
-  }, [translateX]);
+    }),
+    [translateX]
+  );
 
   useLayoutEffect(() => {
-    if (containerRef.current) {
+    if (containerRef.current && !measuredHeight) {
       containerRef.current.measure((x, y, width, measuredHeight) => {
         setMeasuredHeight(measuredHeight);
         height.setValue(measuredHeight);
       });
     }
-  }, []);
+  }, [measuredHeight, height]);
 
   return (
     <>
@@ -149,7 +151,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
         ref={containerRef}
       >
         <Animated.View
-          style={[styles.deleteButtonContainer, getDeleteButtonOpacity()]}
+          style={[styles.deleteButtonContainer, getDeleteButtonOpacity]}
         >
           <Feather
             name="trash-2"
@@ -158,7 +160,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
           />
         </Animated.View>
 
-        <Animated.View style={getTranslationX()} {...panResponder.panHandlers}>
+        <Animated.View style={getTranslationX} {...panResponder.panHandlers}>
           <TouchableHighlight
             underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
             style={[styles.editButtonWrapper]}
@@ -199,6 +201,7 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     </>
   );
 }
+
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
   ({ colors, numbersAliasTokens, customFonts, props }) => ({
     editButtonWrapper: {

@@ -30,7 +30,8 @@ export const useEditForm = ({
     throw new Error("ComponentContext must be used within a ComponentProvider");
   }
 
-  const { setBottomSheetChild, openBottomSheet } = componentContext;
+  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
+    componentContext;
 
   const [title, setTitle] = useState(data.title);
   const [price, setPrice] = useState(
@@ -50,8 +51,10 @@ export const useEditForm = ({
         quantity: parseFloat(quantity),
         uom,
       });
+      closeBottomSheet();
     } else {
       onSave({ title });
+      closeBottomSheet();
     }
   };
 
@@ -108,7 +111,8 @@ export const useEditForm = ({
     handleDecrement,
     onClose,
     handleDropdownPress,
-    onDelete,
+    handleDelete: onDelete,
+    handleClose: onClose,
     mode,
   };
 };

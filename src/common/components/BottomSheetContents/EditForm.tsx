@@ -14,15 +14,13 @@ type EditFormProps = {
   data: EstimateRow | EstimateSection;
   onSave: (updates: any) => void;
   onClose: () => void;
-  onDropdownPress: () => void;
   onDelete: () => void;
 };
 
 export function EditForm({
-  mode,
+  mode: initialMode,
   data,
   onSave,
-  // onDropdownPress,
   onClose,
   onDelete,
 }: EditFormProps) {
@@ -37,18 +35,18 @@ export function EditForm({
     quantity,
     setQuantity,
     uom,
-    setUom,
     handleSave,
     handleIncrement,
     handleDecrement,
-    // onDropdownPress,
-    handleDropdownPress
-  } = useEditForm({
+    handleDropdownPress,
+    handleDelete,
+    handleClose,
     mode,
+  } = useEditForm({
+    mode: initialMode,
     data,
     onSave,
     onClose,
-    // onDropdownPress,
     onDelete,
   });
 
@@ -57,9 +55,9 @@ export function EditForm({
       <BottomSheetHeaders
         title="Edit Item"
         leftIcon="x"
-        onClickLeftIcon={onClose}
+        onClickLeftIcon={handleClose}
         rightIcon="trash-2"
-        onClickRightIcon={onDelete}
+        onClickRightIcon={handleDelete}
       />
 
       <View style={styles.container}>
@@ -88,7 +86,6 @@ export function EditForm({
                 <FloatingLabelInput
                   label="Unit"
                   value={uom}
-                  // onChangeText={(text) => setUom(text as UnitOfMeasure)}
                   backgroundColor={colors.layer.solid.light}
                   showChevron
                   onChevronPress={handleDropdownPress}

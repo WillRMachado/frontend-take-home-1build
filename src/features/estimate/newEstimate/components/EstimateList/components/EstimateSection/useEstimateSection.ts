@@ -1,10 +1,9 @@
-import { useCallback, useContext, useState } from "react";
-import type { EstimateSection, EstimateRow, UnitOfMeasure } from "@/data";
+import { useContext, useState } from "react";
+import type { EstimateSection, EstimateRow } from "@/data";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
 import React from "react";
-import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector";
 
 interface UseEstimateSectionProps {
   section: EstimateSection;
@@ -19,7 +18,8 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     throw new Error("ComponentContext must be used within a ComponentProvider");
   }
 
-  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } = componentContext;
+  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
+    componentContext;
 
   function handleCloseAndSave(newItem: EstimateRow): void {
     addItem(section.id, newItem);
@@ -35,21 +35,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     openBottomSheet();
   }
 
-  function handleChangeUom(): void {
-    setBottomSheetChild(
-      React.createElement(UomSelector, {
-        selectUom: (uom: UnitOfMeasure) => {
-          handleUpdateUom(uom);
-        },
-        onReturn: handleAddItem,
-      })
-    );
-  }
-
-  function handleUpdateUom(uom: UnitOfMeasure): void {
-    handleAddItem(uom);
-  }
-
   function getAddForm(): React.ReactElement {
     return React.createElement(EditForm, {
       mode: "item",
@@ -63,7 +48,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
       } as EstimateRow,
       onSave: handleCloseAndSave,
       onClose: handleCloseAddItem,
-      onDropdownPress: handleChangeUom,
       onDelete: handleCloseAddItem,
     });
   }
@@ -72,11 +56,10 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     setIsOpen((isOpen) => !isOpen);
   };
 
-
   const price = section.rows.reduce((acc, row) => {
     return acc + row.price * row.quantity;
   }, 0);
-  
+
   return {
     title: section.title,
     price,
