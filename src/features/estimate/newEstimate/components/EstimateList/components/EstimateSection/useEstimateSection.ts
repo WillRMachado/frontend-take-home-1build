@@ -4,7 +4,7 @@ import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
-import { EstimateMode } from "@/src/common/types/estimate";
+import { EstimateMode } from "@/src/common/enums/estimate";
 
 interface UseEstimateSectionProps {
   section: EstimateSection;
@@ -38,7 +38,7 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
 
   function getAddForm(): React.ReactElement {
     return React.createElement(EstimateForm, {
-      mode: EstimateMode.AddItem,
+      mode: EstimateMode.ADD_ITEM,
       data: {
         id: "",
         title: "",

@@ -6,9 +6,9 @@ import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
-import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
+import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
 import { useEditForm } from "./useEstimateForm";
-import { EstimateMode } from "@/src/common/types/estimate";
+import { EstimateMode } from "@/src/common/enums/estimate";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 

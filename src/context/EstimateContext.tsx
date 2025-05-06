@@ -2,15 +2,15 @@ import { createContext, useContext, useMemo } from "react"
 import type { Estimate, EstimateRow, EstimateSection } from "@/data"
 import { PropsWithChildren, useState } from "react"
 import { sampleEstimate } from "@/data"
-import { EstimateMode } from "@/src/common/types/estimate"
+import { EstimateMode } from "@/src/common/enums/estimate"
 
 export type EditMode =
 	| {
-			type: EstimateMode.EditItem | EstimateMode.AddItem
+			type: EstimateMode.EDIT_ITEM | EstimateMode.ADD_ITEM
 			data: EstimateRow
 	  }
 	| {
-			type: EstimateMode.EditSection | EstimateMode.AddSection
+			type: EstimateMode.EDIT_SECTION | EstimateMode.ADD_SECTION
 			data: EstimateSection
 	  }
 	| null
@@ -108,11 +108,11 @@ export function EstimateProvider({ children }: PropsWithChildren) {
 	}
 
 	const selectItem = (item: EstimateRow) => {
-		setEditMode({ type: EstimateMode.EditItem, data: item })
+		setEditMode({ type: EstimateMode.EDIT_ITEM, data: item })
 	}
 
 	const selectSection = (section: EstimateSection) => {
-		setEditMode({ type: EstimateMode.EditSection, data: section })
+		setEditMode({ type: EstimateMode.EDIT_SECTION, data: section })
 	}
 
 	const clearSelection = () => {

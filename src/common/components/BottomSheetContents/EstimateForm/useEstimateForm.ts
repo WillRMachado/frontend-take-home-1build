@@ -3,7 +3,7 @@ import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
 import React from "react";
-import { EstimateMode } from "@/src/common/types/estimate";
+import { EstimateMode } from "@/src/common/enums/estimate";
 import { EstimateFormProps } from "./EstimateForm";
 
 function isEstimateRow(data: any): data is EstimateRow {
@@ -46,7 +46,7 @@ export const useEditForm = ({
   const uom: UnitOfMeasure = isEstimateRow(data) ? data.uom : "EA";
 
   const handleSave = () => {
-    if (mode === EstimateMode.EditItem || mode === EstimateMode.AddItem) {
+    if (mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM) {
       onSave({
         ...data,
         title,
@@ -120,9 +120,9 @@ export const useEditForm = ({
     handleDelete: onDelete,
     handleClose: onClose,
     mode,
-    isItemMode: mode === EstimateMode.EditItem || mode === EstimateMode.AddItem,
+    isItemMode: mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM,
     isEditMode:
-      mode === EstimateMode.EditItem || mode === EstimateMode.EditSection,
+      mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.EDIT_SECTION,
     supplierInfo: isEstimateRow(data) ? data.supplier : null,
     showSupplierInfo,
     handleCloseSuplier,

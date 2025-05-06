@@ -4,7 +4,7 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
 import type { EstimateSection } from "@/data";
-import { EstimateMode } from "@/src/common/types/estimate";
+import { EstimateMode } from "@/src/common/enums/estimate";
 
 export function useNewEstimateScreen() {
   const { addSection } = useEstimateContext();
@@ -26,7 +26,7 @@ export function useNewEstimateScreen() {
 
     setBottomSheetChild(
       React.createElement(EstimateForm, {
-        mode: EstimateMode.AddSection,
+        mode: EstimateMode.ADD_SECTION,
         data: newSection,
         onSave: (updates) => {
           addSection({ ...newSection, ...updates });
