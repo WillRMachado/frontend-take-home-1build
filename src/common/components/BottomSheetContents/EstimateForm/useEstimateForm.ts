@@ -10,7 +10,7 @@ function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
 }
 
-type UseEditFormProps = Omit<EstimateFormProps, 'mode'> & {
+type UseEditFormProps = Omit<EstimateFormProps, "mode"> & {
   mode: EstimateMode;
   EstimateFormComponent: React.ComponentType<EstimateFormProps>;
 };
@@ -23,6 +23,10 @@ export const useEditForm = ({
   onDelete,
   EstimateFormComponent,
 }: UseEditFormProps) => {
+  const [showSupplierInfo, setShowSupplierInfo] = useState(
+    isEstimateRow(data) && data.supplier
+  );
+
   const componentContext = useContext(ComponentContext);
 
   if (!componentContext) {
@@ -96,6 +100,10 @@ export const useEditForm = ({
     renderUomSelectorOnSheet();
   };
 
+  const handleCloseSuplier = () => {
+    setShowSupplierInfo(false);
+  };
+
   return {
     title,
     setTitle,
@@ -113,6 +121,10 @@ export const useEditForm = ({
     handleClose: onClose,
     mode,
     isItemMode: mode === EstimateMode.EditItem || mode === EstimateMode.AddItem,
-    isEditMode: mode === EstimateMode.EditItem || mode === EstimateMode.EditSection,
+    isEditMode:
+      mode === EstimateMode.EditItem || mode === EstimateMode.EditSection,
+    supplierInfo: isEstimateRow(data) ? data.supplier : null,
+    showSupplierInfo,
+    handleCloseSuplier,
   };
 };

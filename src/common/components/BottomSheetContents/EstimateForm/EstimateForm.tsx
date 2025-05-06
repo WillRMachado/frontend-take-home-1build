@@ -47,6 +47,9 @@ export function EstimateForm({
     mode,
     isItemMode,
     isEditMode,
+    showSupplierInfo,
+    supplierInfo,
+    handleCloseSuplier,
   } = useEditForm({
     mode: initialMode,
     data,
@@ -120,8 +123,13 @@ export function EstimateForm({
                 onDecrement={handleDecrement}
               />
             </View>
-            {(data as EstimateRow) && (data as EstimateRow)?.supplier && (
-              <SupplierInfo supplier={(data as EstimateRow).supplier!} />
+            {/* {(data as EstimateRow) && (data as EstimateRow)?.supplier && ( */}
+            {showSupplierInfo && (
+              <SupplierInfo
+                // supplier={(data as EstimateRow).supplier!}
+                supplier={supplierInfo}
+                onClose={handleCloseSuplier}
+              />
             )}
           </>
         )}
