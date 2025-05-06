@@ -10,7 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import {
@@ -23,6 +23,7 @@ import {
 } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { useCallback, useContext } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+import { THEMES } from "@/src/common/enums";
 
 type BottomSheetChildProps =
   | EstimateFormProps
@@ -76,6 +77,10 @@ function ThemedContent() {
         backgroundColor: colors.layer.solid.medium,
       }}
     >
+      <StatusBar
+        barStyle={theme === THEMES.DARK ? "light-content" : "dark-content"}
+        backgroundColor={colors.layer.solid.medium}
+      />
       <Stack
         screenOptions={{
           headerShown: false,
