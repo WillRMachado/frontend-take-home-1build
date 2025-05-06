@@ -1,22 +1,19 @@
 import { useState, useContext } from "react";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { ComponentContext } from "@/src/context/ComponentContext";
-import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector";
-import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
+import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
 import React from "react";
 import { EstimateMode } from "@/src/common/types/estimate";
+import { EstimateFormProps } from "./EstimateForm";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
 }
 
-interface UseEditFormProps {
+type UseEditFormProps = Omit<EstimateFormProps, 'mode'> & {
   mode: EstimateMode;
-  data: EstimateRow | EstimateSection;
-  onSave: (updates: any) => void;
-  onClose: () => void;
-  onDelete: () => void;
-}
+  EstimateFormComponent: React.ComponentType<EstimateFormProps>;
+};
 
 export const useEditForm = ({
   mode,
@@ -24,6 +21,7 @@ export const useEditForm = ({
   onSave,
   onClose,
   onDelete,
+  EstimateFormComponent,
 }: UseEditFormProps) => {
   const componentContext = useContext(ComponentContext);
 
@@ -71,7 +69,7 @@ export const useEditForm = ({
     updatedData?: Partial<EstimateRow | EstimateSection>
   ) => {
     return setBottomSheetChild(
-      React.createElement(EditForm, {
+      React.createElement(EstimateFormComponent, {
         mode,
         data: { ...data, ...updatedData },
         onSave,
@@ -114,5 +112,7 @@ export const useEditForm = ({
     handleDelete: onDelete,
     handleClose: onClose,
     mode,
+    isItemMode: mode === EstimateMode.EditItem || mode === EstimateMode.AddItem,
+    isEditMode: mode === EstimateMode.EditItem || mode === EstimateMode.EditSection,
   };
 };

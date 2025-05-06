@@ -7,7 +7,7 @@ import {
 	calculateEstimateTotal,
 } from "../../common/lib/estimate"
 import type { EstimateRow, EstimateSection } from "@/data"
-import { EditForm } from "../../common/components/BottomSheetContents/EditForm"
+import { EstimateForm } from "../../common/components/BottomSheetContents/EstimateForm/EstimateForm"
 import { useEstimateScreen } from "./useEstimateScreen"
 import { TextField } from "../../common/components/TextField"
 
@@ -90,7 +90,7 @@ export default function EstimateScreen() {
 
 			<BottomSheet ref={bottomSheetRef}>
 				{editMode && (
-					<EditForm
+					<EstimateForm
 						key={editMode.data.id}
 						mode={editMode.type}
 						data={editMode.data}

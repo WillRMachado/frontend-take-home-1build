@@ -4,7 +4,7 @@ import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import React from "react";
-import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
+import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { EstimateMode } from "@/src/common/types/estimate";
 
 interface UseEstimateItemProps {
@@ -45,7 +45,7 @@ export function useEstimateItem({
 
   const getEditForm = useCallback(
     (partialItem?: Partial<EstimateRow>): React.ReactElement => {
-      return React.createElement(EditForm, {
+      return React.createElement(EstimateForm, {
         mode: EstimateMode.EditItem,
         data: { ...item, ...partialItem },
         onSave: handleCloseAndSave,

@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import { BottomSheet } from "@/src/common/lib/imports";
-import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
+import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { useCallback, useContext, useEffect } from "react";
 import { EstimateRow, EstimateSection } from "@/data";
 import BottomSheetWrapper, {

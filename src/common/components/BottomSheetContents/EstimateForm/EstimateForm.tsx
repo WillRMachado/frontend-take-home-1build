@@ -1,16 +1,16 @@
 import React from "react";
 import { View } from "react-native";
-import { PrimaryButton } from "../PrimaryButton";
+import { PrimaryButton } from "../../PrimaryButton";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
-import { FloatingLabelInput } from "../FloatingLabelInput";
+import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
-import { useEditForm } from "./useEditForm";
+import { useEditForm } from "./useEstimateForm";
 import { EstimateMode } from "@/src/common/types/estimate";
 
-type EditFormProps = {
+export type EstimateFormProps = {
   mode: EstimateMode;
   data: EstimateRow | EstimateSection;
   onSave: (updates: any) => void;
@@ -18,13 +18,13 @@ type EditFormProps = {
   onDelete: () => void;
 };
 
-export function EditForm({
+export function EstimateForm({
   mode: initialMode,
   data,
   onSave,
   onClose,
   onDelete,
-}: EditFormProps) {
+}: EstimateFormProps) {
   const styles = useStyles();
   const colors = useThemedColors();
 
@@ -43,18 +43,16 @@ export function EditForm({
     handleDelete,
     handleClose,
     mode,
+    isItemMode,
+    isEditMode,
   } = useEditForm({
     mode: initialMode,
     data,
     onSave,
     onClose,
     onDelete,
+    EstimateFormComponent: EstimateForm,
   });
-
-  const isItemMode =
-    mode === EstimateMode.EditItem || mode === EstimateMode.AddItem;
-  const isEditMode =
-    mode === EstimateMode.EditItem || mode === EstimateMode.EditSection;
 
   return (
     <>
