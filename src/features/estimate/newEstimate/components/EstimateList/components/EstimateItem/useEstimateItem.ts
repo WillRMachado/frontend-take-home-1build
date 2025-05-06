@@ -12,10 +12,20 @@ interface UseEstimateItemProps {
   forceRecalculateHeight: () => void;
 }
 
+interface FormattedEstimateItem {
+  description: string;
+  quantity: number;
+  unitPrice: string;
+  total: string;
+  handleRemove: () => void;
+  supplierLogoUrl?: string;
+  handleEdit: (partialItem?: Partial<EstimateRow>) => void;
+}
+
 export function useEstimateItem({
   item,
   forceRecalculateHeight,
-}: UseEstimateItemProps) {
+}: UseEstimateItemProps): FormattedEstimateItem {
   const { deleteItem, updateItem } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
 
@@ -56,7 +66,7 @@ export function useEstimateItem({
         },
       });
     },
-    [item, handleCloseAndSave, handleCloseEdit, handleRemove, item]
+    [item, handleCloseAndSave, handleCloseEdit, handleRemove]
   );
 
   const handleEdit = useCallback(

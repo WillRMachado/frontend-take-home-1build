@@ -1,13 +1,10 @@
 import {
   View,
-  Text,
   Animated,
   PanResponder,
   GestureResponderEvent,
   PanResponderGestureState,
-  Image,
   TouchableHighlight,
-  ActivityIndicator,
 } from "react-native";
 import { useLayoutEffect, useRef, useCallback, useState, useMemo } from "react";
 import type { EstimateRow } from "@/data";
@@ -19,6 +16,7 @@ import { useEstimateItem } from "./useEstimateItem";
 import { Feather } from "@expo/vector-icons";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import React from "react";
+import ItemContent from '../EstimateItemContent';
 
 interface EstimateItemProps {
   item: EstimateRow;
@@ -30,7 +28,7 @@ const SHOW_DELETE_THRESHOLD = SWIPE_THRESHOLD / 2;
 const DELETE_ANIMATION_DURATION = 200;
 const DELETE_OFFSET = -500;
 
-export default function EstimateItem({ item, isLast }: EstimateItemProps) {
+const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
@@ -135,6 +133,18 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
     [translateX]
   );
 
+  const handleImageLoadStart = useCallback(() => {
+    setIsImageLoading(true);
+  }, []);
+
+  const handleImageLoadEnd = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
+
+  const handleEditPress = useCallback(() => {
+    handleEdit();
+  }, [handleEdit]);
+
   useLayoutEffect(() => {
     if (containerRef.current && !measuredHeight) {
       containerRef.current.measure((x, y, width, measuredHeight) => {
@@ -164,43 +174,31 @@ export default function EstimateItem({ item, isLast }: EstimateItemProps) {
           <TouchableHighlight
             underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
             style={[styles.editButtonWrapper]}
-            onPress={() => handleEdit()}
+            onPress={handleEditPress}
           >
-            <>
-              <View style={styles.description}>
-                <Text style={styles.title}>{description}</Text>
-                <Text style={styles.quantityText}>
-                  {quantity} x {unitPrice} / {item.uom}
-                </Text>
-              </View>
-              <View style={styles.rightContent}>
-                <Text style={styles.totalText}>{total}</Text>
-                {supplierLogoUrl && (
-                  <View style={styles.supplierLogoContainer}>
-                    <Image
-                      source={{ uri: supplierLogoUrl }}
-                      style={styles.supplierLogo}
-                      resizeMode="contain"
-                      onLoadStart={() => setIsImageLoading(true)}
-                      onLoadEnd={() => setIsImageLoading(false)}
-                    />
-                    {isImageLoading && (
-                      <ActivityIndicator
-                        size="small"
-                        color={colors.icon.primary}
-                        style={styles.loadingIndicator}
-                      />
-                    )}
-                  </View>
-                )}
-              </View>
-            </>
+            <ItemContent
+              description={description}
+              quantity={quantity}
+              unitPrice={unitPrice}
+              uom={item.uom}
+              total={total}
+              supplierLogoUrl={supplierLogoUrl}
+              isImageLoading={isImageLoading}
+              onImageLoadStart={handleImageLoadStart}
+              onImageLoadEnd={handleImageLoadEnd}
+              styles={styles}
+              colors={colors}
+            />
           </TouchableHighlight>
         </Animated.View>
       </Animated.View>
     </>
   );
-}
+});
+
+EstimateItem.displayName = 'EstimateItem';
+
+export default EstimateItem;
 
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
   ({ colors, numbersAliasTokens, customFonts, props }) => ({
