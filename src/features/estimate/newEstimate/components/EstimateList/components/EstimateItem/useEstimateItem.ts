@@ -5,6 +5,7 @@ import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import React from "react";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
+import { EstimateMode } from "@/src/common/types/estimate";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
@@ -45,7 +46,7 @@ export function useEstimateItem({
   const getEditForm = useCallback(
     (partialItem?: Partial<EstimateRow>): React.ReactElement => {
       return React.createElement(EditForm, {
-        mode: "item",
+        mode: EstimateMode.EditItem,
         data: { ...item, ...partialItem },
         onSave: handleCloseAndSave,
         onClose: handleCloseEdit,

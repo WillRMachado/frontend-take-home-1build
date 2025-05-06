@@ -4,6 +4,7 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
 import React from "react";
 import type { EstimateSection } from "@/data";
+import { EstimateMode } from "@/src/common/types/estimate";
 
 export function useNewEstimateScreen() {
   const { addSection } = useEstimateContext();
@@ -25,15 +26,14 @@ export function useNewEstimateScreen() {
 
     setBottomSheetChild(
       React.createElement(EditForm, {
-        mode: "section",
+        mode: EstimateMode.AddSection,
         data: newSection,
         onSave: (updates) => {
           addSection({ ...newSection, ...updates });
           closeBottomSheet();
         },
         onClose: closeBottomSheet,
-        onDropdownPress: () => {},
-        onDelete: () => {},
+        onDelete: closeBottomSheet,
       })
     );
     openBottomSheet();

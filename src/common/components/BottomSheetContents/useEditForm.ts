@@ -4,13 +4,14 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector";
 import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
 import React from "react";
+import { EstimateMode } from "@/src/common/types/estimate";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
 }
 
 interface UseEditFormProps {
-  mode: "item" | "section";
+  mode: EstimateMode;
   data: EstimateRow | EstimateSection;
   onSave: (updates: any) => void;
   onClose: () => void;
@@ -43,7 +44,7 @@ export const useEditForm = ({
   const uom: UnitOfMeasure = isEstimateRow(data) ? data.uom : "EA";
 
   const handleSave = () => {
-    if (mode === "item") {
+    if (mode === EstimateMode.EditItem || mode === EstimateMode.AddItem) {
       onSave({
         ...data,
         title,
@@ -76,7 +77,6 @@ export const useEditForm = ({
         onSave,
         onClose,
         onDelete,
-        onDropdownPress: handleDropdownPress,
       })
     );
   };

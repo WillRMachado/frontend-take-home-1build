@@ -5,14 +5,8 @@ import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import EstimateSection from "./components/EstimateSection";
 
 export default function EstimateList() {
-  const { estimate, updateItem } = useEstimateList();
+  const { estimate } = useEstimateList();
   const styles = useStyles();
-
-  const handleRemoveItem = (id: string) => {
-    // Since we don't have a direct remove function, we'll update the item to have zero quantity
-    // This effectively removes it from the total calculation
-    updateItem(id, { quantity: 0 });
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -25,11 +19,7 @@ export default function EstimateList() {
         </View>
       ) : (
         estimate.sections.map((section) => (
-          <EstimateSection
-            key={section.id}
-            section={section}
-            onRemove={handleRemoveItem}
-          />
+          <EstimateSection key={section.id} section={section} />
         ))
       )}
     </ScrollView>

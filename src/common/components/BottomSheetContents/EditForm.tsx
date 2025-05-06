@@ -8,9 +8,10 @@ import createThemedStyles, {
 } from "@/src/common/theme/utils/createThemedStyles";
 import { BottomSheetHeaders } from "@/src/common/components/BottomSheetHeaders";
 import { useEditForm } from "./useEditForm";
+import { EstimateMode } from "@/src/common/types/estimate";
 
 type EditFormProps = {
-  mode: "item" | "section";
+  mode: EstimateMode;
   data: EstimateRow | EstimateSection;
   onSave: (updates: any) => void;
   onClose: () => void;
@@ -50,10 +51,17 @@ export function EditForm({
     onDelete,
   });
 
+  const isItemMode =
+    mode === EstimateMode.EditItem || mode === EstimateMode.AddItem;
+  const isEditMode =
+    mode === EstimateMode.EditItem || mode === EstimateMode.EditSection;
+
   return (
     <>
       <BottomSheetHeaders
-        title="Edit Item"
+        title={`${isEditMode ? "Edit" : "Add"} ${
+          isItemMode ? "Item" : "Section"
+        }`}
         leftIcon="x"
         onClickLeftIcon={handleClose}
         rightIcon="trash-2"
@@ -63,14 +71,14 @@ export function EditForm({
       <View style={styles.container}>
         <View style={styles.field}>
           <FloatingLabelInput
-            label={mode === "item" ? "Item title" : "Section title"}
+            label={isItemMode ? "Item title" : "Section title"}
             value={title}
             onChangeText={setTitle}
             backgroundColor={colors.layer.solid.light}
           />
         </View>
 
-        {mode === "item" && (
+        {isItemMode && (
           <>
             <View style={{ flexDirection: "row", gap: 12 }}>
               <View style={{ flex: 1 }}>
@@ -107,7 +115,9 @@ export function EditForm({
         )}
 
         <View style={styles.formActions}>
-          <PrimaryButton onPress={handleSave}>Save item</PrimaryButton>
+          <PrimaryButton onPress={handleSave}>
+            Save {isItemMode ? "item" : "section"}
+          </PrimaryButton>
         </View>
       </View>
     </>
