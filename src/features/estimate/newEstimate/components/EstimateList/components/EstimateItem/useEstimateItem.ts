@@ -1,5 +1,5 @@
 import type { EstimateRow } from "@/data";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
@@ -10,7 +10,6 @@ import { useToast } from '@/src/common/utils/toast';
 
 interface UseEstimateItemProps {
   item: EstimateRow;
-  forceRecalculateHeight: () => void;
 }
 
 interface FormattedEstimateItem {
@@ -21,12 +20,14 @@ interface FormattedEstimateItem {
   handleRemove: () => void;
   supplierLogoUrl?: string;
   handleEdit: (partialItem?: Partial<EstimateRow>) => void;
+  shouldAnimate: boolean;
+  handleSwipeComplete: () => void;
 }
 
 export function useEstimateItem({
   item,
-  forceRecalculateHeight,
 }: UseEstimateItemProps): FormattedEstimateItem {
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const { deleteItem, updateItem } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
   const { show } = useToast();
@@ -43,13 +44,16 @@ export function useEstimateItem({
     show('Item deleted');
   }, [item.id, deleteItem, show]);
 
+  const handleSwipeComplete = useCallback(() => {
+    setShouldAnimate(true);
+  }, []);
+
   const handleCloseAndSave = useCallback(
     (updatedItem: EstimateRow) => {
       updateItem(updatedItem.id, updatedItem);
       handleCloseEdit();
-      forceRecalculateHeight();
     },
-    [updateItem, closeBottomSheet, forceRecalculateHeight]
+    [updateItem, closeBottomSheet]
   );
 
   const handleCloseEdit = useCallback(() => {
@@ -88,5 +92,7 @@ export function useEstimateItem({
     handleRemove,
     supplierLogoUrl: item.supplier?.logoUrl,
     handleEdit,
+    shouldAnimate,
+    handleSwipeComplete,
   };
 }
