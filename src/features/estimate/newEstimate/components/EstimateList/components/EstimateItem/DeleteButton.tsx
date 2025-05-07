@@ -30,8 +30,6 @@ const getOpacityInterpolation = (
 
 export const DeleteButton = React.memo(
   ({ position, translateX, swipeThreshold }: DeleteButtonProps) => {
-    console.log(`DeleteButton ${position} rendered`);
-
     const colors = useThemedColors();
     const styles = useStyles({ swipeThreshold });
     const isLeft = position === DIRECTIONS.LEFT;

@@ -15,29 +15,40 @@ interface EstimateSectionProps {
 
 export default function EstimateSection({ section }: EstimateSectionProps) {
   const styles = useStyles();
-  const { title, price, isOpen, toggleOpen, handleAddItem } = useEstimateSection({
-    section,
-  });
+  const { title, price, isOpen, toggleOpen, handleAddItem, handleEditSection } =
+    useEstimateSection({
+      section,
+    });
 
   return (
     <>
       <Pressable style={styles.sectionContainer} onPress={toggleOpen}>
-        <View style={styles.contentWrapper}>
-          <Text style={styles.sectionTitleInfo}>{title}</Text>
-          <IconButton
-            iconName="plus"
-            onClick={handleAddItem}
-          />
-        </View>
-        <View style={styles.contentWrapper}>
-          <Text style={styles.sectionTitleInfo}>
-            {formatCurrency(Number(price))}
-          </Text>
-          <Feather
-            name={isOpen ? "chevron-down" : "chevron-up"}
-            size={numbersAliasTokens.sizing.icon.lg}
-            color={styles.sectionTitleInfo.color}
-          />
+        <View style={styles.row}>
+          <View style={styles.leftGroup}>
+            <Text
+              style={styles.sectionTitleInfo}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {title}
+            </Text>
+            <IconButton iconName="plus" onClick={handleAddItem} />
+            <IconButton iconName="edit-2" onClick={handleEditSection} />
+          </View>
+          <View style={styles.priceContainer}>
+            <Text
+              style={styles.sectionTitleInfo}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {formatCurrency(Number(price))}
+            </Text>
+            <Feather
+              name={isOpen ? "chevron-down" : "chevron-up"}
+              size={numbersAliasTokens.sizing.icon.lg}
+              color={styles.sectionTitleInfo.color}
+            />
+          </View>
         </View>
       </Pressable>
       {isOpen && (
@@ -71,11 +82,24 @@ const useStyles = createThemedStyles(
     sectionTitleInfo: {
       color: colors.text.primary,
       ...customFonts.bold.text.md,
+      flexShrink: 1,
     },
-    contentWrapper: {
+    row: {
+      flexDirection: "row",
+    },
+    leftGroup: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
+      flex: 1,
+      gap: numbersAliasTokens.spacing.xs,
+      minWidth: "50%",
+    },
+    priceContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      maxWidth: "50%",
+      paddingLeft: numbersAliasTokens.spacing.sm,
       gap: numbersAliasTokens.spacing.xs,
     },
   })

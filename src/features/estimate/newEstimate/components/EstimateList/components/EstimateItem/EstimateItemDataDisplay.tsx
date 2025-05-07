@@ -30,7 +30,9 @@ const ItemContent = React.memo(
           </Text>
         </View>
         <View style={styles.rightContent}>
-          <Text style={styles.totalText}>{total}</Text>
+          <Text style={styles.totalText}>
+            {total}
+          </Text>
           {supplierLogoUrl && (
             <View style={styles.supplierLogoContainer}>
               <LazyImage uri={supplierLogoUrl} style={styles.supplierLogo} />
@@ -65,6 +67,8 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     rightContent: {
       alignItems: "flex-end",
       gap: numbersAliasTokens.spacing.xs,
+      maxWidth: "60%",
+
     },
     supplierLogoContainer: {
       position: "relative",

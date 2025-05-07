@@ -1,5 +1,4 @@
 import { View, TouchableOpacity } from "react-native";
-import { useAddItemButton } from "./useIconButton";
 import { Feather } from "@expo/vector-icons";
 import createThemedStyles, {
   useThemedColors,

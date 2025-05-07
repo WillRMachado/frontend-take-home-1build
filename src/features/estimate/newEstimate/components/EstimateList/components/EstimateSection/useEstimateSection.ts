@@ -10,7 +10,7 @@ interface UseEstimateSectionProps {
 }
 
 export function useEstimateSection({ section }: UseEstimateSectionProps) {
-  const { addItem } = useEstimateContext();
+  const { addItem, updateSection } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,6 +35,16 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     openBottomSheet();
   }
 
+  function handleEditSection(): void {
+    setBottomSheetChild(getEditSectionForm());
+    openBottomSheet();
+  }
+
+  function handleCloseAndSaveSection(updates: Partial<EstimateSection>): void {
+    updateSection(section.id, updates);
+    closeBottomSheet();
+  }
+
   function getAddForm(): React.ReactElement {
     return React.createElement(EstimateForm, {
       mode: EstimateMode.ADD_ITEM,
@@ -52,6 +62,16 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     });
   }
 
+  function getEditSectionForm(): React.ReactElement {
+    return React.createElement(EstimateForm, {
+      mode: EstimateMode.EDIT_SECTION,
+      data: section,
+      onSave: handleCloseAndSaveSection,
+      onClose: closeBottomSheet,
+      onDelete: closeBottomSheet,
+    });
+  }
+
   const toggleOpen = () => {
     setIsOpen((isOpen) => !isOpen);
   };
@@ -66,5 +86,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     isOpen,
     toggleOpen,
     handleAddItem,
+    handleEditSection,
   };
 }
