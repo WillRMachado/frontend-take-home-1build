@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
@@ -24,10 +24,43 @@ export const useEditForm = ({
   onDelete,
   EstimateFormComponent,
 }: UseEditFormProps) => {
+  const initialState = {
+    showSupplierInfo: isEstimateRow(data) && data.supplier,
+    isPriceFocused: false,
+    title: data.title,
+    price: isEstimateRow(data) ? data.price.toString() : "",
+    quantity: isEstimateRow(data) ? data.quantity.toString() : "",
+  };
+
   const [showSupplierInfo, setShowSupplierInfo] = useState(
-    isEstimateRow(data) && data.supplier
+    initialState.showSupplierInfo
   );
-  const [isPriceFocused, setIsPriceFocused] = useState(false);
+  const [isPriceFocused, setIsPriceFocused] = useState(
+    initialState.isPriceFocused
+  );
+  const [title, setTitle] = useState(initialState.title);
+  const [price, setPrice] = useState(initialState.price);
+  const [quantity, setQuantity] = useState(initialState.quantity);
+
+  const resetInitialState = () => {
+    setTitle(initialState.title);
+    setPrice(initialState.price);
+    setQuantity(initialState.quantity);
+    setShowSupplierInfo(initialState.showSupplierInfo);
+    setIsPriceFocused(initialState.isPriceFocused);
+  };
+
+  useEffect(() => {
+    resetInitialState();
+  }, [mode, data]);
+
+  const renderFormDefaultProps = {
+    mode,
+    data,
+    onSave,
+    onClose,
+    onDelete,
+  };
 
   const componentContext = useContext(ComponentContext);
 
@@ -35,16 +68,8 @@ export const useEditForm = ({
     throw new Error("ComponentContext must be used within a ComponentProvider");
   }
 
-  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
-    componentContext;
+  const { setBottomSheetChild, closeBottomSheet } = componentContext;
 
-  const [title, setTitle] = useState(data.title);
-  const [price, setPrice] = useState(
-    isEstimateRow(data) ? data.price.toString() : ""
-  );
-  const [quantity, setQuantity] = useState(
-    isEstimateRow(data) ? data.quantity.toString() : ""
-  );
   const uom: UnitOfMeasure = isEstimateRow(data) ? data.uom : "EA";
 
   const handlePriceChange = (text: string) => {
@@ -95,18 +120,21 @@ export const useEditForm = ({
     setQuantity((value) => Math.max(0, Number(value) - 1).toString());
   };
 
+  const reRenderFormNewProps = (updatedData?: Partial<UseEditFormProps>) => {
+    return setBottomSheetChild(
+      React.createElement(EstimateFormComponent, {
+        ...renderFormDefaultProps,
+        ...updatedData,
+      })
+    );
+  };
+
   const renderEditFormOnSheet = (
     updatedData?: Partial<EstimateRow | EstimateSection>
   ) => {
-    return setBottomSheetChild(
-      React.createElement(EstimateFormComponent, {
-        mode,
-        data: { ...data, ...updatedData },
-        onSave,
-        onClose,
-        onDelete,
-      })
-    );
+    return reRenderFormNewProps({
+      data: { ...data, ...updatedData },
+    });
   };
 
   const renderUomSelectorOnSheet = () => {
@@ -128,6 +156,15 @@ export const useEditForm = ({
 
   const handleCloseSuplier = () => {
     setShowSupplierInfo(false);
+  };
+
+  const toggleItemMode = () => {
+    return reRenderFormNewProps({
+      mode:
+        mode === EstimateMode.ADD_SECTION
+          ? EstimateMode.ADD_ITEM
+          : EstimateMode.ADD_SECTION,
+    });
   };
 
   return {
@@ -157,5 +194,6 @@ export const useEditForm = ({
     supplierInfo: isEstimateRow(data) ? data.supplier : null,
     showSupplierInfo,
     handleCloseSuplier,
+    toggleItemMode,
   };
 };
