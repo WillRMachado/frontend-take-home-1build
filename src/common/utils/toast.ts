@@ -1,12 +1,10 @@
 import { Toast } from "@/src/common/lib/imports";
-import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
-import { useTheme } from "@/src/common/hooks/useTheme";
+import { useThemedColors } from "@/src/common/theme/utils/createThemedStyles";
 
 export function useToast() {
-  const { theme } = useTheme();
-  const colors = getColors(theme);
+  const colors = useThemedColors();
 
   function show(message: string) {
     Toast.show(message, {

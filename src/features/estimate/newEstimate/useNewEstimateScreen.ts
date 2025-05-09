@@ -5,9 +5,10 @@ import { EstimateForm } from "@/src/common/components/BottomSheetContents/Estima
 import React from "react";
 import type { EstimateSection } from "@/data";
 import { EstimateMode } from "@/src/common/enums";
+import { calculateEstimateTotal } from "@/src/common/lib/estimate";
 
 export function useNewEstimateScreen() {
-  const { addSection } = useEstimateContext();
+  const { addSection, estimate } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
 
   if (!componentContext) {
@@ -39,7 +40,11 @@ export function useNewEstimateScreen() {
     openBottomSheet();
   };
 
+  // ${calculateEstimateTotal(estimate).toFixed(2)}
+  const estimateTotal = calculateEstimateTotal(estimate);
+
   return {
     handleAddNewSection,
+    estimateTotal,
   };
 }

@@ -10,7 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { SafeAreaView, StatusBar } from "react-native";
+import { Platform, SafeAreaView, StatusBar } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
 import {
@@ -25,6 +25,7 @@ import { useCallback, useContext } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { THEMES } from "@/src/common/enums";
 import { ToastProvider } from "@/src/common/lib/imports";
+import { WebFontsLoader } from "./WebFontsLoader";
 
 type BottomSheetChildProps =
   | EstimateFormProps
@@ -88,7 +89,7 @@ function ThemedContent() {
         }}
       />
 
-      {isBottomSheetOpen && bottomSheetChild && (
+      {isBottomSheetOpen && bottomSheetChild && Platform.OS !== "web" && (
         <BottomSheet.Wrapper
           key={_getBottomSheetKey(bottomSheetChild as BottomSheetChild)}
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
@@ -112,7 +113,13 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <EstimateProvider>
               <ComponentProvider>
-                <ThemedContent />
+                {Platform.OS === "web" ? (
+                  <WebFontsLoader fallback={<></>}>
+                    <ThemedContent />
+                  </WebFontsLoader>
+                ) : (
+                  <ThemedContent />
+                )}
               </ComponentProvider>
             </EstimateProvider>
           </SafeAreaProvider>
