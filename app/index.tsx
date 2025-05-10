@@ -1,5 +1,5 @@
 import EstimateScreen from "@/src/features/estimate/EstimateScreen";
-import NewEstimateScreen from "@/src/features/estimate/newEstimate/EstimateScreen";
+import NewEstimateScreen from "@/src/features/estimate/EstimateScreen";
 import { Platform, View, Text } from "react-native";
 
 export default function Index() {
