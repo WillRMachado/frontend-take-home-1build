@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View } from "react-native";
 import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
@@ -11,7 +11,6 @@ import { useEditForm } from "./useEstimateForm";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { EstimateMode } from "@/src/common/enums";
-import { formatCurrency } from "@/src/common/utils/format";
 
 export type EstimateFormProps = {
   mode: EstimateMode;

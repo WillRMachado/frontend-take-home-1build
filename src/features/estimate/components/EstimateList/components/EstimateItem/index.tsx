@@ -1,5 +1,11 @@
 import { View, Animated, Button } from "react-native";
-import { useLayoutEffect, useRef, useCallback, useState } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
 import type { EstimateRow } from "@/data";
 import { useEstimateItem } from "./useEstimateItem";
 import React from "react";
@@ -27,6 +33,10 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
     setMeasuredHeight(null);
   }, []);
 
+  useEffect(() => {
+    forceRecalculateHeight();
+  }, [item.title, forceRecalculateHeight]);
+
   const {
     description,
     quantity,
@@ -37,7 +47,6 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
     handleEdit,
   } = useEstimateItem({
     item,
-    forceRecalculateHeight,
   });
 
   const containerRef = useRef<View>(null);

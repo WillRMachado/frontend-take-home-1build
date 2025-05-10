@@ -8,6 +8,7 @@ import { EstimateMode } from "@/src/common/enums";
 import { formatCurrency, parsePriceInput } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
 import { Platform } from "react-native";
+import { useToast } from "@/src/common/utils/toast";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
@@ -30,6 +31,8 @@ export const useEditForm = ({
     price: isEstimateRow(data) ? data.price.toString() : "",
     quantity: isEstimateRow(data) ? data.quantity.toString() : "",
   };
+
+  const { show } = useToast();
 
   const isItemMode =
     mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM;
@@ -73,8 +76,14 @@ export const useEditForm = ({
     };
   }, [mode, data]);
 
-  const { addItem, addSection, deleteItem, updateItem, updateSection, deleteSection } =
-    useEstimateContext();
+  const {
+    addItem,
+    addSection,
+    deleteItem,
+    updateItem,
+    updateSection,
+    deleteSection,
+  } = useEstimateContext();
 
   const componentContext = useContext(ComponentContext);
 
@@ -217,9 +226,11 @@ export const useEditForm = ({
 
   const handleDelete = () => {
     if (isItemMode) {
-      deleteItem(data.id);
+      deleteItem(data?.id);
+      show("Item deleted");
     } else {
       deleteSection(data.id);
+      show("Section deleted");
     }
 
     closeBottomSheet();

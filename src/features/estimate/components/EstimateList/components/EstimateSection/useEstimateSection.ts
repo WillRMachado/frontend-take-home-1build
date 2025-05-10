@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import type { EstimateSection, EstimateRow } from "@/data";
-import { useEstimateContext } from "@/src/context/EstimateContext";
 import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
@@ -11,7 +10,6 @@ interface UseEstimateSectionProps {
 }
 
 export function useEstimateSection({ section }: UseEstimateSectionProps) {
-  const { addItem, updateSection } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,17 +17,7 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     throw new Error("ComponentContext must be used within a ComponentProvider");
   }
 
-  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
-    componentContext;
-
-  function handleCloseAndSave(newItem: EstimateRow): void {
-    addItem(section.id, newItem);
-    handleCloseAddItem();
-  }
-
-  function handleCloseAddItem(): void {
-    closeBottomSheet();
-  }
+  const { setBottomSheetChild, openBottomSheet } = componentContext;
 
   function handleAddItem(): void {
     setBottomSheetChild(getAddForm());
@@ -39,11 +27,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
   function handleEditSection(): void {
     setBottomSheetChild(getEditSectionForm());
     openBottomSheet();
-  }
-
-  function handleCloseAndSaveSection(updates: Partial<EstimateSection>): void {
-    updateSection(section.id, updates);
-    closeBottomSheet();
   }
 
   function getAddForm(): React.ReactElement {
@@ -57,9 +40,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
         uom: "EA",
         sectionId: section.id,
       } as EstimateRow,
-      onSave: handleCloseAndSave,
-      onClose: handleCloseAddItem,
-      onDelete: handleCloseAddItem,
     });
   }
 
@@ -67,9 +47,6 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     return React.createElement(EstimateForm, {
       mode: EstimateMode.EDIT_SECTION,
       data: section,
-      onSave: handleCloseAndSaveSection,
-      onClose: closeBottomSheet,
-      onDelete: closeBottomSheet,
     });
   }
 

@@ -6,9 +6,10 @@ import React from "react";
 import type { EstimateSection } from "@/data";
 import { EstimateMode } from "@/src/common/enums";
 import { calculateEstimateTotal } from "@/src/common/lib/estimate";
+import { uuid } from "@/src/common/lib/imports";
 
 export function useNewEstimateScreen() {
-  const { addSection, estimate } = useEstimateContext();
+  const { estimate } = useEstimateContext();
   const componentContext = useContext(ComponentContext);
 
   if (!componentContext) {
@@ -20,7 +21,7 @@ export function useNewEstimateScreen() {
 
   const handleAddNewSection = () => {
     const newSection: EstimateSection = {
-      id: `section-${Math.random().toString(36).substring(2, 9)}`,
+      id: `section-${uuid.v4()}`,
       title: "",
       rows: [],
     };
@@ -29,18 +30,11 @@ export function useNewEstimateScreen() {
       React.createElement(EstimateForm, {
         mode: EstimateMode.ADD_SECTION,
         data: newSection,
-        onSave: (updates) => {
-          addSection({ ...newSection, ...updates });
-          closeBottomSheet();
-        },
-        onClose: closeBottomSheet,
-        onDelete: closeBottomSheet,
       })
     );
     openBottomSheet();
   };
 
-  // ${calculateEstimateTotal(estimate).toFixed(2)}
   const estimateTotal = calculateEstimateTotal(estimate);
 
   return {

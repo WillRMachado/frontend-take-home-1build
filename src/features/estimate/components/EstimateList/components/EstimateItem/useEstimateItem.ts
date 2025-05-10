@@ -6,7 +6,7 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import React from "react";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
-import { useToast } from '@/src/common/utils/toast';
+import { useToast } from "@/src/common/utils/toast";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
@@ -41,7 +41,7 @@ export function useEstimateItem({
 
   const handleRemove = useCallback(() => {
     deleteItem(item.id);
-    show('Item deleted');
+    show("Item deleted");
   }, [item.id, deleteItem, show]);
 
   const handleSwipeComplete = useCallback(() => {
@@ -65,12 +65,6 @@ export function useEstimateItem({
       return React.createElement(EstimateForm, {
         mode: EstimateMode.EDIT_ITEM,
         data: { ...item, ...partialItem },
-        onSave: handleCloseAndSave,
-        onClose: handleCloseEdit,
-        onDelete: () => {
-          handleRemove();
-          handleCloseEdit();
-        },
       });
     },
     [item, handleCloseAndSave, handleCloseEdit, handleRemove]

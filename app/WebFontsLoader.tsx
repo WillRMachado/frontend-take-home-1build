@@ -12,7 +12,7 @@ import {
 
 const MIN_FALLBACK_DURATION = 500;
 
-export function WebFontsLoader({
+export default function WebFontsLoader({
   children,
   fallback,
 }: {
