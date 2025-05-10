@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import LazyImage from "@/src/common/components/LazyImage/LazyImage";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
+import { Text } from "@/src/common/components";
 
 const ItemContent = React.memo(
   ({

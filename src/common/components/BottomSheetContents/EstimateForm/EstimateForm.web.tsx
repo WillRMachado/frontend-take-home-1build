@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
 import { FloatingLabelInput } from "../../FloatingLabelInput";
@@ -12,7 +12,7 @@ import { EstimateMode } from "@/src/common/enums";
 import Switcher from "../../Switcher";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import UomSelector from "../UomSelector/UomSelector";
-
+import { Text } from "@/src/common/components";
 export type EstimateFormProps = {
   mode: EstimateMode;
   data: EstimateRow | EstimateSection;

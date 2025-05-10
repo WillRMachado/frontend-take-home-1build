@@ -5,8 +5,9 @@ import createThemedStyles, {
 } from "@/src/common/theme/utils/createThemedStyles";
 import React from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
-import { Text } from "../Text";
 import { numbersBaseTokens } from "../../theme/tokens/base/numbers";
+import { Text } from "@/src/common/components";
+
 interface AddItemButtonProps {
   onClick: () => void;
   iconName: keyof typeof Feather.glyphMap;

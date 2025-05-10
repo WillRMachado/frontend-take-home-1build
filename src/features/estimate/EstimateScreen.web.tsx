@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import { Text } from "../../common/components/Text";
 import { useNewEstimateScreen } from "./useEstimateScreen";
 import ThemeSwitch from "@/src/common/components/ThemeSwitch";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
@@ -8,6 +7,7 @@ import { TagType } from "@/src/common/enums";
 import EstimateList from "./components/EstimateList/EstimateList";
 import { useComponentsContext } from "@/src/common/hooks/useComponents";
 import EstimateTitle from "./components/EstimateTitle/EstimateTitle";
+import { Text } from "@/src/common/components";
 
 export default function EstimateScreenDesktop() {
   const { estimateTotal } = useNewEstimateScreen();
@@ -87,7 +87,7 @@ const useStyles = createThemedStyles(
     },
     formContainer: {
       flex: 0.3,
-      alignSelf: 'flex-start',
+      alignSelf: "flex-start",
       borderWidth: numbersAliasTokens.borderWidth.xs,
       borderColor: colors.outline.medium,
       backgroundColor: colors.layer.solid.light,

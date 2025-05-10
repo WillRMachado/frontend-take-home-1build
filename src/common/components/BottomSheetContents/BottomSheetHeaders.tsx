@@ -4,8 +4,8 @@ import { Feather } from "@expo/vector-icons";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
-import { Text } from "@/src/common/components/Text";
 import IconButton from "@/src/common/components/IconButton";
+import { Text } from "@/src/common/components";
 interface BottomSheetHeadersProps {
   title: string;
   rightIcon?: keyof typeof Feather.glyphMap;
