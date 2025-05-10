@@ -101,52 +101,44 @@ const ChevronInput = forwardRef<
     },
     ref
   ) => {
-    console.log("🚀 ~ props:", props);
     const colors = useThemedColors();
     const styles = useStyles();
 
     return (
       <View style={{ position: "relative" }}>
-        <TouchableOpacity
+        <View
           style={[
             styles.inputRow,
             { backgroundColor },
             styles.webDropdownStyle,
           ]}
-          onPress={() => {
-            onChevronPress?.();
-          }}
         >
           <TextInput
             {...props}
             ref={ref}
             value={value}
-            style={[
-              styles.dropdown,
-              { cursor: "pointer", fontWeight: "500", flex: 1 },
-            ]}
-            // editable={false}
-            // pointerEvents="none"
-
+            style={[styles.dropdown, { flex: 1 }]}
             onFocus={onFocus}
-            onBlur={onBlur}
-            // onFocus={() => {
-            //   console.log("focu2");
-            // }}
-            // onBlur={() => {
-            //   console.log("blur2");
-            // }}
+            onEndEditing={onBlur}
+            // onBlur={onBlur}
           />
-          <Feather
-            name="chevron-down"
-            size={numbersAliasTokens.sizing.icon.md}
-            color={colors.text.secondary}
-            style={[
-              styles.chevronIcon,
-              { marginLeft: numbersAliasTokens.spacing.sm },
-            ]}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              onChevronPress?.();
+            }}
+            style={styles.chevronButton}
+          >
+            <Feather
+              name="chevron-down"
+              size={numbersAliasTokens.sizing.icon.md}
+              color={colors.text.secondary}
+              style={[
+                styles.chevronIcon,
+                { marginLeft: numbersAliasTokens.spacing.sm },
+              ]}
+            />
+          </TouchableOpacity>
+        </View>
 
         {isOpen && <View style={styles.dropdownContainer}>{dropdownList}</View>}
       </View>
@@ -380,6 +372,9 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     top: 56,
     left: 0,
     right: 0,
+  },
+  chevronButton: {
+    padding: numbersAliasTokens.spacing["2xs"],
   },
 }));
 

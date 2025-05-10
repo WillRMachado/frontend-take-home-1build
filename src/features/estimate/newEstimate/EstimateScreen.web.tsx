@@ -60,7 +60,7 @@ export default function EstimateScreenDesktop() {
 }
 
 const useStyles = createThemedStyles(
-  ({ colors, theme, numbersAliasTokens, customFonts }) => ({
+  ({ colors, numbersAliasTokens, customFonts }) => ({
     container: {
       flex: 1,
       backgroundColor: colors.layer.solid.light,
@@ -92,10 +92,12 @@ const useStyles = createThemedStyles(
     },
     formContainer: {
       flex: 0.3,
+      alignSelf: 'flex-start',
       borderWidth: numbersAliasTokens.borderWidth.xs,
       borderColor: colors.outline.medium,
       backgroundColor: colors.layer.solid.light,
-      padding: numbersAliasTokens.spacing.md,
+      paddingHorizontal: numbersAliasTokens.spacing.md,
+      paddingTop: numbersAliasTokens.spacing.md,
       marginLeft: numbersAliasTokens.spacing.md,
       borderRadius: numbersAliasTokens.borderRadius.md,
     },

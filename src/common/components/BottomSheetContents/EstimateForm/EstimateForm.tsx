@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { PrimaryButton } from "../../PrimaryButton";
+import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
 import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
@@ -138,9 +138,9 @@ export function EstimateForm({
         )}
 
         <View style={styles.formActions}>
-          <PrimaryButton onPress={handleSave}>
+          <Button onPress={handleSave}>
             Save {isItemMode ? "item" : "section"}
-          </PrimaryButton>
+          </Button>
         </View>
       </View>
     </>

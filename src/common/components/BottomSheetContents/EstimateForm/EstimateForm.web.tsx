@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { PrimaryButton } from "../../PrimaryButton";
+import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
 import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
@@ -71,6 +71,7 @@ export function EstimateForm({
     handleSelectNewUom,
     uomSearch,
     setUomSearch,
+    handleFocusDropdown,
   } = useEditForm({
     mode: initialMode,
     data,
@@ -145,6 +146,7 @@ export function EstimateForm({
               isOpen={isUomDropdownOpen}
               onChangeText={setUomSearch}
               onBlur={handleBlurDropdown}
+              onFocus={handleFocusDropdown}
               dropdownList={
                 <UomSelector
                   key={uomSearch}
@@ -174,9 +176,14 @@ export function EstimateForm({
         )}
 
         <View style={styles.formActions}>
-          <PrimaryButton onPress={handleSave}>
-            Save {isItemMode ? "item" : "section"}
-          </PrimaryButton>
+          {isEditMode && (
+            <Button variant="destructive" onPress={handleDelete}>
+              Delete
+            </Button>
+          )}
+          <Button onPress={handleSave}>
+            {isEditMode ? "Done" : isItemMode ? "Add Item" : "Add Section"}
+          </Button>
         </View>
       </View>
     </>

@@ -62,13 +62,18 @@ export const useEditForm = ({
     setQuantity(initialState.quantity);
     setShowSupplierInfo(initialState.showSupplierInfo);
     setIsPriceFocused(initialState.isPriceFocused);
+    setUomSearch("");
+    setIsUomDropdownOpen(false);
   };
 
   useEffect(() => {
     resetInitialState();
+    return () => {
+      resetInitialState();
+    };
   }, [mode, data]);
 
-  const { deleteItem, updateItem, addItem, addSection } = useEstimateContext();
+  const { addItem, addSection } = useEstimateContext();
 
   const componentContext = useContext(ComponentContext);
 
@@ -138,6 +143,7 @@ export const useEditForm = ({
   };
 
   const handleSelectNewUom = (newUom: UnitOfMeasure) => {
+    console.log("🚀 ~ handleSelectNewUom ~ newUom:", newUom);
     renderEditFormOnSheet({ uom: newUom });
     setIsUomDropdownOpen(false);
   };
@@ -159,6 +165,11 @@ export const useEditForm = ({
     Platform.OS === "web"
       ? setIsUomDropdownOpen((value) => !value)
       : renderUomSelectorOnSheet();
+  };
+
+  const handleFocusDropdown = () => {
+    setIsUomDropdownOpen(true);
+    setUomSearch("");
   };
 
   const handleCloseSuplier = () => {
@@ -186,29 +197,10 @@ export const useEditForm = ({
   };
 
   const handleBlurDropdown = () => {
+    console.log("🚀 ~ handleBlurDropdown ~ uomSearch:", uomSearch);
     setIsUomDropdownOpen(false);
+    setUomSearch("");
   };
-
-  // const [isUomDropdownOpen, setUomDropdownOpen] = useState(false);
-  // const [uomSearch, setUomSearch] = useState("");
-
-  // Filtering logic (reuse from UomSelector)
-  // const matchesSearch = (text: string) =>
-  //   text.toLowerCase().includes(uomSearch.toLowerCase());
-  // const filterUnitsByCategory = (units: (typeof UNITS_OF_MEASURE)[string]) =>
-  //   units.filter(
-  //     (uom) =>
-  //       matchesSearch(uom.name) ||
-  //       matchesSearch(uom.abbreviation) ||
-  //       matchesSearch(uom.key)
-  //   );
-  // const filteredUnits: typeof UNITS_OF_MEASURE = Object.entries(
-  //   UNITS_OF_MEASURE
-  // ).reduce((acc, [category, units]) => {
-  //   const filtered = filterUnitsByCategory(units);
-  //   if (filtered.length > 0) (acc as any)[category] = filtered;
-  //   return acc;
-  // }, {} as typeof UNITS_OF_MEASURE);
 
   return {
     title,
@@ -243,5 +235,6 @@ export const useEditForm = ({
     handleBlurDropdown,
     uomSearch,
     setUomSearch,
+    handleFocusDropdown,
   };
 };
