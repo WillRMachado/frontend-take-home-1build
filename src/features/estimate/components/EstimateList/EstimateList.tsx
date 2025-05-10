@@ -1,11 +1,12 @@
 import { View, Text, ScrollView } from "react-native";
-import { useEstimateList } from "./useEstimateList";
+import { useEstimateContext } from "@/src/common/hooks/useEstimate";
+
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import EstimateSection from "./components/EstimateSection/EstimateSection";
 
 export default function EstimateList() {
-  const { estimate } = useEstimateList();
+  const { estimate } = useEstimateContext();
   const styles = useStyles();
 
   return (

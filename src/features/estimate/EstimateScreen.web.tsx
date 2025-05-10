@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Text } from "../../common/components/Text";
-import { useNewEstimateScreen } from "./useNewEstimateScreen";
+import { useNewEstimateScreen } from "./useEstimateScreen";
 import ThemeSwitch from "@/src/common/components/ThemeSwitch";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import Tag from "@/src/common/components/Tag";

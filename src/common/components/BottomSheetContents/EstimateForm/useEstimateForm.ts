@@ -6,7 +6,7 @@ import React from "react";
 import { EstimateFormProps } from "./EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
 import { formatCurrency, parsePriceInput } from "@/src/common/utils/format";
-import { useEstimateContext } from "@/src/context/EstimateContext";
+import { useEstimateContext } from "@/src/common/hooks/useEstimate";
 import { Platform } from "react-native";
 import { useToast } from "@/src/common/utils/toast";
 

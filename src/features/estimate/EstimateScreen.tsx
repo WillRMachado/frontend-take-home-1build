@@ -3,7 +3,7 @@ import { ThemeSwitch } from "@/src/common/components";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import EstimateList from "./components/EstimateList/EstimateList";
 import IconButton from "@/src/common/components/IconButton";
-import { useNewEstimateScreen } from "./useNewEstimateScreen";
+import { useNewEstimateScreen } from "./useEstimateScreen";
 import EstimateTitle from "./components/EstimateTitle/EstimateTitle";
 import Tag from "@/src/common/components/Tag";
 import { TagType } from "@/src/common/enums";
