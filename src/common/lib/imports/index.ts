@@ -7,6 +7,7 @@ import BottomSheetWrapper, {
 } from "@gorhom/bottom-sheet";
 import Toast from "react-native-root-toast";
 import { RootSiblingParent } from "react-native-root-siblings";
+import uuid from 'react-native-uuid';
 
 const BottomSheet = {
   Wrapper: BottomSheetWrapper,
@@ -21,4 +22,5 @@ export {
   BottomSheetBackdropProps,
   Toast,
   RootSiblingParent as ToastProvider,
+  uuid,
 };

@@ -94,11 +94,6 @@ export default function EstimateScreen() {
 						key={editMode.data.id}
 						mode={editMode.type}
 						data={editMode.data}
-						onSave={
-							editMode.type === "item"
-								? handleSaveItem
-								: handleSaveSection
-						}
 						onClose={handleCloseBottomSheet}
 					/>
 				)}

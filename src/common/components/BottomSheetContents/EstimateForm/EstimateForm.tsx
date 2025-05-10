@@ -16,17 +16,11 @@ import { formatCurrency } from "@/src/common/utils/format";
 export type EstimateFormProps = {
   mode: EstimateMode;
   data: EstimateRow | EstimateSection;
-  onSave: (updates: any) => void;
-  onClose: () => void;
-  onDelete: () => void;
 };
 
 export function EstimateForm({
   mode: initialMode,
   data,
-  onSave,
-  onClose,
-  onDelete,
 }: EstimateFormProps) {
   const colors = useThemedColors();
   const styles = useStyles();
@@ -56,9 +50,6 @@ export function EstimateForm({
   } = useEditForm({
     mode: initialMode,
     data,
-    onSave,
-    onClose,
-    onDelete,
     EstimateFormComponent: EstimateForm,
   });
 

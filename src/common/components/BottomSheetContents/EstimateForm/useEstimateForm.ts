@@ -21,9 +21,6 @@ type UseEditFormProps = Omit<EstimateFormProps, "mode"> & {
 export const useEditForm = ({
   mode,
   data,
-  onSave,
-  onClose,
-  onDelete,
   EstimateFormComponent,
 }: UseEditFormProps) => {
   const initialState = {
@@ -34,12 +31,15 @@ export const useEditForm = ({
     quantity: isEstimateRow(data) ? data.quantity.toString() : "",
   };
 
+  const isItemMode =
+    mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM;
+
+  const isEditMode =
+    mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.EDIT_SECTION;
+
   const renderFormDefaultProps = {
     mode,
     data,
-    onSave,
-    onClose,
-    onDelete,
   };
 
   const [showSupplierInfo, setShowSupplierInfo] = useState(
@@ -73,7 +73,8 @@ export const useEditForm = ({
     };
   }, [mode, data]);
 
-  const { addItem, addSection } = useEstimateContext();
+  const { addItem, addSection, deleteItem, updateItem, updateSection, deleteSection } =
+    useEstimateContext();
 
   const componentContext = useContext(ComponentContext);
 
@@ -101,20 +102,40 @@ export const useEditForm = ({
   const handlePriceFocus = () => setIsPriceFocused(true);
   const handlePriceBlur = () => setIsPriceFocused(false);
 
-  const handleSave = () => {
-    if (mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM) {
-      onSave({
-        ...data,
+  const handleUpdateData = () => {
+    if (mode === EstimateMode.ADD_SECTION) return addSection({ title });
+
+    if (mode === EstimateMode.ADD_ITEM) {
+      const sectionId = (data as any).sectionId;
+      if (!sectionId) {
+        throw new Error("Cannot add item: sectionId is required");
+      }
+      const newItem = {
+        title,
+        price: parseFloat(price),
+        quantity: parseFloat(quantity),
+        uom,
+      };
+      return addItem(sectionId, newItem);
+    }
+
+    if (mode === EstimateMode.EDIT_ITEM) {
+      return updateItem(data.id, {
         title,
         price: parseFloat(price),
         quantity: parseFloat(quantity),
         uom,
       });
-      closeBottomSheet();
-    } else {
-      onSave({ title });
-      closeBottomSheet();
     }
+
+    if (mode === EstimateMode.EDIT_SECTION) {
+      return updateSection(data.id, { title });
+    }
+  };
+
+  const handleSave = () => {
+    handleUpdateData();
+    closeBottomSheet();
   };
 
   const handleIncrement = () => {
@@ -176,23 +197,11 @@ export const useEditForm = ({
     setShowSupplierInfo(false);
   };
 
+  console.log("🚀 ~ toggleItemMode ~ mode0:", mode);
   const toggleItemMode = () => {
+    console.log("🚀 ~ toggleItemMode ~ mode1:", mode);
     return reRenderFormNewProps({
-      mode:
-        mode === EstimateMode.ADD_SECTION
-          ? EstimateMode.ADD_ITEM
-          : EstimateMode.ADD_SECTION,
-      onSave:
-        mode === EstimateMode.ADD_ITEM
-          ? (updates) => {
-              addSection({ ...data, ...updates });
-            }
-          : (updates) => {
-              if (!isEstimateRow(data) || !data.sectionId) {
-                throw new Error("sectionId is required when adding an item");
-              }
-              addItem(data.sectionId, { ...data, ...updates });
-            },
+      mode: isItemMode ? EstimateMode.ADD_SECTION : EstimateMode.ADD_ITEM,
     });
   };
 
@@ -200,6 +209,20 @@ export const useEditForm = ({
     console.log("🚀 ~ handleBlurDropdown ~ uomSearch:", uomSearch);
     setIsUomDropdownOpen(false);
     setUomSearch("");
+  };
+
+  const handleClose = () => {
+    closeBottomSheet();
+  };
+
+  const handleDelete = () => {
+    if (isItemMode) {
+      deleteItem(data.id);
+    } else {
+      deleteSection(data.id);
+    }
+
+    closeBottomSheet();
   };
 
   return {
@@ -217,15 +240,12 @@ export const useEditForm = ({
     handleSave,
     handleIncrement,
     handleDecrement,
-    onClose,
     handleDropdownPress,
-    handleDelete: onDelete,
-    handleClose: onClose,
+    handleDelete,
+    handleClose,
     mode,
-    isItemMode:
-      mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.ADD_ITEM,
-    isEditMode:
-      mode === EstimateMode.EDIT_ITEM || mode === EstimateMode.EDIT_SECTION,
+    isItemMode,
+    isEditMode,
     supplierInfo: isEstimateRow(data) ? data.supplier : null,
     showSupplierInfo,
     handleCloseSuplier,

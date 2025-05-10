@@ -28,17 +28,11 @@ import UomSelector from "../UomSelector/UomSelector";
 export type EstimateFormProps = {
   mode: EstimateMode;
   data: EstimateRow | EstimateSection;
-  onSave: (updates: any) => void;
-  onClose: () => void;
-  onDelete: () => void;
 };
 
 export function EstimateForm({
   mode: initialMode,
   data,
-  onSave,
-  onClose,
-  onDelete,
 }: EstimateFormProps) {
   const colors = useThemedColors();
   const styles = useStyles();
@@ -75,9 +69,9 @@ export function EstimateForm({
   } = useEditForm({
     mode: initialMode,
     data,
-    onSave,
-    onClose,
-    onDelete,
+    // onSave,
+    // onClose,
+    // onDelete,
     EstimateFormComponent: EstimateForm,
   });
 
@@ -246,19 +240,13 @@ const useStyles = createThemedStyles(
       top: 56,
       left: 0,
       right: 0,
-      // zIndex: ,
       backgroundColor: colors.layer.solid.light,
       borderRadius: numbersAliasTokens.borderRadius.lg,
       borderWidth: numbersAliasTokens.borderWidth.xs,
       borderColor: colors.outline.medium,
-      // boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
       padding: numbersAliasTokens.spacing.xs,
       maxHeight: 320,
-      // overflow: "scroll"
       overflow: "hidden",
-      // elevation: 10000,
-      // border: "1px solid red",
-      // zIndex: 100,
     },
     uomSearchInput: {
       borderWidth: numbersAliasTokens.borderWidth.xs,

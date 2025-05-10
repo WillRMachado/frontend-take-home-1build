@@ -26,6 +26,8 @@ import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { THEMES } from "@/src/common/enums";
 import { ToastProvider } from "@/src/common/lib/imports";
 import { WebFontsLoader } from "./WebFontsLoader";
+import React from "react";
+
 
 type BottomSheetChildProps =
   | EstimateFormProps
@@ -78,7 +80,6 @@ function ThemedContent() {
         flex: 1,
         backgroundColor: colors.layer.solid.medium,
         zIndex: 32,
-
       }}
     >
       <StatusBar
