@@ -51,7 +51,7 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
           </View>
         </View>
       </Pressable>
-      {isOpen && (
+      {isOpen && section?.rows?.length > 0 && (
         <>
           {section.rows.map((row, index) => (
             <EstimateItem

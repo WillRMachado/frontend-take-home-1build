@@ -5,7 +5,8 @@ import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector
 import React from "react";
 import { EstimateFormProps } from "./EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
-import { formatCurrency } from "@/src/common/utils/format";
+import { formatCurrency, parsePriceInput } from "@/src/common/utils/format";
+import { useEstimateContext } from "@/src/context/EstimateContext";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
@@ -32,6 +33,14 @@ export const useEditForm = ({
     quantity: isEstimateRow(data) ? data.quantity.toString() : "",
   };
 
+  const renderFormDefaultProps = {
+    mode,
+    data,
+    onSave,
+    onClose,
+    onDelete,
+  };
+
   const [showSupplierInfo, setShowSupplierInfo] = useState(
     initialState.showSupplierInfo
   );
@@ -54,13 +63,7 @@ export const useEditForm = ({
     resetInitialState();
   }, [mode, data]);
 
-  const renderFormDefaultProps = {
-    mode,
-    data,
-    onSave,
-    onClose,
-    onDelete,
-  };
+  const { deleteItem, updateItem, addItem, addSection } = useEstimateContext();
 
   const componentContext = useContext(ComponentContext);
 
@@ -73,18 +76,10 @@ export const useEditForm = ({
   const uom: UnitOfMeasure = isEstimateRow(data) ? data.uom : "EA";
 
   const handlePriceChange = (text: string) => {
-    const numericValue = text.replace(/[^0-9.]/g, "");
-
-    const parts = numericValue.split(".");
-    if (parts.length > 2) {
-      return;
+    const numericValue = parsePriceInput(text);
+    if (numericValue !== "") {
+      setPrice(numericValue);
     }
-
-    if (parts[1] && parts[1].length > 2) {
-      return;
-    }
-
-    setPrice(numericValue);
   };
 
   const displayPrice = isPriceFocused
@@ -164,6 +159,17 @@ export const useEditForm = ({
         mode === EstimateMode.ADD_SECTION
           ? EstimateMode.ADD_ITEM
           : EstimateMode.ADD_SECTION,
+      onSave:
+        mode === EstimateMode.ADD_ITEM
+          ? (updates) => {
+              addSection({ ...data, ...updates });
+            }
+          : (updates) => {
+              if (!isEstimateRow(data) || !data.sectionId) {
+                throw new Error("sectionId is required when adding an item");
+              }
+              addItem(data.sectionId, { ...data, ...updates });
+            },
     });
   };
 

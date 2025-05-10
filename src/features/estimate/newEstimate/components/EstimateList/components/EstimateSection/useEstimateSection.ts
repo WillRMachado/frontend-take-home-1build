@@ -5,6 +5,7 @@ import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
 import { EstimateMode } from "@/src/common/enums";
+import { calculateSectionTotal } from "@/src/common/lib/estimate";
 interface UseEstimateSectionProps {
   section: EstimateSection;
 }
@@ -76,9 +77,7 @@ export function useEstimateSection({ section }: UseEstimateSectionProps) {
     setIsOpen((isOpen) => !isOpen);
   };
 
-  const price = section.rows.reduce((acc, row) => {
-    return acc + row.price * row.quantity;
-  }, 0);
+  const price = calculateSectionTotal(section);
 
   return {
     title: section.title,

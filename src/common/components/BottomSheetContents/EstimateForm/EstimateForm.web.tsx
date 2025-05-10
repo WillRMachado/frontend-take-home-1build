@@ -83,16 +83,6 @@ export function EstimateForm({
 
       {isEditMode && <Text>{`Edit ${isItemMode ? "Item" : "Section"}`}</Text>}
 
-      {/* <BottomSheetHeaders
-        title={`${isEditMode ? "Edit" : "Add"} ${
-          isItemMode ? "Item" : "Section"
-        }`}
-        leftIcon="x"
-        onClickLeftIcon={handleClose}
-        rightIcon="trash-2"
-        onClickRightIcon={handleDelete}
-      />  */}
-
       <View style={styles.container}>
         <View style={styles.field}>
           <FloatingLabelInput
