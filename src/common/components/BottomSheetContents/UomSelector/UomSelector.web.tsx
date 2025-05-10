@@ -2,46 +2,28 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { UnitOfMeasure } from "@/data";
-import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
-import { FloatingLabelInput } from "@/src/common/components/FloatingLabelInput";
 import { useUomSelector } from "./useUomSelector";
 import { THEMES } from "@/src/common/enums";
 interface UomSelectorProps {
   selectUom: (name: UnitOfMeasure) => void;
-  onReturn?: () => void;
+  onReturn: () => void;
   searchTerm?: string;
 }
 
 export default function UomSelector({
   selectUom,
-  onReturn = () => {},
+  onReturn,
   searchTerm,
 }: UomSelectorProps) {
   const styles = useStyles();
-  const { search, setSearch, filteredUnits } = useUomSelector({
+  const { filteredUnits } = useUomSelector({
     onSelectUom: selectUom,
     onReturn,
     searchTerm,
   });
 
   return (
-    <View>
-      <BottomSheetHeaders
-        title="Unit of measurement"
-        leftIcon="arrow-left"
-        onClickLeftIcon={onReturn}
-      />
-      <View style={styles.searchInputContainer}>
-        <FloatingLabelInput
-          label="Search"
-          value={search}
-          onChangeText={setSearch}
-          backgroundColor={styles.searchInput.backgroundColor}
-          placeholderTextColor={styles.searchInput.backgroundColor}
-          autoCorrect={false}
-          leftIconName="search"
-        />
-      </View>
+    <View style={styles.container}>
       {Object.keys(filteredUnits).map((key) => (
         <View key={key} style={styles.categoryContainer}>
           <Text style={styles.categoryText}>{key}</Text>
@@ -65,7 +47,9 @@ export default function UomSelector({
 
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
   ({ colors, numbersAliasTokens, customFonts, theme }) => ({
-    categoryContainer: {},
+    categoryContainer: {
+      backgroundColor: colors.layer.solid.light,
+    },
     categoryText: {
       backgroundColor:
         theme === THEMES.LIGHT
@@ -94,16 +78,6 @@ const useStyles = createThemedStyles<{ isLast?: boolean }>(
     abbreviationText: {
       color: colors.text.secondary,
       ...customFonts.regular.text.md,
-    },
-    searchInputContainer: {
-      paddingHorizontal: numbersAliasTokens.spacing.md,
-      paddingBottom: numbersAliasTokens.spacing.xs,
-    },
-    searchInput: {
-      color: colors.text.primary,
-      borderRadius: numbersAliasTokens.borderRadius.md,
-      padding: numbersAliasTokens.spacing.sm,
-      backgroundColor: colors.layer.solid.light,
     },
   })
 );

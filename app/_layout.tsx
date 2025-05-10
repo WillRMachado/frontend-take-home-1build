@@ -77,6 +77,8 @@ function ThemedContent() {
       style={{
         flex: 1,
         backgroundColor: colors.layer.solid.medium,
+        zIndex: 32,
+
       }}
     >
       <StatusBar

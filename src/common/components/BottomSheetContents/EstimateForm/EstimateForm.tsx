@@ -128,7 +128,7 @@ export function EstimateForm({
                 onDecrement={handleDecrement}
               />
             </View>
-            {showSupplierInfo && (
+            {showSupplierInfo && supplierInfo && (
               <SupplierInfo
                 supplier={supplierInfo}
                 onClose={handleCloseSuplier}

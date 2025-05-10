@@ -7,6 +7,7 @@ import { EstimateFormProps } from "./EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
 import { formatCurrency, parsePriceInput } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/context/EstimateContext";
+import { Platform } from "react-native";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
@@ -50,6 +51,10 @@ export const useEditForm = ({
   const [title, setTitle] = useState(initialState.title);
   const [price, setPrice] = useState(initialState.price);
   const [quantity, setQuantity] = useState(initialState.quantity);
+
+  const [uomSearch, setUomSearch] = useState("");
+
+  const [isUomDropdownOpen, setIsUomDropdownOpen] = useState(false);
 
   const resetInitialState = () => {
     setTitle(initialState.title);
@@ -132,11 +137,16 @@ export const useEditForm = ({
     });
   };
 
+  const handleSelectNewUom = (newUom: UnitOfMeasure) => {
+    renderEditFormOnSheet({ uom: newUom });
+    setIsUomDropdownOpen(false);
+  };
+
   const renderUomSelectorOnSheet = () => {
     return setBottomSheetChild(
       React.createElement(UomSelector, {
         selectUom: (newUom: UnitOfMeasure) => {
-          renderEditFormOnSheet({ uom: newUom });
+          handleSelectNewUom(newUom);
         },
         onReturn: () => {
           renderEditFormOnSheet();
@@ -146,7 +156,9 @@ export const useEditForm = ({
   };
 
   const handleDropdownPress = () => {
-    renderUomSelectorOnSheet();
+    Platform.OS === "web"
+      ? setIsUomDropdownOpen((value) => !value)
+      : renderUomSelectorOnSheet();
   };
 
   const handleCloseSuplier = () => {
@@ -172,6 +184,31 @@ export const useEditForm = ({
             },
     });
   };
+
+  const handleBlurDropdown = () => {
+    setIsUomDropdownOpen(false);
+  };
+
+  // const [isUomDropdownOpen, setUomDropdownOpen] = useState(false);
+  // const [uomSearch, setUomSearch] = useState("");
+
+  // Filtering logic (reuse from UomSelector)
+  // const matchesSearch = (text: string) =>
+  //   text.toLowerCase().includes(uomSearch.toLowerCase());
+  // const filterUnitsByCategory = (units: (typeof UNITS_OF_MEASURE)[string]) =>
+  //   units.filter(
+  //     (uom) =>
+  //       matchesSearch(uom.name) ||
+  //       matchesSearch(uom.abbreviation) ||
+  //       matchesSearch(uom.key)
+  //   );
+  // const filteredUnits: typeof UNITS_OF_MEASURE = Object.entries(
+  //   UNITS_OF_MEASURE
+  // ).reduce((acc, [category, units]) => {
+  //   const filtered = filterUnitsByCategory(units);
+  //   if (filtered.length > 0) (acc as any)[category] = filtered;
+  //   return acc;
+  // }, {} as typeof UNITS_OF_MEASURE);
 
   return {
     title,
@@ -201,5 +238,10 @@ export const useEditForm = ({
     showSupplierInfo,
     handleCloseSuplier,
     toggleItemMode,
+    isUomDropdownOpen,
+    handleSelectNewUom,
+    handleBlurDropdown,
+    uomSearch,
+    setUomSearch,
   };
 };

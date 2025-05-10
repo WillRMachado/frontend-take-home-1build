@@ -14,7 +14,7 @@ import createThemedStyles, {
 import { numbersAliasTokens } from "../theme/tokens/alias/numbers";
 import { numbersBaseTokens } from "../theme/tokens/base/numbers";
 
-interface FloatingLabelInputProps extends TextInputProps {
+export interface FloatingLabelInputWebProps extends TextInputProps {
   label: string;
   backgroundColor: string;
   showStepper?: boolean;
@@ -23,8 +23,8 @@ interface FloatingLabelInputProps extends TextInputProps {
   showChevron?: boolean;
   onChevronPress?: () => void;
   leftIconName?: keyof typeof Feather.glyphMap;
-  isOpen?: boolean;
   dropdownList?: React.ReactNode;
+  isOpen?: boolean;
 }
 
 const StepperInput = forwardRef<
@@ -82,33 +82,77 @@ const ChevronInput = forwardRef<
     onChevronPress: () => void;
     backgroundColor: string;
     props: TextInputProps;
+    dropdownList?: React.ReactNode;
+    isOpen?: boolean;
+    onFocus?: (e: any) => void;
+    onBlur?: (e: any) => void;
   }
->(({ value, onChevronPress, backgroundColor, props }, ref) => {
-  const colors = useThemedColors();
-  const styles = useStyles();
+>(
+  (
+    {
+      value,
+      onChevronPress,
+      backgroundColor,
+      props,
+      dropdownList,
+      isOpen = false,
+      onFocus,
+      onBlur,
+    },
+    ref
+  ) => {
+    console.log("🚀 ~ props:", props);
+    const colors = useThemedColors();
+    const styles = useStyles();
 
-  return (
-    <TouchableOpacity
-      style={[styles.inputRow, { backgroundColor }]}
-      onPress={onChevronPress}
-    >
-      <TextInput
-        {...props}
-        ref={ref}
-        value={value}
-        style={styles.dropdown}
-        editable={false}
-        pointerEvents="none"
-      />
-      <Feather
-        name="chevron-down"
-        size={numbersAliasTokens.sizing.icon.md}
-        color={colors.text.secondary}
-        style={styles.chevronIcon}
-      />
-    </TouchableOpacity>
-  );
-});
+    return (
+      <View style={{ position: "relative" }}>
+        <TouchableOpacity
+          style={[
+            styles.inputRow,
+            { backgroundColor },
+            styles.webDropdownStyle,
+          ]}
+          onPress={() => {
+            onChevronPress?.();
+          }}
+        >
+          <TextInput
+            {...props}
+            ref={ref}
+            value={value}
+            style={[
+              styles.dropdown,
+              { cursor: "pointer", fontWeight: "500", flex: 1 },
+            ]}
+            // editable={false}
+            // pointerEvents="none"
+
+            onFocus={onFocus}
+            onBlur={onBlur}
+            // onFocus={() => {
+            //   console.log("focu2");
+            // }}
+            // onBlur={() => {
+            //   console.log("blur2");
+            // }}
+          />
+          <Feather
+            name="chevron-down"
+            size={numbersAliasTokens.sizing.icon.md}
+            color={colors.text.secondary}
+            style={[
+              styles.chevronIcon,
+              { marginLeft: numbersAliasTokens.spacing.sm },
+            ]}
+          />
+        </TouchableOpacity>
+
+        {isOpen && <View style={styles.dropdownContainer}>{dropdownList}</View>}
+      </View>
+    );
+  }
+);
 
 const StandardInput = forwardRef<
   TextInput,
@@ -145,7 +189,7 @@ const StandardInput = forwardRef<
   );
 });
 
-export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
+export const FloatingLabelInput: React.FC<FloatingLabelInputWebProps> = ({
   label,
   value,
   onFocus,
@@ -157,6 +201,8 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   showChevron = false,
   onChevronPress,
   leftIconName,
+  dropdownList,
+  isOpen = false,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -232,6 +278,10 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           backgroundColor={backgroundColor}
           props={props}
           ref={inputRef}
+          dropdownList={dropdownList}
+          isOpen={isOpen}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       );
     }
@@ -249,7 +299,13 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        flexDirection: "column",
+        gap: numbersAliasTokens.spacing.sm,
+        zIndex: isOpen ? 2 : 1,
+      }}
+    >
       <Animated.Text style={labelStyle} onPress={handleLabelPress}>
         {label}
       </Animated.Text>
@@ -290,6 +346,10 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   chevronIcon: {
     marginLeft: numbersAliasTokens.spacing["2xs"],
   },
+  webDropdownStyle: {
+    paddingHorizontal: numbersAliasTokens.spacing.md,
+    alignItems: "center",
+  },
   stepperRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -314,7 +374,12 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     left: numbersAliasTokens.spacing.sm,
     top: "50%",
     marginTop: -numbersAliasTokens.spacing["2xs"],
-    zIndex: 2,
+  },
+  dropdownContainer: {
+    position: "absolute",
+    top: 56,
+    left: 0,
+    right: 0,
   },
 }));
 

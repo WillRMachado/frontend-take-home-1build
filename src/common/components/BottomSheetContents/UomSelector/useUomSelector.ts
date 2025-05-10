@@ -5,10 +5,16 @@ import { UnitOfMeasure } from "@/data";
 interface UseUomSelectorProps {
   onSelectUom: (name: UnitOfMeasure) => void;
   onReturn: () => void;
+  searchTerm?: string;
 }
 
-export const useUomSelector = ({ onSelectUom, onReturn }: UseUomSelectorProps) => {
-  const [search, setSearch] = useState("");
+export const useUomSelector = ({
+  onSelectUom,
+  onReturn,
+  searchTerm = "",
+}: UseUomSelectorProps) => {
+  console.log("🚀 ~ searchTerm:", searchTerm);
+  const [search, setSearch] = useState(searchTerm);
 
   const matchesSearch = (text: string) =>
     text.toLowerCase().includes(search.toLowerCase());
