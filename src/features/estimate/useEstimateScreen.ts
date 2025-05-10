@@ -1,20 +1,15 @@
-import { useContext } from "react";
 import { useEstimateContext } from "@/src/common/hooks/useEstimate";
-import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
 import type { EstimateSection } from "@/data";
 import { EstimateMode } from "@/src/common/enums";
 import { calculateEstimateTotal } from "@/src/common/lib/estimate";
 import { uuid } from "@/src/common/lib/imports";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 
 export function useNewEstimateScreen() {
   const { estimate } = useEstimateContext();
-  const componentContext = useContext(ComponentContext);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
+  const componentContext = useComponentsContext();
 
   const { setBottomSheetChild, openBottomSheet } = componentContext;
 

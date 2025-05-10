@@ -1,21 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import type { EstimateSection, EstimateRow } from "@/data";
-import { ComponentContext } from "@/src/context/ComponentContext";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import React from "react";
 import { EstimateMode } from "@/src/common/enums";
 import { calculateSectionTotal } from "@/src/common/lib/estimate";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 interface UseEstimateSectionProps {
   section: EstimateSection;
 }
 
 export function useEstimateSection({ section }: UseEstimateSectionProps) {
-  const componentContext = useContext(ComponentContext);
+  const componentContext = useComponentsContext();
   const [isOpen, setIsOpen] = useState(false);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
 
   const { setBottomSheetChild, openBottomSheet } = componentContext;
 

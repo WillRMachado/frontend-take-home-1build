@@ -6,18 +6,13 @@ import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import Tag from "@/src/common/components/Tag";
 import { TagType } from "@/src/common/enums";
 import EstimateList from "./components/EstimateList/EstimateList";
-import { useContext } from "react";
-import { ComponentContext } from "@/src/context/ComponentContext";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 import EstimateTitle from "./components/EstimateTitle/EstimateTitle";
 
 export default function EstimateScreenDesktop() {
   const { estimateTotal } = useNewEstimateScreen();
 
-  const componentContext = useContext(ComponentContext);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
+  const componentContext = useComponentsContext();
 
   const { isBottomSheetOpen, bottomSheetChild } = componentContext;
 

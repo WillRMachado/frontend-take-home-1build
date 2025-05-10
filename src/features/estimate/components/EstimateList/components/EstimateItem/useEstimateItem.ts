@@ -1,12 +1,12 @@
 import type { EstimateRow } from "@/data";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/common/hooks/useEstimate";
-import { ComponentContext } from "@/src/context/ComponentContext";
 import React from "react";
 import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
 import { useToast } from "@/src/common/utils/toast";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 
 interface UseEstimateItemProps {
   item: EstimateRow;
@@ -29,12 +29,8 @@ export function useEstimateItem({
 }: UseEstimateItemProps): FormattedEstimateItem {
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const { deleteItem, updateItem } = useEstimateContext();
-  const componentContext = useContext(ComponentContext);
+  const componentContext = useComponentsContext();
   const { show } = useToast();
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
 
   const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
     componentContext;

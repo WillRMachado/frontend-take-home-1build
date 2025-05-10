@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
-import { ComponentContext } from "@/src/context/ComponentContext";
 import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
 import React from "react";
 import { EstimateFormProps } from "./EstimateForm";
@@ -9,6 +8,7 @@ import { formatCurrency, parsePriceInput } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/common/hooks/useEstimate";
 import { Platform } from "react-native";
 import { useToast } from "@/src/common/utils/toast";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 
 function isEstimateRow(data: any): data is EstimateRow {
   return "price" in data && "quantity" in data && "uom" in data;
@@ -85,11 +85,7 @@ export const useEditForm = ({
     deleteSection,
   } = useEstimateContext();
 
-  const componentContext = useContext(ComponentContext);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
+  const componentContext = useComponentsContext();
 
   const { setBottomSheetChild, closeBottomSheet } = componentContext;
 

@@ -2,10 +2,7 @@ import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { EstimateProvider } from "@/src/context/EstimateContext";
 import { ThemeProvider } from "@/src/context/ThemeContext";
-import {
-  ComponentProvider,
-  ComponentContext,
-} from "@/src/context/ComponentContext";
+import { ComponentProvider } from "@/src/context/ComponentContext";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -21,13 +18,13 @@ import {
   EstimateForm,
   EstimateFormProps,
 } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { THEMES } from "@/src/common/enums";
 import { ToastProvider } from "@/src/common/lib/imports";
 import WebFontsLoader from "./WebFontsLoader";
 import React from "react";
-
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 type BottomSheetChildProps =
   | EstimateFormProps
   | {
@@ -40,11 +37,7 @@ type BottomSheetChild = React.ReactElement<BottomSheetChildProps>;
 function ThemedContent() {
   const { theme } = useTheme();
   const colors = getColors(theme);
-  const componentContext = useContext(ComponentContext);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
+  const componentContext = useComponentsContext();
 
   const { bottomSheetRef, bottomSheetChild, isBottomSheetOpen } =
     componentContext;
