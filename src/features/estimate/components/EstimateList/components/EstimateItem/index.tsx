@@ -1,4 +1,4 @@
-import { View, Animated, Button } from "react-native";
+import { View, Animated } from "react-native";
 import {
   useLayoutEffect,
   useRef,
@@ -12,10 +12,6 @@ import React from "react";
 import { DeleteButton } from "./DeleteButton";
 import { DIRECTIONS } from "@/src/common/enums/directions";
 import { EstimateItemButton } from "./EstimateItemButton";
-import { getColors } from "@/src/common/theme/tokens/alias/colors";
-import { useTheme } from "@/src/common/hooks/useTheme";
-import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
-import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 
 interface EstimateItemProps {
   item: EstimateRow;
@@ -67,7 +63,7 @@ const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
 
   useLayoutEffect(() => {
     if (containerRef.current && !measuredHeight) {
-      containerRef.current.measure((x, y, width, measuredHeight) => {
+      containerRef.current.measure((_x, _y, _width, measuredHeight) => {
         setMeasuredHeight(measuredHeight);
         height.setValue(measuredHeight);
       });

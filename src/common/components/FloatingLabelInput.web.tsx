@@ -200,7 +200,6 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputWebProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const labelAnim = useState(new Animated.Value(value ? 1 : 0))[0];
   const inputRef = React.useRef<TextInput>(null);
-  const styles = useStyles();
   const colors = useThemedColors();
 
   useEffect(() => {

@@ -35,7 +35,7 @@ export const AnimateShrinkToDeletion: React.FC<
   const _measureInitialHeight = () => {
     if (isMeasured || !containerRef.current) return;
 
-    containerRef.current.measure((x, y, width, measuredHeight) => {
+    containerRef.current.measure((_x, _y, _width, measuredHeight) => {
       height.setValue(measuredHeight);
       setIsMeasured(true);
     });

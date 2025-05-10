@@ -155,7 +155,7 @@ export const EstimateItemButton = React.memo(
 );
 
 const useStyles = createThemedStyles<{ isLast?: boolean }>(
-  ({ colors, numbersAliasTokens, customFonts, props }) => ({
+  ({ colors, numbersAliasTokens, props }) => ({
     editButtonWrapper: {
       flexDirection: "row",
       justifyContent: "space-between",

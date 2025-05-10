@@ -16,8 +16,7 @@ export function useNewEstimateScreen() {
     throw new Error("ComponentContext must be used within a ComponentProvider");
   }
 
-  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
-    componentContext;
+  const { setBottomSheetChild, openBottomSheet } = componentContext;
 
   const handleAddNewSection = () => {
     const newSection: EstimateSection = {

@@ -4,7 +4,6 @@ import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import React from "react";
-import type { EstimateSection } from "@/data";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { Text } from "../Text";
 import { numbersBaseTokens } from "../../theme/tokens/base/numbers";

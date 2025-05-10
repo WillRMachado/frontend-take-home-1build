@@ -45,7 +45,7 @@ export default function UomSelector({
       {Object.keys(filteredUnits).map((key) => (
         <View key={key} style={styles.categoryContainer}>
           <Text style={styles.categoryText}>{key}</Text>
-          {filteredUnits[key].map((uom) => (
+          {filteredUnits[key]?.map((uom) => (
             <TouchableOpacity
               key={uom.name}
               style={styles.uomContainer}

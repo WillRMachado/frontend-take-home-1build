@@ -1,27 +1,15 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Platform,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import React from "react";
+import { View, Text } from "react-native";
 import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
 import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
-import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
 import { useEditForm } from "./useEstimateForm";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
-import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { EstimateMode } from "@/src/common/enums";
-import { formatCurrency } from "@/src/common/utils/format";
-import ThemeSwitch from "../../ThemeSwitch";
 import Switcher from "../../Switcher";
-import { useTheme } from "@/src/common/hooks/useTheme";
-import { UNITS_OF_MEASURE } from "@/src/consts/unitsOfMeasure";
 import { numbersBaseTokens } from "@/src/common/theme/tokens/base/numbers";
 import UomSelector from "../UomSelector/UomSelector";
 
@@ -30,10 +18,7 @@ export type EstimateFormProps = {
   data: EstimateRow | EstimateSection;
 };
 
-export function EstimateForm({
-  mode: initialMode,
-  data,
-}: EstimateFormProps) {
+export function EstimateForm({ mode: initialMode, data }: EstimateFormProps) {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -52,8 +37,6 @@ export function EstimateForm({
     handleDecrement,
     handleDropdownPress,
     handleDelete,
-    handleClose,
-    mode,
     isItemMode,
     isEditMode,
     showSupplierInfo,
@@ -69,9 +52,6 @@ export function EstimateForm({
   } = useEditForm({
     mode: initialMode,
     data,
-    // onSave,
-    // onClose,
-    // onDelete,
     EstimateFormComponent: EstimateForm,
   });
 

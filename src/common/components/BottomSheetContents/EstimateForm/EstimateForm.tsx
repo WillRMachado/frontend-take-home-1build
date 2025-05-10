@@ -17,10 +17,7 @@ export type EstimateFormProps = {
   data: EstimateRow | EstimateSection;
 };
 
-export function EstimateForm({
-  mode: initialMode,
-  data,
-}: EstimateFormProps) {
+export function EstimateForm({ mode: initialMode, data }: EstimateFormProps) {
   const colors = useThemedColors();
   const styles = useStyles();
 
@@ -40,7 +37,6 @@ export function EstimateForm({
     handleDropdownPress,
     handleDelete,
     handleClose,
-    mode,
     isItemMode,
     isEditMode,
     showSupplierInfo,

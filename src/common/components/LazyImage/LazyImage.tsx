@@ -7,7 +7,6 @@ import {
   ImageStyle,
 } from "react-native";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
-import { getIconSize } from "@/src/common/utils/getIconSize";
 import { useLazyImage } from "./useLazyImage";
 
 export type LazyImageSize = "xs" | "sm" | "md" | "lg" | "xl" | number;

@@ -49,7 +49,7 @@ function ThemedContent() {
   const { bottomSheetRef, bottomSheetChild, isBottomSheetOpen } =
     componentContext;
 
-  const { top, bottom, left, right } = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
