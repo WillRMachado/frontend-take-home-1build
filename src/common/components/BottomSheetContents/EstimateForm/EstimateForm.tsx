@@ -52,11 +52,11 @@ export function EstimateForm({ mode: initialMode, data }: EstimateFormProps) {
     <>
       <BottomSheetHeaders
         title={`${isEditMode ? "Edit" : "Add"} ${
-          isItemMode ? "Item" : "Section"
+          isItemMode ? "Item" : "Group"
         }`}
         leftIcon="x"
         onClickLeftIcon={handleClose}
-        rightIcon="trash-2"
+        rightIcon={isEditMode ? "trash-2" : undefined}
         onClickRightIcon={handleDelete}
       />
 
