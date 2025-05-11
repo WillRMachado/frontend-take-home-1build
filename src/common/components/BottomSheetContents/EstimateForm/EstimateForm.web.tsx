@@ -57,109 +57,107 @@ export function EstimateForm({ mode: initialMode, data }: EstimateFormProps) {
 
   return (
     <>
-      {!isEditMode && (
-        <Switcher
-          isActive={!isItemMode}
-          onToggle={toggleItemMode}
-          primaryComponent={
-            <Text
-              style={
-                isItemMode
-                  ? styles.switcherTextActive
-                  : styles.switcherTextDeactivated
-              }
-            >
-              Add Item
-            </Text>
-          }
-          secondaryComponent={
-            <Text
-              style={
-                !isItemMode
-                  ? styles.switcherTextActive
-                  : styles.switcherTextDeactivated
-              }
-            >
-              Add Group
-            </Text>
-          }
-        />
-      )}
-
-      {isEditMode && (
-        <Text style={styles.editModeTitle}>
-          {`Edit ${isItemMode ? "Item" : "Section"}`}
-        </Text>
-      )}
-
-      <View style={styles.fieldsContainer}>
-        <FloatingLabelInput
-          label={isItemMode ? "Item title" : "Section title"}
-          value={title}
-          onChangeText={setTitle}
-          backgroundColor={colors.layer.solid.light}
-        />
-
-        {isItemMode && (
-          <>
-            <FloatingLabelInput
-              label="Cost"
-              value={displayPrice}
-              onChangeText={handlePriceChange}
-              keyboardType="decimal-pad"
-              backgroundColor={colors.layer.solid.light}
-              onFocus={handlePriceFocus}
-              onBlur={handlePriceBlur}
-            />
-
-            <FloatingLabelInput
-              label="Unit"
-              value={isUomDropdownOpen ? uomSearch : uom}
-              backgroundColor={colors.layer.solid.light}
-              showChevron
-              isOpen={isUomDropdownOpen}
-              onChangeText={setUomSearch}
-              onBlur={handleBlurDropdown}
-              onFocus={handleFocusDropdown}
-              dropdownList={
-                <UomSelector
-                  key={uomSearch}
-                  selectUom={handleSelectNewUom}
-                  searchTerm={uomSearch}
-                />
-              }
-              onChevronPress={handleDropdownPress}
-            />
-
-            <FloatingLabelInput
-              label="Quantity"
-              value={quantity}
-              onChangeText={setQuantity}
-              showStepper
-              backgroundColor={colors.layer.solid.light}
-              onIncrement={handleIncrement}
-              onDecrement={handleDecrement}
-            />
-            {showSupplierInfo && supplierInfo && (
-              <SupplierInfo
-                supplier={supplierInfo}
-                onClose={handleCloseSuplier}
-              />
-            )}
-          </>
+      <View style={styles.formContainer}>
+        {!isEditMode && (
+          <Switcher
+            isActive={!isItemMode}
+            onToggle={toggleItemMode}
+            primaryComponent={
+              <Text
+                style={
+                  isItemMode
+                    ? styles.switcherTextActive
+                    : styles.switcherTextDeactivated
+                }
+              >
+                Add Item
+              </Text>
+            }
+            secondaryComponent={
+              <Text
+                style={
+                  !isItemMode
+                    ? styles.switcherTextActive
+                    : styles.switcherTextDeactivated
+                }
+              >
+                Add Group
+              </Text>
+            }
+          />
         )}
+        {isEditMode && (
+          <Text style={styles.editModeTitle}>
+            {`Edit ${isItemMode ? "Item" : "Section"}`}
+          </Text>
+        )}
+        <View style={styles.fieldsContainer}>
+          <FloatingLabelInput
+            label={isItemMode ? "Item title" : "Section title"}
+            value={title}
+            onChangeText={setTitle}
+            backgroundColor={colors.layer.solid.light}
+          />
+          {isItemMode && (
+            <>
+              <FloatingLabelInput
+                label="Cost"
+                value={displayPrice}
+                onChangeText={handlePriceChange}
+                keyboardType="decimal-pad"
+                backgroundColor={colors.layer.solid.light}
+                onFocus={handlePriceFocus}
+                onBlur={handlePriceBlur}
+              />
 
-        <View style={styles.formActions}>
-          {isEditMode && (
-            <Button variant="destructive" onPress={handleDelete}>
-              Delete
-            </Button>
+              <FloatingLabelInput
+                label="Unit"
+                value={isUomDropdownOpen ? uomSearch : uom}
+                backgroundColor={colors.layer.solid.light}
+                showChevron
+                isOpen={isUomDropdownOpen}
+                onChangeText={setUomSearch}
+                onBlur={handleBlurDropdown}
+                onFocus={handleFocusDropdown}
+                dropdownList={
+                  <UomSelector
+                    key={uomSearch}
+                    selectUom={handleSelectNewUom}
+                    searchTerm={uomSearch}
+                  />
+                }
+                onChevronPress={handleDropdownPress}
+              />
+
+              <FloatingLabelInput
+                label="Quantity"
+                value={quantity}
+                onChangeText={setQuantity}
+                showStepper
+                backgroundColor={colors.layer.solid.light}
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
+              />
+            </>
           )}
-          <Button onPress={handleSave}>
-            {isEditMode ? "Done" : isItemMode ? "Add Item" : "Add Section"}
-          </Button>
+          <View style={styles.formActions}>
+            {isEditMode && (
+              <Button variant="destructive" onPress={handleDelete}>
+                Delete
+              </Button>
+            )}
+            <Button onPress={handleSave}>
+              {isEditMode ? "Done" : isItemMode ? "Add Item" : "Add Section"}
+            </Button>
+          </View>
         </View>
       </View>
+
+      {showSupplierInfo && supplierInfo && (
+        <View style={styles.supplierContainer}>
+          <SupplierInfo supplier={supplierInfo} onClose={handleCloseSuplier}  isCloseable={false}/>
+        </View>
+      )}
     </>
   );
 }
@@ -187,12 +185,6 @@ const useStyles = createThemedStyles(
     },
     button: {
       minWidth: numbersAliasTokens.sizing.container["2xs"],
-    },
-    supplierContainer: {
-      backgroundColor: colors.layer.solid.light,
-      borderRadius: numbersAliasTokens.borderRadius.md,
-      padding: numbersAliasTokens.spacing.sm,
-      marginVertical: numbersAliasTokens.spacing.sm,
     },
     supplierLabel: {
       color: colors.text.secondary,
@@ -225,7 +217,7 @@ const useStyles = createThemedStyles(
       borderWidth: numbersAliasTokens.borderWidth.xs,
       borderColor: colors.outline.medium,
       padding: numbersAliasTokens.spacing.xs,
-      maxHeight: 320,
+      maxHeight: numbersAliasTokens.sizing.container["2xs"],
       overflow: "hidden",
     },
     uomSearchInput: {
@@ -282,6 +274,24 @@ const useStyles = createThemedStyles(
     switcherTextDeactivated: {
       ...customFonts.regular.text.sm,
       color: colors.text.secondary,
+    },
+
+    formContainer: {
+      borderWidth: numbersAliasTokens.borderWidth.xs,
+      borderColor: colors.outline.medium,
+      backgroundColor: colors.layer.solid.light,
+      paddingHorizontal: numbersAliasTokens.spacing.md,
+      paddingTop: numbersAliasTokens.spacing.md,
+      marginLeft: numbersAliasTokens.spacing.md,
+      borderRadius: numbersAliasTokens.borderRadius.md,
+    },
+
+    supplierContainer: {
+      zIndex: -1,
+      position: "relative",
+      marginTop: numbersAliasTokens.spacing.sm,
+      marginLeft: numbersAliasTokens.spacing.md,
+
     },
   })
 );

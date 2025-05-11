@@ -6,6 +6,7 @@ import createThemedStyles, {
 } from "@/src/common/theme/utils/createThemedStyles";
 import IconButton from "@/src/common/components/IconButton";
 import { Text } from "@/src/common/components";
+import { numbersAliasTokens } from "../../theme/tokens/alias/numbers";
 interface BottomSheetHeadersProps {
   title: string;
   rightIcon?: keyof typeof Feather.glyphMap;
@@ -26,15 +27,26 @@ export function BottomSheetHeaders({
 
   return (
     <View style={styles.container}>
-      {leftIcon && <IconButton iconName={leftIcon} onClick={onClickLeftIcon ? onClickLeftIcon : () => {}} />}
+      {leftIcon && (
+        <IconButton
+          iconName={leftIcon}
+          onClick={onClickLeftIcon ? onClickLeftIcon : () => {}}
+        />
+      )}
       <Text style={styles.title}>{title}</Text>
-      {rightIcon && (
+      {rightIcon ? (
         <TouchableOpacity
           style={styles.iconButton}
           onPress={onClickRightIcon ? onClickRightIcon : () => {}}
         >
-          <Feather name={rightIcon} size={24} color={colors.icon.primary} />
+          <Feather
+            name={rightIcon}
+            size={numbersAliasTokens.sizing.icon.md}
+            color={colors.icon.primary}
+          />
         </TouchableOpacity>
+      ) : (
+        <View style={styles.spacingView} />
       )}
     </View>
   );
@@ -56,10 +68,14 @@ const useStyles = createThemedStyles(
       ...customFonts.bold.text.md,
     },
     iconButton: {
-      width: 40,
-      height: 40,
+      width: numbersAliasTokens.spacing["3xl"],
+      height: numbersAliasTokens.spacing["3xl"],
       alignItems: "center",
       justifyContent: "center",
+    },
+    spacingView: {
+      width: numbersAliasTokens.spacing["3xl"],
+      height: numbersAliasTokens.spacing["3xl"],
     },
   })
 );

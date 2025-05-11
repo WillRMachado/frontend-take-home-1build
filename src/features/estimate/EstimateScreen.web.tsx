@@ -88,13 +88,6 @@ const useStyles = createThemedStyles(
     formContainer: {
       flex: 0.3,
       alignSelf: "flex-start",
-      borderWidth: numbersAliasTokens.borderWidth.xs,
-      borderColor: colors.outline.medium,
-      backgroundColor: colors.layer.solid.light,
-      paddingHorizontal: numbersAliasTokens.spacing.md,
-      paddingTop: numbersAliasTokens.spacing.md,
-      marginLeft: numbersAliasTokens.spacing.md,
-      borderRadius: numbersAliasTokens.borderRadius.md,
     },
     content: {
       flex: 1,

@@ -12,9 +12,14 @@ import { useSupplierInfo } from "./useSupplierInfo";
 interface SupplierInfoProps {
   supplier: Supplier;
   onClose?: () => void;
+  isCloseable?: boolean;
 }
 
-export default function SupplierInfo({ supplier, onClose }: SupplierInfoProps) {
+export default function SupplierInfo({
+  supplier,
+  onClose,
+  isCloseable = true,
+}: SupplierInfoProps) {
   const styles = useStyles();
   const colors = useThemedColors();
   const { handleProductPress, handleClosePress } = useSupplierInfo({
@@ -24,7 +29,7 @@ export default function SupplierInfo({ supplier, onClose }: SupplierInfoProps) {
 
   if (!supplier) return null;
   return (
-    <View style={styles.supplierContainer}>
+    <View style={[styles.supplierContainer]}>
       <View style={styles.infoRow}>
         <View style={styles.infoRowLeft}>
           <Text style={styles.supplierLabel}>Provided by supplier</Text>
@@ -35,13 +40,15 @@ export default function SupplierInfo({ supplier, onClose }: SupplierInfoProps) {
           />
         </View>
 
-        <TouchableOpacity onPress={handleClosePress}>
-          <Feather
-            name="x"
-            size={numbersAliasTokens.sizing.icon.lg}
-            color={colors.icon.primary}
-          />
-        </TouchableOpacity>
+        {isCloseable && (
+          <TouchableOpacity onPress={handleClosePress}>
+            <Feather
+              name="x"
+              size={numbersAliasTokens.sizing.icon.lg}
+              color={colors.icon.primary}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       <TouchableOpacity
@@ -75,6 +82,8 @@ const useStyles = createThemedStyles(
       borderRadius: numbersAliasTokens.borderRadius.md,
       padding: numbersAliasTokens.spacing.sm,
       marginBottom: numbersAliasTokens.spacing.xs,
+      // zIndex: -1,
+      // position: "relative",
     },
     infoRow: {
       flexDirection: "row",
