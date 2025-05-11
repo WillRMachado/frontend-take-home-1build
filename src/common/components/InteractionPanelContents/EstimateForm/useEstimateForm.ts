@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { EstimateRow, EstimateSection, UnitOfMeasure } from "@/data";
-import UomSelector from "@/src/common/components/BottomSheetContents/UomSelector/UomSelector";
+import UomSelector from "@/src/common/components/InteractionPanelContents/UomSelector/UomSelector";
 import React from "react";
 import { EstimateFormProps } from "./EstimateForm";
 import { EstimateMode } from "@/src/common/enums";

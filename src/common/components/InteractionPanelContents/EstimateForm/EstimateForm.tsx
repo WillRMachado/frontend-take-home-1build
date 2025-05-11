@@ -6,7 +6,7 @@ import { FloatingLabelInput } from "../../FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
-import { BottomSheetHeaders } from "@/src/common/components/BottomSheetContents/BottomSheetHeaders";
+import { BottomSheetHeaders } from "@/src/common/components/InteractionPanelContents/InteractionPanelHeaders";
 import { useEditForm } from "./useEstimateForm";
 import SupplierInfo from "@/src/common/components/SupplierInfo";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";

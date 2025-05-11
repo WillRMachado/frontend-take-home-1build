@@ -1,5 +1,5 @@
 import { useEstimateContext } from "@/src/common/hooks/useEstimate";
-import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
+import { EstimateForm } from "@/src/common/components/InteractionPanelContents/EstimateForm/EstimateForm";
 import React from "react";
 import type { EstimateSection } from "@/data";
 import { EstimateMode } from "@/src/common/enums";

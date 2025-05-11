@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { formatCurrency } from "@/src/common/utils/format";
 import { useEstimateContext } from "@/src/common/hooks/useEstimate";
 import React from "react";
-import { EstimateForm } from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
+import { EstimateForm } from "@/src/common/components/InteractionPanelContents/EstimateForm/EstimateForm";
 import { EstimateMode } from "@/src/common/enums";
 import { useToast } from "@/src/common/utils/toast";
 import { useComponentsContext } from "@/src/common/hooks/useComponents";

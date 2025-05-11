@@ -17,7 +17,7 @@ import {
 import {
   EstimateForm,
   EstimateFormProps,
-} from "@/src/common/components/BottomSheetContents/EstimateForm/EstimateForm";
+} from "@/src/common/components/InteractionPanelContents/EstimateForm/EstimateForm";
 import { useCallback } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { THEMES } from "@/src/common/enums";
