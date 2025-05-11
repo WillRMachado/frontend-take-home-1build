@@ -30,7 +30,7 @@ const useStyles = createThemedStyles(
       borderWidth: numbersAliasTokens.borderWidth.xs,
       borderRadius: numbersAliasTokens.borderRadius.pill,
       paddingHorizontal: numbersAliasTokens.spacing.sm,
-      paddingVertical: numbersAliasTokens.spacing["3xs"],
+      paddingVertical: numbersAliasTokens.spacing["3xs"] / 2,
       alignSelf: "flex-start",
     },
     dot: {

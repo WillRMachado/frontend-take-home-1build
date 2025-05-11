@@ -56,7 +56,7 @@ export default function EstimateSection({ section }: EstimateSectionProps) {
           {section.rows.map((row, index) => (
             <EstimateItem
               item={row}
-              key={`${row.id}-${section.rows.length}`}
+              key={`${row.id}-${section.rows.length}-${row.title}`}
               isLast={index === section.rows.length - 1}
             />
           ))}

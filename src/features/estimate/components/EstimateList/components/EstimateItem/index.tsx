@@ -1,11 +1,5 @@
 import { View, Animated } from "react-native";
-import {
-  useLayoutEffect,
-  useRef,
-  useCallback,
-  useState,
-  useEffect,
-} from "react";
+import { useLayoutEffect, useRef, useCallback, useState } from "react";
 import type { EstimateRow } from "@/data";
 import { useEstimateItem } from "./useEstimateItem";
 import React from "react";
@@ -24,14 +18,6 @@ const DELETE_OFFSET = 500;
 
 const EstimateItem = React.memo(({ item, isLast }: EstimateItemProps) => {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
-
-  const forceRecalculateHeight = useCallback(() => {
-    setMeasuredHeight(null);
-  }, []);
-
-  useEffect(() => {
-    forceRecalculateHeight();
-  }, [item.title, forceRecalculateHeight]);
 
   const {
     description,

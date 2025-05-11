@@ -28,12 +28,11 @@ export function useEstimateItem({
   item,
 }: UseEstimateItemProps): FormattedEstimateItem {
   const [shouldAnimate, setShouldAnimate] = useState(false);
-  const { deleteItem, updateItem } = useEstimateContext();
+  const { deleteItem } = useEstimateContext();
   const componentContext = useComponentsContext();
   const { show } = useToast();
 
-  const { setBottomSheetChild, openBottomSheet, closeBottomSheet } =
-    componentContext;
+  const { setBottomSheetChild, openBottomSheet } = componentContext;
 
   const handleRemove = useCallback(() => {
     deleteItem(item.id);
@@ -44,18 +43,6 @@ export function useEstimateItem({
     setShouldAnimate(true);
   }, []);
 
-  const handleCloseAndSave = useCallback(
-    (updatedItem: EstimateRow) => {
-      updateItem(updatedItem.id, updatedItem);
-      handleCloseEdit();
-    },
-    [updateItem, closeBottomSheet]
-  );
-
-  const handleCloseEdit = useCallback(() => {
-    closeBottomSheet();
-  }, [closeBottomSheet]);
-
   const getEditForm = useCallback(
     (partialItem?: Partial<EstimateRow>): React.ReactElement => {
       return React.createElement(EstimateForm, {
@@ -63,7 +50,7 @@ export function useEstimateItem({
         data: { ...item, ...partialItem },
       });
     },
-    [item, handleCloseAndSave, handleCloseEdit, handleRemove]
+    [item, handleRemove]
   );
 
   const handleEdit = useCallback(
