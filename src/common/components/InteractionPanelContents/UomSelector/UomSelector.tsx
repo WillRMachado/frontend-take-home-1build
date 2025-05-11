@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { UnitOfMeasure } from "@/data";
 import { BottomSheetHeaders } from "@/src/common/components/InteractionPanelContents/InteractionPanelHeaders";
-import { FloatingLabelInput } from "@/src/common/components/FloatingLabelInput";
+import { FloatingLabelInput } from "@/src/common/components/FloatingLabelInput/FloatingLabelInput";
 import { useUomSelector } from "./useUomSelector";
 import { THEMES } from "@/src/common/enums";
 interface UomSelectorProps {

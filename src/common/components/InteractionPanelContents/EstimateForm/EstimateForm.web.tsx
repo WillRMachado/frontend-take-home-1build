@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Button } from "../../Button/Button";
 import { EstimateRow, EstimateSection } from "@/data";
-import { FloatingLabelInput } from "../../FloatingLabelInput";
+import { FloatingLabelInput } from "../../FloatingLabelInput/FloatingLabelInput";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
