@@ -2,7 +2,8 @@ import React from "react";
 import { View } from "react-native";
 import createThemedStyles from "@/src/common/theme/utils/createThemedStyles";
 import { TagType } from "@/src/common/enums";
-import { Text } from "@/src/common/components";
+import { Text } from "../Text";
+
 type TagProps = {
   type: TagType;
 };

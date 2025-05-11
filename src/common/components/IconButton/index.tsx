@@ -6,7 +6,7 @@ import createThemedStyles, {
 import React from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
 import { numbersBaseTokens } from "../../theme/tokens/base/numbers";
-import { Text } from "@/src/common/components";
+import { Text } from "../Text";
 
 interface AddItemButtonProps {
   onClick: () => void;
