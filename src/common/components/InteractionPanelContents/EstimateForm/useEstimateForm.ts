@@ -169,7 +169,6 @@ export const useEditForm = ({
   };
 
   const handleSelectNewUom = (newUom: UnitOfMeasure) => {
-    console.log("🚀 ~ handleSelectNewUom ~ newUom:", newUom);
     renderEditFormOnSheet({ uom: newUom });
     setIsUomDropdownOpen(false);
   };
@@ -202,16 +201,13 @@ export const useEditForm = ({
     setShowSupplierInfo(false);
   };
 
-  console.log("🚀 ~ toggleItemMode ~ mode0:", mode);
   const toggleItemMode = () => {
-    console.log("🚀 ~ toggleItemMode ~ mode1:", mode);
     return reRenderFormNewProps({
       mode: isItemMode ? EstimateMode.ADD_SECTION : EstimateMode.ADD_ITEM,
     });
   };
 
   const handleBlurDropdown = () => {
-    console.log("🚀 ~ handleBlurDropdown ~ uomSearch:", uomSearch);
     setIsUomDropdownOpen(false);
     setUomSearch("");
   };

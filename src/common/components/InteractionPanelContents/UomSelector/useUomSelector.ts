@@ -13,7 +13,6 @@ export const useUomSelector = ({
   onReturn,
   searchTerm = "",
 }: UseUomSelectorProps) => {
-  console.log("🚀 ~ searchTerm:", searchTerm);
   const [search, setSearch] = useState(searchTerm);
 
   const matchesSearch = (text: string) =>
