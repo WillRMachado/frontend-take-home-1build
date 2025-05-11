@@ -89,8 +89,7 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
     borderWidth: numbersAliasTokens.borderWidth.xs,
     borderColor: colors.outline.dark,
     borderRadius: numbersAliasTokens.borderRadius.sm,
-    padding: numbersAliasTokens.spacing.xs,
-    paddingTop: numbersAliasTokens.spacing.md,
+    padding: numbersAliasTokens.spacing["2xs"],
   },
   dropdown: {
     borderWidth: 0,
@@ -109,7 +108,7 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   },
   dropdownContainer: {
     position: "absolute",
-    top: 56,
+    top: numbersAliasTokens.spacing["4xl"],
     left: 0,
     right: 0,
   },
