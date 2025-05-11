@@ -1,7 +1,8 @@
-import React, { useState, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import { Pressable, Text, TextStyle, View } from "react-native";
 import createThemedStyles from "../../theme/utils/createThemedStyles";
 import { numbersBaseTokens } from "../../theme/tokens/base/numbers";
+import { useButton } from "./useButton";
 
 type PrimaryButtonProps = {
   onPress: () => void;
@@ -19,8 +20,7 @@ const Button = forwardRef<View, PrimaryButtonProps>((props, ref) => {
   const { children, disabled = false, variant = "primary" } = props;
 
   const styles = useStyles({ variant });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const { isHovered, isPressed, handleHoverIn, handleHoverOut, handlePressIn, handlePressOut } = useButton({ disabled });
 
   return (
     <Pressable
@@ -32,10 +32,10 @@ const Button = forwardRef<View, PrimaryButtonProps>((props, ref) => {
         disabled && styles.disabled,
       ]}
       disabled={disabled}
-      onHoverIn={() => setIsHovered(true)}
-      onHoverOut={() => setIsHovered(false)}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
+      onHoverIn={handleHoverIn}
+      onHoverOut={handleHoverOut}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       {...props}
     >
       <Text style={styles.text}>{children}</Text>
