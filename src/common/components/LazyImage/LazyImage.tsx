@@ -29,7 +29,7 @@ export default function LazyImage({
       )}
       <Image
         source={{ uri }}
-        style={[styles.image, style]}
+        style={styles.image, style}
         resizeMode="contain"
         onLoadStart={onLoadStart}
         onLoadEnd={onLoadEnd}

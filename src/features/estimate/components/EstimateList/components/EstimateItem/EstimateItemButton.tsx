@@ -137,7 +137,7 @@ export const EstimateItemButton = React.memo(
       >
         <TouchableHighlight
           underlayColor={getColorWithAlpha(colors.layer.solid.light, 60)}
-          style={[styles.editButtonWrapper]}
+          style={styles.editButtonWrapper}
           onPress={handleEdit}
         >
           <ItemContent

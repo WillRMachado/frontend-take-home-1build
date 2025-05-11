@@ -29,7 +29,7 @@ export default function SupplierInfo({
 
   if (!supplier) return null;
   return (
-    <View style={[styles.supplierContainer]}>
+    <View style={styles.supplierContainer}>
       <View style={styles.infoRow}>
         <View style={styles.infoRowLeft}>
           <Text style={styles.supplierLabel}>Provided by supplier</Text>

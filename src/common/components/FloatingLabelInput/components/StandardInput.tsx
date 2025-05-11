@@ -1,7 +1,9 @@
 import React, { forwardRef } from "react";
 import { View, TextInput, TextInputProps } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import createThemedStyles, { useThemedColors } from "../../../theme/utils/createThemedStyles";
+import createThemedStyles, {
+  useThemedColors,
+} from "../../../theme/utils/createThemedStyles";
 import { numbersAliasTokens } from "../../../theme/tokens/alias/numbers";
 import { numbersBaseTokens } from "../../../theme/tokens/base/numbers";
 
@@ -32,7 +34,14 @@ export const StandardInput = forwardRef<TextInput, StandardInputProps>(
           {...props}
           ref={ref}
           value={value}
-          style={styles.input}
+          style={[
+            styles.input,
+            {
+              paddingLeft: leftIconName
+                ? numbersAliasTokens.spacing["3xl"]
+                : numbersAliasTokens.spacing.xs,
+            },
+          ]}
           onFocus={onFocus}
           onBlur={onBlur}
         />
@@ -64,4 +73,4 @@ const useStyles = createThemedStyles(({ numbersAliasTokens, colors }) => ({
   },
 }));
 
-export default StandardInput; 
+export default StandardInput;
