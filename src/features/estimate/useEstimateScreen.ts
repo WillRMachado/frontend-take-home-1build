@@ -1,42 +1,38 @@
-import type { EstimateRow, EstimateSection } from "@/data"
-import { useEstimateContext } from "../../context/EstimateContext"
+import { useEstimateContext } from "@/src/common/hooks/useEstimate";
+import { EstimateForm } from "@/src/common/components/InteractionPanelContents/EstimateForm/EstimateForm";
+import React from "react";
+import type { EstimateSection } from "@/data";
+import { EstimateMode } from "@/src/common/enums";
+import { calculateEstimateTotal } from "@/src/common/lib/estimate";
+import { uuid } from "@/src/common/lib/imports";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
 
-export function useEstimateScreen() {
-	const {
-		estimate,
-		editMode,
-		updateTitle,
-		updateItem,
-		updateSection,
-		selectItem,
-		selectSection,
-		clearSelection,
-	} = useEstimateContext()
+export function useNewEstimateScreen() {
+  const { estimate } = useEstimateContext();
+  const componentContext = useComponentsContext();
 
-	const handleSaveItem = (updatedItem: EstimateRow) => {
-		if (editMode?.type !== "item") {
-			return
-		}
+  const { setBottomSheetChild, openBottomSheet } = componentContext;
 
-		updateItem(updatedItem.id, updatedItem)
-	}
+  const handleAddNewSection = () => {
+    const newSection: EstimateSection = {
+      id: `section-${uuid.v4()}`,
+      title: "",
+      rows: [],
+    };
 
-	const handleSaveSection = (updates: Partial<EstimateSection>) => {
-		if (editMode?.type !== "section") {
-			return
-		}
+    setBottomSheetChild(
+      React.createElement(EstimateForm, {
+        mode: EstimateMode.ADD_SECTION,
+        data: newSection,
+      })
+    );
+    openBottomSheet();
+  };
 
-		updateSection(editMode.data.id, updates)
-	}
+  const estimateTotal = calculateEstimateTotal(estimate);
 
-	return {
-		estimate,
-		editMode,
-		updateTitle,
-		handleStartItemEdit: selectItem,
-		handleStartSectionEdit: selectSection,
-		handleSaveItem,
-		handleSaveSection,
-		handleStopEdit: clearSelection,
-	}
+  return {
+    handleAddNewSection,
+    estimateTotal,
+  };
 }

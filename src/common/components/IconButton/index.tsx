@@ -1,14 +1,13 @@
 import { View, TouchableOpacity } from "react-native";
-import { useAddItemButton } from "./useIconButton";
 import { Feather } from "@expo/vector-icons";
 import createThemedStyles, {
   useThemedColors,
 } from "@/src/common/theme/utils/createThemedStyles";
 import React from "react";
-import type { EstimateSection } from "@/data";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
-import { Text } from "../Text";
 import { numbersBaseTokens } from "../../theme/tokens/base/numbers";
+import { Text } from "../Text";
+
 interface AddItemButtonProps {
   onClick: () => void;
   iconName: keyof typeof Feather.glyphMap;

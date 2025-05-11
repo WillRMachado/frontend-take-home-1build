@@ -1,42 +1,48 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { EstimateProvider } from "@/src/context/EstimateContext";
-import { ThemeProvider, ThemeContext } from "@/src/context/ThemeContext";
-import {
-  ComponentProvider,
-  ComponentContext,
-} from "@/src/context/ComponentContext";
+import { ThemeProvider } from "@/src/context/ThemeContext";
+import { ComponentProvider } from "@/src/context/ComponentContext";
 import {
   SafeAreaProvider,
-  useSafeAreaFrame,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { SafeAreaView } from "react-native";
+import { Platform, SafeAreaView, StatusBar } from "react-native";
 import { useTheme } from "@/src/common/hooks/useTheme";
 import { getColors } from "@/src/common/theme/tokens/alias/colors";
-import { BottomSheet } from "@/src/common/lib/imports";
-import { EditForm } from "@/src/common/components/BottomSheetContents/EditForm";
-import { useCallback, useContext, useEffect } from "react";
-import { EstimateRow, EstimateSection } from "@/data";
-import BottomSheetWrapper, {
-  BottomSheetBackdrop,
+import {
+  BottomSheet,
   BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
+} from "@/src/common/lib/imports";
+import {
+  EstimateForm,
+  EstimateFormProps,
+} from "@/src/common/components/InteractionPanelContents/EstimateForm/EstimateForm";
+import { useCallback } from "react";
 import { numbersAliasTokens } from "@/src/common/theme/tokens/alias/numbers";
+import { THEMES } from "@/src/common/enums";
+import { ToastProvider } from "@/src/common/lib/imports";
+import WebFontsLoader from "./WebFontsLoader";
+import React from "react";
+import { useComponentsContext } from "@/src/common/hooks/useComponents";
+type BottomSheetChildProps =
+  | EstimateFormProps
+  | {
+      selectUom: (name: string) => void;
+      onReturn: () => void;
+    };
+
+type BottomSheetChild = React.ReactElement<BottomSheetChildProps>;
 
 function ThemedContent() {
   const { theme } = useTheme();
   const colors = getColors(theme);
-  const componentContext = useContext(ComponentContext);
-
-  if (!componentContext) {
-    throw new Error("ComponentContext must be used within a ComponentProvider");
-  }
+  const componentContext = useComponentsContext();
 
   const { bottomSheetRef, bottomSheetChild, isBottomSheetOpen } =
     componentContext;
 
-  const { top, bottom, left, right } = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
@@ -52,22 +58,35 @@ function ThemedContent() {
     []
   );
 
+  const _getBottomSheetKey = useCallback((child: BottomSheetChild) => {
+    if (child.type === EstimateForm) {
+      const props = child.props as EstimateFormProps;
+      return `bottom-sheet-${props.mode}-${props.data.id || "new"}`;
+    }
+    return "bottom-sheet";
+  }, []);
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: colors.layer.solid.medium,
+        zIndex: 32,
       }}
     >
+      <StatusBar
+        barStyle={theme === THEMES.DARK ? "light-content" : "dark-content"}
+        backgroundColor={colors.layer.solid.medium}
+      />
       <Stack
         screenOptions={{
           headerShown: false,
         }}
       />
 
-      {isBottomSheetOpen && (
+      {isBottomSheetOpen && bottomSheetChild && Platform.OS !== "web" && (
         <BottomSheet.Wrapper
-          key={JSON.stringify(bottomSheetChild)}
+          key={_getBottomSheetKey(bottomSheetChild as BottomSheetChild)}
           backgroundStyle={{ backgroundColor: colors.layer.solid.light }}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
@@ -83,16 +102,24 @@ function ThemedContent() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <EstimateProvider>
-            <ComponentProvider>
-              <ThemedContent />
-            </ComponentProvider>
-          </EstimateProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <ToastProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <EstimateProvider>
+              <ComponentProvider>
+                {Platform.OS === "web" ? (
+                  <WebFontsLoader fallback={<></>}>
+                    <ThemedContent />
+                  </WebFontsLoader>
+                ) : (
+                  <ThemedContent />
+                )}
+              </ComponentProvider>
+            </EstimateProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </ToastProvider>
   );
 }
