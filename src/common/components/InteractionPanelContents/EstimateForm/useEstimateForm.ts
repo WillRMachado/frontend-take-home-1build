@@ -119,8 +119,8 @@ export const useEditForm = ({
       }
       const newItem = {
         title,
-        price: parseFloat(price),
-        quantity: parseFloat(quantity),
+        price: parseFloat(price || "0"),
+        quantity: parseFloat(quantity || "0"),
         uom,
       };
       return addItem(sectionId, newItem);
@@ -129,8 +129,8 @@ export const useEditForm = ({
     if (mode === EstimateMode.EDIT_ITEM) {
       return updateItem(data.id, {
         title,
-        price: parseFloat(price),
-        quantity: parseFloat(quantity),
+        price: parseFloat(price || "0"),
+        quantity: parseFloat(quantity || "0"),
         uom,
       });
     }
