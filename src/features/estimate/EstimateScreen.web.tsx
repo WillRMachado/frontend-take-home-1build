@@ -39,9 +39,7 @@ export default function EstimateScreenDesktop() {
 
           <View style={styles.estimateTotal}>
             <Text style={styles.totalAmountText}>Total:</Text>
-            <Text style={styles.totalAmountText}>
-              ${estimateTotal.toFixed(2)}
-            </Text>
+            <Text style={styles.totalAmountText}>{estimateTotal}</Text>
           </View>
         </View>
 

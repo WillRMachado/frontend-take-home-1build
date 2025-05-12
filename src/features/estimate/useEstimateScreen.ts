@@ -6,6 +6,7 @@ import { EstimateMode } from "@/src/common/enums";
 import { calculateEstimateTotal } from "@/src/common/lib/estimate";
 import { uuid } from "@/src/common/lib/imports";
 import { useComponentsContext } from "@/src/common/hooks/useComponents";
+import { formatCurrency } from "@/src/common/utils/format";
 
 export function useNewEstimateScreen() {
   const { estimate } = useEstimateContext();
@@ -29,7 +30,7 @@ export function useNewEstimateScreen() {
     openBottomSheet();
   };
 
-  const estimateTotal = calculateEstimateTotal(estimate);
+  const estimateTotal = formatCurrency(calculateEstimateTotal(estimate));
 
   return {
     handleAddNewSection,
