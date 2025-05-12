@@ -93,6 +93,10 @@ export const useEditForm = ({
 
   const handlePriceChange = (text: string) => {
     const numericValue = parsePriceInput(text);
+
+
+    if (text === "") return setPrice("");
+
     if (numericValue !== "") {
       setPrice(numericValue);
     }
@@ -100,9 +104,7 @@ export const useEditForm = ({
 
   const displayPrice = isPriceFocused
     ? price
-    : price
-    ? formatCurrency(parseFloat(price))
-    : "";
+    : formatCurrency(parseFloat(price || "0"));
 
   const handlePriceFocus = () => setIsPriceFocused(true);
   const handlePriceBlur = () => setIsPriceFocused(false);
@@ -163,8 +165,15 @@ export const useEditForm = ({
   const renderEditFormOnSheet = (
     updatedData?: Partial<EstimateRow | EstimateSection>
   ) => {
+    console.log("🚀 ~ renderEditFormOnSheet ~ updatedData:", updatedData, data);
     return reRenderFormNewProps({
-      data: { ...data, ...updatedData },
+      data: {
+        ...data,
+        title,
+        price: parseFloat(price),
+        quantity: parseFloat(quantity),
+        ...updatedData,
+      },
     });
   };
 
